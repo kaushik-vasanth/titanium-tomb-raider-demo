@@ -1,0 +1,1302 @@
+/* ==========================================================================
+   RECs TITANIUM '27 | TOMB RAIDER EXPEDITION EDITION
+   Bespoke AAA Gaming Visual Experience & Archaeological Interface
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --font-serif: 'Cinzel', Georgia, serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+  --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --bg-deep: #06090e;
+  --bg-slate: #0d1219;
+  --tomb-stone: #151c24;
+  --tomb-stone-light: #1e2834;
+  
+  --border-stone: rgba(140, 160, 185, 0.2);
+  --border-gold: rgba(245, 158, 11, 0.55);
+  --border-flare: rgba(255, 85, 0, 0.6);
+
+  --survival-gold: #f59e0b;
+  --survival-bright: #fbbf24;
+  --survival-glow: rgba(245, 158, 11, 0.5);
+  --flare-orange: #ff5500;
+  --flare-glow: rgba(255, 85, 0, 0.5);
+  --ancient-cyan: #00e5ff;
+  --cyan-glow: rgba(0, 229, 255, 0.45);
+  
+  --parchment: #e2d9cc;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+
+  --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-deep);
+  color: #fff;
+  font-family: var(--font-sans);
+  cursor: none; /* Controlled by SurveyorCursor */
+}
+
+/* ==========================================================================
+   SURVIVAL INSTINCT POST-PROCESSING (KEY: Q)
+   ========================================================================== */
+.survival-tint {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 8;
+  opacity: 0;
+  background: radial-gradient(circle at center, rgba(0, 229, 255, 0.05), rgba(5, 10, 18, 0.85));
+  transition: opacity 0.4s var(--ease-cinematic);
+}
+
+body.survival-instinct-active .hero-art-layer img {
+  filter: grayscale(0.85) contrast(1.25) brightness(0.68) hue-rotate(180deg) !important;
+}
+
+body.survival-instinct-active .survival-tint {
+  opacity: 1;
+}
+
+body.survival-instinct-active .game-hotspot .hotspot-beacon-pulse {
+  border-color: var(--survival-bright);
+  box-shadow: 0 0 25px var(--survival-gold), 0 0 50px var(--survival-gold);
+}
+
+body.survival-instinct-active .game-hotspot .hotspot-marker-icon {
+  filter: drop-shadow(0 0 24px var(--survival-bright)) drop-shadow(0 0 10px var(--ancient-cyan)) !important;
+}
+
+body.survival-instinct-active .survival-secret-node {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: translate(-50%, 0) scale(1) !important;
+}
+
+body.survival-instinct-active #dock-survival {
+  background: var(--survival-gold);
+  color: #000;
+  box-shadow: 0 0 30px var(--survival-gold);
+}
+
+/* ==========================================================================
+   SURVEYOR RETICLE CURSOR
+   ========================================================================== */
+.surveyor-cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 44px;
+  height: 44px;
+  margin: -22px 0 0 -22px;
+  border: 1.5px solid rgba(245, 158, 11, 0.7);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transition: width 0.25s var(--ease-cinematic), height 0.25s var(--ease-cinematic), margin 0.25s var(--ease-cinematic), border-color 0.25s;
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.surveyor-reticle-inner {
+  width: 28px;
+  height: 28px;
+  border: 1px dashed rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  animation: reticleSpin 14s linear infinite;
+}
+
+@keyframes reticleSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.surveyor-cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  background-color: var(--survival-bright);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10000;
+  box-shadow: 0 0 8px var(--survival-gold);
+}
+
+.surveyor-coord-tag {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: var(--survival-bright);
+  white-space: nowrap;
+  opacity: 0.7;
+}
+
+.surveyor-label {
+  position: absolute;
+  bottom: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: #fff;
+  background: rgba(8, 12, 18, 0.88);
+  border: 1px solid var(--border-gold);
+  padding: 2px 7px;
+  border-radius: 3px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.cursor-hover {
+  width: 62px;
+  height: 62px;
+  margin: -31px 0 0 -31px;
+  border-color: var(--ancient-cyan);
+  box-shadow: 0 0 25px var(--cyan-glow);
+}
+
+.cursor-hover .surveyor-reticle-inner {
+  border-color: var(--ancient-cyan);
+  animation-duration: 4s;
+}
+
+.cursor-click {
+  transform: scale(0.85);
+}
+
+.cursor-spark {
+  position: fixed;
+  width: 4px;
+  height: 4px;
+  background: var(--survival-bright);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  box-shadow: 0 0 8px var(--survival-gold);
+}
+
+/* ==========================================================================
+   HERO STAGE & 2.5D MULTI-PLANE PARALLAX
+   ========================================================================== */
+.hero-stage {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-ambient-layer {
+  position: absolute;
+  inset: -5%;
+  width: 110%;
+  height: 110%;
+  z-index: 1;
+  filter: blur(25px) brightness(0.45);
+  pointer-events: none;
+}
+
+.hero-ambient-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-art-layer {
+  position: absolute;
+  inset: -3%;
+  width: 106%;
+  height: 106%;
+  z-index: 2;
+  transition: transform 0.15s ease-out;
+  pointer-events: none;
+}
+
+.hero-clean-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 38%;
+  filter: contrast(1.06) brightness(0.96);
+  transition: filter 0.4s ease;
+}
+
+#atmosphere-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.hero-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  background: radial-gradient(ellipse at 50% 45%, transparent 45%, rgba(6, 9, 14, 0.6) 80%, rgba(4, 6, 9, 0.95) 100%);
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   FOREGROUND LOGOS & 3D FLOATING TITLES
+   ========================================================================== */
+.hero-brand-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* Top Left Expedition Crest */
+.brand-header-lockup {
+  position: absolute;
+  top: 28px;
+  left: 36px;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-crest-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(10, 15, 22, 0.82);
+  backdrop-filter: blur(12px);
+  padding: 8px 18px;
+  border: 1px solid var(--border-stone);
+  border-left: 3px solid var(--survival-gold);
+  border-radius: 4px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+}
+
+.brand-crest-symbol {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--survival-gold);
+}
+
+.brand-crest-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-crest-title {
+  font-family: var(--font-serif);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.brand-crest-sub {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: var(--survival-gold);
+}
+
+/* Center 3D Floating Fest Title */
+.main-title-container {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  pointer-events: auto;
+  transition: transform 0.15s ease-out;
+  filter: drop-shadow(0 15px 40px rgba(0, 0, 0, 0.95));
+}
+
+.fest-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 6px;
+}
+
+.eyebrow-line {
+  width: 45px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--survival-gold));
+}
+
+.eyebrow-line.rev {
+  background: linear-gradient(90deg, var(--survival-gold), transparent);
+}
+
+.eyebrow-text {
+  font-family: var(--font-serif);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 5px;
+  color: var(--survival-bright);
+  text-transform: uppercase;
+}
+
+.fest-main-title {
+  font-family: var(--font-serif);
+  font-size: clamp(48px, 6.8vw, 88px);
+  font-weight: 900;
+  letter-spacing: 6px;
+  line-height: 0.95;
+  color: #f1f5f9;
+  text-transform: uppercase;
+  background: linear-gradient(180deg, #ffffff 10%, #d8e2ec 45%, #8aa0b6 75%, #5a6e82 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 25px rgba(245, 158, 11, 0.35));
+  position: relative;
+}
+
+.fest-main-title::after {
+  content: "'27";
+  font-size: 0.55em;
+  vertical-align: super;
+  background: linear-gradient(180deg, #ffdd55, #f59e0b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-left: 6px;
+}
+
+.main-title-sub {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.sub-line {
+  width: 60px;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, var(--survival-gold));
+}
+
+.sub-line.rev {
+  background: linear-gradient(90deg, var(--survival-gold), transparent);
+}
+
+.sub-text {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: var(--parchment);
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
+}
+
+/* ==========================================================================
+   GAME WORLD HOTSPOTS (SURVIVAL EXPEDITION BEACONS)
+   ========================================================================== */
+.hotspots-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+}
+
+.game-hotspot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+  cursor: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.25s var(--ease-cinematic);
+}
+
+.game-hotspot:hover {
+  transform: translate(-50%, -50%) scale(1.15);
+  z-index: 10;
+}
+
+.hotspot-insignia-wrap {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hotspot-beacon-pulse {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1.5px solid var(--survival-gold);
+  animation: beaconPulse 2.8s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes beaconPulse {
+  0% { transform: scale(0.65); opacity: 1; }
+  60% { transform: scale(1.6); opacity: 0; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+.hotspot-marker-icon {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 10px rgba(245, 158, 11, 0.5));
+  transition: filter 0.3s ease;
+}
+
+.game-hotspot:hover .hotspot-marker-icon {
+  filter: drop-shadow(0 0 18px var(--survival-bright)) drop-shadow(0 0 8px var(--ancient-cyan));
+}
+
+.hotspot-tag {
+  margin-top: 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #fff;
+  background: rgba(10, 15, 24, 0.88);
+  backdrop-filter: blur(8px);
+  padding: 4px 10px;
+  border: 1px solid var(--border-gold);
+  border-radius: 3px;
+  white-space: nowrap;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+  transition: background 0.25s, border-color 0.25s, color 0.25s;
+}
+
+.game-hotspot:hover .hotspot-tag {
+  background: var(--survival-gold);
+  color: #000;
+  border-color: #fff;
+}
+
+/* Secret Easter Egg Nodes (Visible in Survival Instinct) */
+.survival-secret-node {
+  position: absolute;
+  z-index: 15;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 0) scale(0.9);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.secret-box {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ancient-cyan);
+  letter-spacing: 2px;
+  font-weight: 700;
+  background: rgba(4, 9, 16, 0.94);
+  backdrop-filter: blur(12px);
+  padding: 12px 20px;
+  border: 1px solid var(--ancient-cyan);
+  border-left: 4px solid var(--survival-gold);
+  box-shadow: 0 0 25px rgba(0, 229, 255, 0.3);
+  text-align: center;
+}
+
+/* ==========================================================================
+   ANCIENT STONE & BRONZE GEAR COUNTDOWN TIMER (Bottom Center)
+   ========================================================================== */
+.tomb-counter-container {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 6;
+  pointer-events: auto;
+  transition: transform 0.15s ease-out;
+}
+
+.tomb-counter-chassis {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(12, 17, 24, 0.88);
+  backdrop-filter: blur(16px);
+  padding: 10px 22px;
+  border: 1px solid var(--border-stone);
+  border-top: 2px solid var(--survival-gold);
+  border-radius: 6px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.counter-slot-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 58px;
+  padding: 6px 4px;
+}
+
+.counter-val-num {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 2px;
+  line-height: 1;
+  text-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+}
+
+.counter-lbl-tag {
+  margin-top: 4px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: var(--survival-gold);
+  text-transform: uppercase;
+}
+
+.counter-gear-sep {
+  color: var(--survival-gold);
+  opacity: 0.6;
+  font-size: 14px;
+  margin-top: -6px;
+}
+
+/* ==========================================================================
+   FLOATING HUD COMMAND DOCK (NO EMOJIS - TACTICAL SVG ICONS)
+   ========================================================================== */
+.floating-hud-dock {
+  position: fixed;
+  right: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 12px 8px;
+  background: rgba(9, 14, 20, 0.86);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--border-stone);
+  border-radius: 40px;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.8);
+}
+
+.dock-btn {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--border-stone);
+  background: rgba(18, 25, 35, 0.8);
+  color: #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: none;
+  transition: all 0.25s var(--ease-cinematic);
+}
+
+.dock-svg-icon {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  transition: transform 0.25s, stroke 0.25s;
+}
+
+.dock-btn:hover {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: var(--survival-gold);
+  color: var(--survival-bright);
+  box-shadow: 0 0 20px var(--survival-glow);
+}
+
+.dock-btn:hover .dock-svg-icon {
+  transform: scale(1.15);
+}
+
+.dock-btn.active {
+  background: var(--survival-gold);
+  border-color: #fff;
+  color: #000;
+  box-shadow: 0 0 25px var(--survival-gold);
+}
+
+.dock-tooltip {
+  position: absolute;
+  right: 64px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(6, 10, 16, 0.94);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-gold);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.8);
+}
+
+.dock-btn:hover .dock-tooltip {
+  opacity: 1;
+  transform: translateY(-50%) translateX(-4px);
+}
+
+/* ==========================================================================
+   MODAL WINDOWS: EXPEDITION SURVEY MAP
+   ========================================================================== */
+.expedition-map-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(4, 7, 12, 0.92);
+  backdrop-filter: blur(16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s var(--ease-cinematic);
+  padding: 30px;
+}
+
+.expedition-map-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.expedition-map-window {
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+  height: 82vh;
+  background: #090e16;
+  border: 1px solid var(--border-stone);
+  border-top: 3px solid var(--survival-gold);
+  border-radius: 8px;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.98);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.expedition-map-header {
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-stone);
+  background: rgba(14, 21, 30, 0.9);
+}
+
+.map-header-title {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: #fff;
+}
+
+.map-header-coords {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--survival-gold);
+  letter-spacing: 2px;
+}
+
+.modal-close-btn {
+  background: transparent;
+  border: 1px solid var(--border-stone);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 2px;
+  padding: 6px 14px;
+  border-radius: 4px;
+  cursor: none;
+  transition: all 0.2s;
+}
+
+.modal-close-btn:hover {
+  background: var(--survival-gold);
+  color: #000;
+  border-color: #fff;
+}
+
+.map-viewport {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  background: #05080c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.campus-satellite-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.map-grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(0, 229, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+.map-sector-pin {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  cursor: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 5;
+  transition: transform 0.2s;
+}
+
+.map-sector-pin:hover {
+  transform: translate(-50%, -50%) scale(1.15);
+  z-index: 10;
+}
+
+.pin-beacon {
+  width: 14px;
+  height: 14px;
+  background: var(--survival-bright);
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 16px var(--survival-gold);
+}
+
+.pin-badge {
+  margin-top: 6px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #fff;
+  background: rgba(6, 10, 16, 0.92);
+  border: 1px solid var(--border-gold);
+  padding: 3px 8px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   MODAL WINDOWS: RELIC ARCHIVE & EXPEDITION DOSSIER
+   ========================================================================== */
+.relic-dossier-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(3, 6, 10, 0.93);
+  backdrop-filter: blur(18px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s var(--ease-cinematic);
+  padding: 30px;
+}
+
+.relic-dossier-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.dossier-window {
+  position: relative;
+  width: 100%;
+  max-width: 1140px;
+  height: 84vh;
+  background: #090e15;
+  border: 1px solid var(--border-stone);
+  border-top: 3px solid var(--survival-gold);
+  border-radius: 8px;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.98);
+  display: grid;
+  grid-template-columns: 290px 1fr;
+  overflow: hidden;
+}
+
+.dossier-window .modal-close-btn {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  z-index: 20;
+}
+
+/* Left Rail: Sequence Directory */
+.relic-rail {
+  background: #0d131c;
+  border-right: 1px solid var(--border-stone);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 20px 14px;
+  gap: 8px;
+}
+
+.rail-title {
+  font-family: var(--font-serif);
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--survival-gold);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  padding-left: 6px;
+}
+
+.rail-item {
+  background: rgba(18, 25, 36, 0.5);
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 12px 14px;
+  text-align: left;
+  cursor: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: all 0.2s var(--ease-cinematic);
+}
+
+.rail-item:hover {
+  background: rgba(245, 158, 11, 0.08);
+  border-color: var(--border-gold);
+}
+
+.rail-item.active {
+  background: rgba(245, 158, 11, 0.16);
+  border-color: var(--survival-gold);
+  border-left: 3px solid var(--survival-bright);
+}
+
+.rail-seq-code {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--survival-gold);
+}
+
+.rail-item-name {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.rail-item.active .rail-item-name {
+  color: #fff;
+}
+
+/* Right Content Dossier with 3D Holographic Vertical Trading Card + Intel */
+.dossier-detail-pane {
+  padding: 40px 48px;
+  overflow-y: auto;
+  display: flex;
+  align-items: center;
+}
+
+.dossier-content-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 45px;
+  align-items: center;
+}
+
+.dossier-card-showcase {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  perspective: 1000px;
+}
+
+.collectible-card-wrap {
+  position: relative;
+  width: 260px;
+  height: 410px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95), 0 0 30px rgba(245, 158, 11, 0.25);
+  border: 1px solid var(--border-gold);
+  transform-style: preserve-3d;
+  transition: transform 0.12s ease-out, box-shadow 0.2s;
+  background: #090e16;
+}
+
+.collectible-card-wrap:hover {
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.98), 0 0 45px var(--survival-glow);
+}
+
+.collectible-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.card-foil-sheen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: color-dodge;
+  transition: opacity 0.3s;
+}
+
+.card-hint {
+  margin-top: 12px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--survival-gold);
+}
+
+/* Dossier Intel Column */
+.dossier-intel-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dossier-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.dossier-category-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--ancient-cyan);
+  background: rgba(0, 229, 255, 0.1);
+  padding: 4px 10px;
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  border-radius: 3px;
+}
+
+.dossier-bounty-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--survival-bright);
+  background: rgba(245, 158, 11, 0.15);
+  padding: 4px 10px;
+  border: 1px solid var(--border-gold);
+  border-radius: 3px;
+  font-weight: 700;
+}
+
+.dossier-headline {
+  font-family: var(--font-serif);
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #fff;
+  line-height: 1.15;
+}
+
+.dossier-brief-text {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--text-muted);
+}
+
+.dossier-spec-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 10px 0;
+}
+
+.spec-box-lbl {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: var(--text-dim);
+}
+
+.spec-box-val {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin-top: 2px;
+}
+
+.dossier-action-bar {
+  margin-top: 14px;
+  display: flex;
+  gap: 16px;
+}
+
+.btn-expedition-primary {
+  font-family: var(--font-serif);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: #000;
+  background: var(--survival-gold);
+  border: none;
+  padding: 12px 26px;
+  border-radius: 4px;
+  cursor: none;
+  transition: all 0.25s var(--ease-cinematic);
+  box-shadow: 0 4px 20px var(--survival-glow);
+}
+
+.btn-expedition-primary:hover {
+  background: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 30px rgba(255, 255, 255, 0.4);
+}
+
+/* ==========================================================================
+   MODAL WINDOWS: EXPEDITION PERMIT FORGE (SURVIVOR ID)
+   ========================================================================== */
+.forge-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(3, 6, 10, 0.94);
+  backdrop-filter: blur(18px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s var(--ease-cinematic);
+  padding: 30px;
+}
+
+.forge-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.forge-window {
+  position: relative;
+  width: 100%;
+  max-width: 980px;
+  background: #090e16;
+  border: 1px solid var(--border-stone);
+  border-top: 3px solid var(--survival-gold);
+  border-radius: 8px;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.98);
+  padding: 40px;
+}
+
+.forge-window .modal-close-btn {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+}
+
+.forge-box {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 40px;
+  align-items: center;
+}
+
+.forge-form-col {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.forge-title {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: #fff;
+}
+
+.forge-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-lbl {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--survival-gold);
+}
+
+.form-input, .form-select {
+  background: #0f1722;
+  border: 1px solid var(--border-stone);
+  border-radius: 4px;
+  padding: 10px 14px;
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input:focus, .form-select:focus {
+  border-color: var(--survival-gold);
+  box-shadow: 0 0 15px var(--survival-glow);
+}
+
+/* 3D Interactive Permit Card Preview */
+.permit-card-preview {
+  position: relative;
+  width: 320px;
+  height: 480px;
+  background: linear-gradient(135deg, #101824 0%, #0a0f16 100%);
+  border: 2px solid var(--survival-gold);
+  border-radius: 10px;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95), 0 0 30px var(--survival-glow);
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease-out;
+}
+
+.permit-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-gold);
+  padding-bottom: 12px;
+}
+
+.permit-fest-tag {
+  font-family: var(--font-serif);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #fff;
+}
+
+.permit-serial {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: var(--survival-gold);
+}
+
+.permit-center {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.permit-field-lbl {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  color: var(--text-dim);
+}
+
+.permit-field-val {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  margin-top: 1px;
+}
+
+.permit-role-val {
+  color: var(--ancient-cyan);
+}
+
+.permit-bottom {
+  border-top: 1px dashed var(--border-stone);
+  padding-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.permit-barcode {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 3px;
+  color: var(--text-muted);
+}
+
+.permit-stamp {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--survival-gold);
+  border: 1px solid var(--survival-gold);
+  padding: 3px 8px;
+  border-radius: 2px;
+  transform: rotate(-8deg);
+}
+
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+@media (max-width: 900px) {
+  .fest-main-title { font-size: 42px; }
+  .floating-hud-dock { right: 12px; }
+  .brand-header-lockup { left: 16px; top: 16px; }
+  .tomb-counter-container { bottom: 16px; }
+  .dossier-window { grid-template-columns: 1fr; }
+  .relic-rail { flex-direction: row; overflow-x: auto; }
+  .dossier-content-grid { grid-template-columns: 1fr; }
+  .forge-box { grid-template-columns: 1fr; }
+}
