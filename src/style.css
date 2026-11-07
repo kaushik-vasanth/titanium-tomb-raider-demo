@@ -370,6 +370,21 @@ body.survival-instinct-active #dock-survival {
   text-transform: uppercase;
 }
 
+.main-title-logo-img {
+  width: clamp(340px, 48vw, 680px);
+  max-width: 92vw;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 4px 0;
+  filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 25px rgba(245, 158, 11, 0.35));
+  transition: transform 0.2s ease-out, filter 0.3s;
+}
+
+.main-title-logo-img:hover {
+  filter: drop-shadow(0 20px 45px rgba(0, 0, 0, 0.98)) drop-shadow(0 0 40px var(--survival-glow));
+}
+
 .fest-main-title {
   font-family: var(--font-serif);
   font-size: clamp(48px, 6.8vw, 88px);
