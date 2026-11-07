@@ -1,5 +1,5 @@
 // RECs TITANIUM '27 | TOMB RAIDER EXPEDITION EDITION
-// Core Logic, 2.5D Parallax, Survival Instinct, Procedural SFX & Modals
+// Content synchronized with official TITANIUM 2027 (Valley of Aurel) & REC Campus
 
 import { SurveyorCursor } from './cursor.js';
 import { MountainAtmosphere } from './canvas-atmosphere.js';
@@ -14,8 +14,12 @@ import card05 from '../assets/event_cards/05_fpv_drone_racing.png';
 import card06 from '../assets/event_cards/06_robowars.png';
 import card07 from '../assets/event_cards/07_main_stage.png';
 
+// Import Maps
+import mapAurel from '../assets/titaniumfest/valley-of-aurel.webp';
+import mapCampus from '../assets/rec-campus-map.jpg';
+
 // Preload card images for 0-latency display
-[card01, card02, card03, card04, card05, card06, card07].forEach((src) => {
+[card01, card02, card03, card04, card05, card06, card07, mapAurel, mapCampus].forEach((src) => {
   const img = new Image();
   img.src = src;
 });
@@ -116,10 +120,17 @@ if (dockAudio) {
   });
 }
 
-// 6. REC Campus Expedition Survey Map Modal
+// 6. Dual-Map Modal: Valley of Aurel Atlas + REC Campus Grid
 const expeditionMapOverlay = document.getElementById('expedition-map-overlay');
 const dockMapBtn = document.getElementById('dock-map');
 const closeMapBtn = document.getElementById('close-map');
+const tabMapAurel = document.getElementById('tab-map-aurel');
+const tabMapCampus = document.getElementById('tab-map-campus');
+const mapDisplayImg = document.getElementById('map-display-img');
+const pinsAurelGroup = document.getElementById('pins-aurel-group');
+const pinsCampusGroup = document.getElementById('pins-campus-group');
+const mapHeaderTitle = document.getElementById('map-header-title');
+const mapHeaderCoords = document.getElementById('map-header-coords');
 
 function openMap() {
   if (expeditionMapOverlay) {
@@ -135,8 +146,31 @@ function closeMap() {
   }
 }
 
+function setMapView(view) {
+  sound.playClick();
+  if (view === 'aurel') {
+    tabMapAurel.classList.add('active');
+    tabMapCampus.classList.remove('active');
+    mapDisplayImg.src = mapAurel;
+    pinsAurelGroup.style.display = 'block';
+    pinsCampusGroup.style.display = 'none';
+    mapHeaderTitle.textContent = 'THE WORLD ATLAS // VALLEY OF AUREL FESTIVAL GROUNDS';
+    mapHeaderCoords.textContent = 'BEYOND THE SKY GATE • AUREL';
+  } else {
+    tabMapCampus.classList.add('active');
+    tabMapAurel.classList.remove('active');
+    mapDisplayImg.src = mapCampus;
+    pinsAurelGroup.style.display = 'none';
+    pinsCampusGroup.style.display = 'block';
+    mapHeaderTitle.textContent = 'ARCHAEOLOGICAL SURVEY GRID // REC CHENNAI';
+    mapHeaderCoords.textContent = 'LAT 12.986° N • LON 80.005° E';
+  }
+}
+
 if (dockMapBtn) dockMapBtn.addEventListener('click', openMap);
 if (closeMapBtn) closeMapBtn.addEventListener('click', closeMap);
+if (tabMapAurel) tabMapAurel.addEventListener('click', () => setMapView('aurel'));
+if (tabMapCampus) tabMapCampus.addEventListener('click', () => setMapView('campus'));
 
 if (expeditionMapOverlay) {
   expeditionMapOverlay.addEventListener('click', (e) => {
@@ -144,90 +178,90 @@ if (expeditionMapOverlay) {
   });
 }
 
-// 7. Relic Archive Database (The 7 Ancient Chambers of TITANIUM '27)
+// 7. Relic Archive Database (Synced with demo.titaniumfest.com)
 const relicData = {
-  technical: {
-    img: card01,
-    cat: 'THE CRYPTOGRAPHIC SANCTUM',
-    title: '01 // Technical Events',
-    bounty: 'EXPEDITION BOUNTY: ₹5,00,000 INR',
-    desc: 'Unearth ancient algorithms and decipher complex cryptographic challenges. Compete across National Coding Championships, micro-mouse labyrinth navigation, and zero-knowledge protocol proofs evaluated by top-tier engineering masters.',
-    specs: [
-      { lbl: 'ELIGIBILITY', val: 'Undergrad & Postgrad' },
-      { lbl: 'EXPEDITION CREW', val: 'Solos & Teams of 2-4' },
-      { lbl: 'CREDENTIAL', val: 'REC & IIT Validated' }
-    ]
-  },
-  hackathons: {
-    img: card02,
-    cat: 'THE 36-HOUR MACHINE FORGE',
-    title: '02 // 36H Hackathons',
-    bounty: 'EXPEDITION BOUNTY: ₹6,00,000 INR',
-    desc: 'A non-stop 36-hour sprint into deep software ruins. Build autonomous multi-agent AI swarms, decentralized computing protocols, and scalable enterprise platforms evaluated by Silicon Valley tech architects.',
-    specs: [
-      { lbl: 'SPRINT TIME', val: '36 Continuous Hours' },
-      { lbl: 'SURVIVOR GUILD', val: '3 - 4 Infiltrators' },
-      { lbl: 'DISCOVERY TRACKS', val: 'AI Agents, ZK, Web3' }
-    ]
-  },
-  nontechnical: {
-    img: card03,
-    cat: "THE CARTOGRAPHER'S GAUNTLET",
-    title: '03 // Non-Technical Events',
-    bounty: 'EXPEDITION BOUNTY: ₹3,00,000 INR',
-    desc: 'Test your strategic instincts in high-stakes case study challenges, creative design gauntlets, product management simulations, tech debates, and LAN gaming tournaments across PC and mobile arenas.',
-    specs: [
-      { lbl: 'CHALLENGE ARENAS', val: 'Strategy, Design, Esports' },
-      { lbl: 'PARTICIPATION', val: 'Open to All Campuses' },
-      { lbl: 'REWARDS', val: 'Artifact Trophies & Cash' }
-    ]
-  },
-  workshops: {
-    img: card04,
-    cat: 'GUILD OF MASTER ARCHITECTS',
-    title: '04 // Master Workshops',
-    bounty: 'CREDENTIAL: CERTIFIED ARCHITECT',
-    desc: 'Direct hands-on transmissions from veteran engineering leaders. Master Autonomous Drone Avionics (PX4 Autopilot), Generative AI Model Engineering, and Unreal Engine 5 AAA Nanite & Lumen interactive environments.',
-    specs: [
-      { lbl: 'CERTIFICATION', val: 'Autonomous Certificate' },
-      { lbl: 'EXPEDITION TIME', val: '12 - 16 Guided Hours' },
-      { lbl: 'EQUIPMENT', val: 'Workstations & Kits Provided' }
-    ]
-  },
-  drones: {
-    img: card05,
-    cat: 'CANOPY DESCENT AERIAL PURSUIT',
-    title: '05 // FPV Drone Racing',
-    bounty: 'EXPEDITION BOUNTY: ₹3,50,000 INR',
-    desc: 'Sub-250g brushless quadcopters clocking upwards of 140km/h through neon laser gates, smoke rings, and vertical dive tunnels under floodlights in an arena of high-adrenaline telemetry.',
-    specs: [
-      { lbl: 'FRAME CLASS', val: '5-inch & Whoop FPV' },
-      { lbl: 'SPEED THRESHOLD', val: '140+ KM/H' },
-      { lbl: 'CIRCUIT FORMAT', val: 'Multi-Gate Time Attack' }
-    ]
-  },
-  robowars: {
+  automata: {
     img: card06,
-    cat: 'COLOSSEUM OF HEAVY COMBAT',
-    title: '06 // Robowars Cage Siege',
-    bounty: 'EXPEDITION BOUNTY: ₹6,00,000 INR',
-    desc: "Enter the bulletproof steel colosseum. Battle against India's most brutal 60kg heavyweight and 15kg featherweight combat robots equipped with pneumatic flippers, hardened AR400 spinning drums, and solid titanium armor.",
+    cat: 'CHAPTER I // ROBOTICS & AUTONOMOUS ROVERS',
+    title: 'The Automata Trials',
+    bounty: 'ARENA BOUNTY: ₹6,00,000 INR',
+    desc: 'Guide a small rover through an obstacle course built to reward a steady hand, a clever design and quick repairs. Score points for clearing obstacles and completing the run with controller precision, spare parts and build documentation.',
     specs: [
-      { lbl: 'WEIGHT CLASS', val: '60kg & 15kg Bots' },
-      { lbl: 'PILOT CREW', val: '2 - 6 Engineers' },
-      { lbl: 'ARENA AREAL', val: 'Titanium Colosseum' }
+      { lbl: 'CHALLENGE TYPE', val: 'Robotics / Team Challenge' },
+      { lbl: 'CREW CAPACITY', val: 'Teams of 2 - 4' },
+      { lbl: 'VENUE', val: 'Arena of Aurel (Colosseum)' }
     ]
   },
-  mainstage: {
-    img: card07,
-    cat: 'THE SOLSTICE CELEBRATION',
-    title: '07 // Main Stage Pro-Nights',
-    bounty: 'ACCESS: ALL-ACCESS EXPEDITION PASS',
-    desc: 'When night falls across the campus, 500 autonomous synchronized drones draw ancient temple constellations over the sky, followed by a world-class EDM artist lineup, laser cascades, and 100,000 Watts of bass.',
+  cipher: {
+    img: card01,
+    cat: 'CHAPTER I // ALGORITHMIC & TIMED CODE SPRINT',
+    title: 'Cipher Run // The Algorithm Trail',
+    bounty: 'NATIONAL CODING BOUNTY: ₹5,00,000 INR',
+    desc: 'Follow a trail of clues through algorithms, logic puzzles and timed coding rounds. Solve independent challenges in any order, use sample inputs to verify approaches, and compete on the live festival leaderboard.',
     specs: [
-      { lbl: 'DRONE SWARM', val: '500 Synchronized UAVs' },
-      { lbl: 'AUDIO OUTPUT', val: '100,000W Line Array' },
-      { lbl: 'ADMISSION', val: 'Wristband Required' }
+      { lbl: 'CHALLENGE TYPE', val: 'Programming / Team Challenge' },
+      { lbl: 'DURATION', val: 'Timed Multi-Round Sprint' },
+      { lbl: 'VENUE', val: 'The Cryptographic Sanctum' }
+    ]
+  },
+  design: {
+    img: card02,
+    cat: 'CHAPTER I // RAPID ENGINEERING UNDER PRESSURE',
+    title: 'Design Under Pressure',
+    bounty: '36H HACKATHON BOUNTY: ₹6,00,000 INR',
+    desc: 'Respond to an intensive engineering design brief, sketch and prototype a functional solution with your team, and demonstrate the tradeoffs and architectural reasoning behind your prototype to veteran judges.',
+    specs: [
+      { lbl: 'CHALLENGE TYPE', val: 'Engineering / Hardware Sprint' },
+      { lbl: 'DURATION', val: '36 Continuous Hours' },
+      { lbl: 'VENUE', val: 'Machine Forge Encampment' }
+    ]
+  },
+  sensor: {
+    img: card04,
+    cat: 'CHAPTER II // HANDS-ON ELECTRONICS & TELEMETRY',
+    title: 'Build a Sensor Rig',
+    bounty: 'CREDENTIAL: CERTIFIED SENSOR ARCHITECT',
+    desc: 'Wire a precision sensor and turn a raw physical signal into actionable telemetry data you can use. Learn to read circuit wiring diagrams, prototype responsive inputs, inspect output waveforms, and test the rig under diverse environments.',
+    specs: [
+      { lbl: 'SESSION TYPE', val: 'Electronics / Hands-on' },
+      { lbl: 'EQUIPMENT', val: 'Hardware Kits & Rigs Provided' },
+      { lbl: 'VENUE', val: 'Riverside Mill Workshops' }
+    ]
+  },
+  prototype: {
+    img: card05,
+    cat: 'CHAPTER II // RAPID PHYSICAL FABRICATION',
+    title: 'From Sketch to Prototype',
+    bounty: 'CREDENTIAL: MASTER MAKER CERTIFICATE',
+    desc: 'Develop a rough concept into a tangible prototype you can try, test, and improve. Start from an initial design sketch, build and compare early iterations, and depart with a production-ready roadmap.',
+    specs: [
+      { lbl: 'SESSION TYPE', val: 'Fabrication / Hands-on' },
+      { lbl: 'TOOLING', val: '3D Prototyping & Laser Workstations' },
+      { lbl: 'VENUE', val: 'Makers Laboratory & Canopy' }
+    ]
+  },
+  exhibits: {
+    img: card03,
+    cat: 'CHAPTER III // INTERACTIVE OPTICS & MOTION',
+    title: 'Light Through Matter & Machines in Motion',
+    bounty: 'EXHIBIT ACCESS: OPEN TO ALL ATTENDEES',
+    desc: 'Explore working physical models demonstrating how transparent materials split and redirect light paths at varying incident angles, and investigate the mechanical linkages translating motor rotation into high-precision multi-axis motion.',
+    specs: [
+      { lbl: 'EXHIBIT TYPE', val: 'Interactive Demonstrations' },
+      { lbl: 'DISCIPLINES', val: 'Optics, Lasers & Applied Physics' },
+      { lbl: 'VENUE', val: 'The Grand Conservatory' }
+    ]
+  },
+  speakers: {
+    img: card07,
+    cat: 'CHAPTER IV // DISTINGUISHED GLOBAL KEYNOTES',
+    title: 'Field Notes from the Frontier',
+    bounty: 'HEADLINER ACCESS: ALL-ACCESS PASS',
+    desc: 'Take a seat for transformative keynotes: Stephen Attenborough (Virgin Galactic Commercial Spaceflight), Ben Collins (The Stig / Professional Racing & Stunt Legend), and Tilly Lockey (Bionic Pioneer). Plenary panels feature R ADM Deepak Bansal VSM (Indian Navy / AI in Defence), Dr. Ramachandra Budihal (Quantum & Neuromorphic Computing), and Dr. Shankar Venugopal (VP, Mahindra & Mahindra / Future Mobility).',
+    specs: [
+      { lbl: 'SESSION TYPE', val: 'Talks, Panels & Discussions' },
+      { lbl: 'LINEUP', val: 'Virgin Galactic, The Stig, Tilly Lockey' },
+      { lbl: 'VENUE', val: 'The Ancient Amphitheater' }
     ]
   }
 };
@@ -249,7 +283,7 @@ const dossierDesc = document.getElementById('dossier-desc');
 const dossierSpecs = document.getElementById('dossier-specs');
 const btnDossierEnter = document.getElementById('btn-dossier-enter');
 
-function openDossier(seqKey = 'technical') {
+function openDossier(seqKey = 'automata') {
   loadRelic(seqKey);
   if (relicDossierOverlay) relicDossierOverlay.classList.add('open');
   sound.playRelicDiscovery();
@@ -261,7 +295,7 @@ function closeDossier() {
 }
 
 function loadRelic(seqKey) {
-  const data = relicData[seqKey] || relicData['technical'];
+  const data = relicData[seqKey] || relicData['automata'];
   if (!data) return;
 
   railItems.forEach((item) => {
@@ -298,9 +332,9 @@ function loadRelic(seqKey) {
 }
 
 // Initialize default Sequence 01
-loadRelic('technical');
+loadRelic('automata');
 
-if (dockDossierBtn) dockDossierBtn.addEventListener('click', () => openDossier('technical'));
+if (dockDossierBtn) dockDossierBtn.addEventListener('click', () => openDossier('automata'));
 if (closeDossierBtn) closeDossierBtn.addEventListener('click', closeDossier);
 
 railItems.forEach((item) => {
@@ -349,13 +383,13 @@ if (collectibleCardWrap) {
 }
 
 // 10. Interactive Game World Hotspots Click Handling
-const hotspots = document.querySelectorAll('.game-hotspot');
+const hotspots = document.querySelectorAll('.game-hotspot, .map-sector-pin');
 hotspots.forEach((spot) => {
   spot.addEventListener('click', () => {
     const mem = spot.getAttribute('data-memory');
     if (mem === 'pass') {
       openForge();
-    } else {
+    } else if (mem) {
       openDossier(mem);
     }
   });
@@ -427,12 +461,12 @@ if (previewPassCard) {
 if (btnConfirmPass) {
   btnConfirmPass.addEventListener('click', () => {
     sound.playPickaxe();
-    btnConfirmPass.textContent = 'AUTHORIZING CLEARANCE...';
+    btnConfirmPass.textContent = 'AUTHORIZING CREDENTIAL...';
     btnConfirmPass.style.background = '#f59e0b';
     btnConfirmPass.style.color = '#000';
 
     setTimeout(() => {
-      btnConfirmPass.textContent = 'EXPEDITION CREDENTIAL VERIFIED!';
+      btnConfirmPass.textContent = 'VALLEY PASS VERIFIED & READY!';
       btnConfirmPass.style.background = '#10b981';
       btnConfirmPass.style.color = '#fff';
       setTimeout(() => {
@@ -445,7 +479,7 @@ if (btnConfirmPass) {
   });
 }
 
-// 12. Live Synchronized Countdown Timer (Into Stone Frame)
+// 12. Live Synchronized Countdown Timer
 const hudDays = document.getElementById('hud-days');
 const hudHours = document.getElementById('hud-hours');
 const hudMinutes = document.getElementById('hud-minutes');

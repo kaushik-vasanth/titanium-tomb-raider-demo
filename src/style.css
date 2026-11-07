@@ -732,12 +732,53 @@ body.survival-instinct-active #dock-survival {
 }
 
 .expedition-map-header {
-  padding: 16px 24px;
+  padding: 14px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid var(--border-stone);
   background: rgba(14, 21, 30, 0.9);
+  gap: 16px;
+}
+
+.map-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.map-view-switch {
+  display: flex;
+  align-items: center;
+  background: rgba(10, 15, 22, 0.85);
+  border: 1px solid var(--border-stone);
+  border-radius: 4px;
+  padding: 3px;
+  gap: 4px;
+}
+
+.map-switch-tab {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 3px;
+  cursor: none;
+  transition: all 0.2s;
+}
+
+.map-switch-tab:hover {
+  color: #fff;
+}
+
+.map-switch-tab.active {
+  background: var(--survival-gold);
+  color: #000;
+  box-shadow: 0 0 14px var(--survival-glow);
 }
 
 .map-header-title {
