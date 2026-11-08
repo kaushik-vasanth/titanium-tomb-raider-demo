@@ -485,6 +485,9 @@ const focusTitle = document.getElementById('focus-title');
 const focusSubtitle = document.getElementById('focus-subtitle');
 
 window.addEventListener('campfire-lit', () => {
+  if (cavernStage) {
+    cavernStage.classList.add('lit');
+  }
   if (campfirePromptBox) {
     campfirePromptBox.classList.add('lit');
     setTimeout(() => {
