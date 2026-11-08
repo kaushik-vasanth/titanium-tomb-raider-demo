@@ -4,9 +4,10 @@
 import { sound } from './sound.js';
 
 export class CompassWheelManager {
-  constructor({ openDossier, openForge, onNavigateSanctuary, onNavigateCavern } = {}) {
+  constructor({ openDossier, openForge, openMap, onNavigateSanctuary, onNavigateCavern } = {}) {
     this.openDossier = openDossier;
     this.openForge = openForge;
+    this.openMap = openMap;
     this.onNavigateSanctuary = onNavigateSanctuary;
     this.onNavigateCavern = onNavigateCavern;
 
@@ -32,12 +33,17 @@ export class CompassWheelManager {
     this.positionNodesRadially();
     this.bindEvents();
     this.startDockNeedleAnimation();
+
+    window.addEventListener('resize', () => {
+      this.positionNodesRadially();
+    });
   }
 
   positionNodesRadially() {
-    // Radius of the circle of nodes (around 190px from center)
-    const radius = 185;
+    const isMobile = window.innerWidth < 640;
+    const radius = isMobile ? 142 : 192;
 
+    this.nodeItems = Array.from(document.querySelectorAll('.wheel-node-item'));
     this.nodeItems.forEach((node) => {
       const angleDeg = parseFloat(node.dataset.angle || 0);
       const angleRad = (angleDeg * Math.PI) / 180;
@@ -46,7 +52,9 @@ export class CompassWheelManager {
       const x = Math.round(Math.cos(angleRad) * radius);
       const y = Math.round(Math.sin(angleRad) * radius);
 
-      node.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+      node.style.setProperty('--node-x', `${x}px`);
+      node.style.setProperty('--node-y', `${y}px`);
+      node.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(var(--node-scale, 1))`;
     });
   }
 
@@ -87,6 +95,8 @@ export class CompassWheelManager {
     this.nodeItems.forEach((node) => {
       node.addEventListener('mouseenter', () => {
         sound.playHover();
+        node.style.setProperty('--node-scale', '1.14');
+
         const angle = parseFloat(node.dataset.angle || 0);
         // Direct central compass needle towards the node (pointing from center outward)
         // angle is 0 at right, 90 at bottom, 180 at left, -90 at top
@@ -105,6 +115,8 @@ export class CompassWheelManager {
       });
 
       node.addEventListener('mouseleave', () => {
+        node.style.setProperty('--node-scale', '1');
+
         // Return needle to North
         if (this.coreNeedle) {
           this.coreNeedle.style.transform = 'translate(-50%, -50%) rotate(0deg)';
@@ -157,6 +169,7 @@ export class CompassWheelManager {
     if (this.isOpen) return;
     this.isOpen = true;
     sound.playStoneMechanism();
+    this.positionNodesRadially();
     this.overlay.classList.add('open');
     document.body.classList.add('modal-open');
   }
@@ -173,6 +186,28 @@ export class CompassWheelManager {
     this.close();
 
     setTimeout(() => {
+      if (!action) return;
+
+      if (action.startsWith('link:')) {
+        const url = action.slice(5);
+        window.open(url, '_blank', 'noopener,noreferrer');
+        return;
+      }
+
+      if (action === 'map') {
+        if (this.openMap) {
+          this.openMap();
+        } else {
+          const mapOverlay = document.getElementById('expedition-map-overlay');
+          if (mapOverlay) {
+            sound.playStoneMechanism();
+            mapOverlay.classList.add('open');
+            document.body.classList.add('modal-open');
+          }
+        }
+        return;
+      }
+
       if (action === 'sanctuary') {
         if (this.onNavigateSanctuary) {
           this.onNavigateSanctuary();
@@ -190,7 +225,7 @@ export class CompassWheelManager {
         }
       } else if (action === 'permit') {
         if (this.openForge) this.openForge();
-      } else if (action && action.startsWith('dossier:')) {
+      } else if (action.startsWith('dossier:')) {
         const trackId = action.split(':')[1];
         if (this.openDossier) this.openDossier(trackId);
       }

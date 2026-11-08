@@ -1588,7 +1588,7 @@ body.survival-instinct-active #dock-survival {
    ========================================================================== */
 .scroll-descent-guide {
   position: absolute;
-  bottom: 34px;
+  bottom: 104px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -1764,13 +1764,16 @@ body.survival-instinct-active #dock-survival {
    ========================================================================== */
 .compass-dock {
   position: fixed;
-  bottom: 28px;
-  left: 32px;
-  z-index: 90;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 95;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 6px;
   user-select: none;
+  pointer-events: auto;
 }
 
 .compass-btn {
@@ -1781,14 +1784,14 @@ body.survival-instinct-active #dock-survival {
   background: radial-gradient(circle, #1a2333 0%, #0d131f 70%, #06090e 100%);
   border: 2px solid rgba(245, 158, 11, 0.55);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8), 0 0 15px rgba(245, 158, 11, 0.25);
-  cursor: none;
+  cursor: pointer;
   padding: 0;
   outline: none;
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .compass-btn:hover {
-  transform: scale(1.1);
+  transform: scale(1.12);
   border-color: #fbbf24;
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.9), 0 0 25px rgba(251, 191, 36, 0.5);
 }
@@ -1859,24 +1862,45 @@ body.survival-instinct-active #dock-survival {
   box-shadow: 0 0 5px #fbbf24;
 }
 
+.compass-dock-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(10, 15, 22, 0.88);
+  backdrop-filter: blur(8px);
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+  transition: all 0.25s ease;
+}
+
+.compass-dock-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+}
+
 .compass-dock-label {
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 8.5px;
   font-weight: 700;
   letter-spacing: 2px;
   color: #94a3b8;
-  background: rgba(10, 15, 22, 0.85);
-  backdrop-filter: blur(8px);
-  padding: 4px 10px;
-  border-radius: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  pointer-events: none;
-  transition: color 0.25s, border-color 0.25s;
+  white-space: nowrap;
+  transition: color 0.25s;
+}
+
+.compass-dock:hover .compass-dock-badge {
+  border-color: #fbbf24;
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.35);
 }
 
 .compass-dock:hover .compass-dock-label {
   color: #fbbf24;
-  border-color: rgba(245, 158, 11, 0.4);
 }
 
 /* ==========================================================================
@@ -2029,34 +2053,86 @@ body.survival-instinct-active #dock-survival {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 86px;
-  height: 60px;
+  width: 88px;
+  height: 64px;
   border-radius: 12px;
-  background: rgba(15, 23, 42, 0.92);
+  background: rgba(15, 23, 42, 0.94);
   border: 1px solid rgba(245, 158, 11, 0.35);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 5px;
   pointer-events: auto;
-  cursor: none;
+  cursor: pointer;
   outline: none;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  transform: translate(calc(-50% + var(--node-x, 0px)), calc(-50% + var(--node-y, 0px))) scale(var(--node-scale, 1));
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s, box-shadow 0.2s, background 0.2s, color 0.2s;
   user-select: none;
+  color: #cbd5e1;
 }
 
 .wheel-node-item:hover {
-  transform: scale(1.15) !important;
   border-color: #fbbf24;
-  background: rgba(30, 41, 59, 0.98);
-  box-shadow: 0 0 25px rgba(251, 191, 36, 0.5), 0 10px 30px rgba(0, 0, 0, 0.85);
+  background: rgba(26, 36, 54, 0.98);
+  box-shadow: 0 0 25px rgba(251, 191, 36, 0.45), 0 10px 30px rgba(0, 0, 0, 0.85);
 }
 
 .wheel-node-icon {
-  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
   line-height: 1;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.wheel-node-item:hover .wheel-node-icon {
+  transform: scale(1.15);
+}
+
+/* Individual node branding colors on hover */
+.wheel-node-item.node-instagram:hover {
+  border-color: #e1306c;
+  box-shadow: 0 0 25px rgba(225, 48, 108, 0.5);
+  color: #e1306c;
+}
+.wheel-node-item.node-facebook:hover {
+  border-color: #1877f2;
+  box-shadow: 0 0 25px rgba(24, 119, 242, 0.5);
+  color: #1877f2;
+}
+.wheel-node-item.node-x:hover {
+  border-color: #ffffff;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.45);
+  color: #ffffff;
+}
+.wheel-node-item.node-youtube:hover {
+  border-color: #ef4444;
+  box-shadow: 0 0 25px rgba(239, 68, 68, 0.5);
+  color: #ef4444;
+}
+.wheel-node-item.node-discord:hover {
+  border-color: #5865f2;
+  box-shadow: 0 0 25px rgba(88, 101, 242, 0.5);
+  color: #5865f2;
+}
+.wheel-node-item.node-map:hover {
+  border-color: #10b981;
+  box-shadow: 0 0 25px rgba(16, 185, 129, 0.5);
+  color: #10b981;
+}
+.wheel-node-item.node-courtyard:hover {
+  border-color: #f59e0b;
+  box-shadow: 0 0 25px rgba(245, 158, 11, 0.5);
+  color: #f59e0b;
+}
+.wheel-node-item.node-sanctuary:hover {
+  border-color: #38bdf8;
+  box-shadow: 0 0 25px rgba(56, 189, 248, 0.5);
+  color: #38bdf8;
 }
 
 .wheel-node-text {
@@ -2064,13 +2140,9 @@ body.survival-instinct-active #dock-survival {
   font-size: 8px;
   font-weight: 700;
   letter-spacing: 1px;
-  color: #cbd5e1;
+  color: inherit;
   text-align: center;
   line-height: 1;
-}
-
-.wheel-node-item:hover .wheel-node-text {
-  color: #fbbf24;
 }
 
 .wheel-close-btn {
@@ -2411,15 +2483,265 @@ body.survival-instinct-active #dock-survival {
   transform: none;
 }
 
+/* ==========================================================================
+   4. TACTICAL EXPEDITION ATLAS & VALLEY MAP MODAL
+   ========================================================================== */
+.expedition-map-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  background: rgba(3, 5, 8, 0.88);
+  backdrop-filter: blur(16px);
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
 
+.expedition-map-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
 
+.map-window {
+  position: relative;
+  width: 90vw;
+  max-width: 960px;
+  height: 80vh;
+  max-height: 680px;
+  background: #090e17;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(245, 158, 11, 0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
 
+.map-window-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: rgba(15, 23, 42, 0.95);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
 
+.map-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
 
+.map-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #10b981;
+}
 
+.map-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+  animation: radarPing 1.8s infinite ease-out;
+}
 
+.map-title {
+  font-family: var(--font-title);
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #f8fafc;
+  margin: 0;
+}
 
+.map-coords {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: #94a3b8;
+}
 
+.map-viewport {
+  position: relative;
+  flex: 1;
+  background: radial-gradient(circle at 50% 50%, #0d1524 0%, #06090f 100%);
+  overflow: hidden;
+}
+
+.map-grid-mesh {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(245, 158, 11, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(245, 158, 11, 0.08) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+}
+
+.map-contour-rings {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 580px;
+  height: 580px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px dashed rgba(245, 158, 11, 0.15);
+  box-shadow: 
+    0 0 0 70px rgba(245, 158, 11, 0.03),
+    0 0 0 140px rgba(245, 158, 11, 0.02),
+    0 0 0 210px rgba(245, 158, 11, 0.015);
+  pointer-events: none;
+  animation: astrolabeSpinCW 80s linear infinite;
+}
+
+/* Map Sector Hotspot Pins */
+.map-pin {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pin-marker {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.95);
+  border: 2px solid #fbbf24;
+  color: #fbbf24;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pin-radar-beacon {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 1px solid rgba(251, 191, 36, 0.5);
+  animation: radarPing 2.2s infinite ease-out;
+  pointer-events: none;
+}
+
+@keyframes radarPing {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+.map-pin:hover .pin-marker {
+  transform: scale(1.25);
+  background: #fbbf24;
+  color: #0b0f19;
+  box-shadow: 0 0 30px rgba(251, 191, 36, 0.8);
+}
+
+.pin-tooltip {
+  position: absolute;
+  top: 42px;
+  left: 50%;
+  transform: translateX(-50%) translateY(5px);
+  background: rgba(10, 15, 22, 0.95);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  padding: 8px 12px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.85);
+  z-index: 10;
+}
+
+.map-pin:hover .pin-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.pin-tooltip .pin-sec {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 700;
+  color: #fbbf24;
+  letter-spacing: 1.5px;
+}
+
+.pin-tooltip strong {
+  font-family: var(--font-title);
+  font-size: 11px;
+  color: #f8fafc;
+  letter-spacing: 1px;
+}
+
+.pin-tooltip small {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: #94a3b8;
+}
+
+/* Pin Positions */
+.pin-sanctuary { top: 22%; left: 32%; }
+.pin-courtyard { top: 68%; left: 50%; }
+.pin-automata { top: 40%; left: 74%; }
+.pin-cipher { top: 58%; left: 24%; }
+.pin-forge { top: 34%; left: 52%; }
+.pin-permit { top: 78%; left: 78%; }
+
+.map-legend {
+  position: absolute;
+  bottom: 16px;
+  left: 20px;
+  display: flex;
+  gap: 16px;
+  background: rgba(10, 15, 22, 0.85);
+  padding: 6px 14px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 1px;
+}
+
+.legend-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+.legend-dot.active { background: #38bdf8; box-shadow: 0 0 6px #38bdf8; }
+.legend-dot.cave { background: #f59e0b; box-shadow: 0 0 6px #f59e0b; }
+.legend-dot.trials { background: #fbbf24; box-shadow: 0 0 6px #fbbf24; }
 
 /* ==========================================================================
    RESPONSIVE BREAKPOINTS
@@ -2429,7 +2751,7 @@ body.survival-instinct-active #dock-survival {
   .floating-hud-dock { right: 12px; }
   .brand-header-lockup { left: 16px; top: 16px; }
   .tomb-counter-container { bottom: 16px; }
-  .scroll-descent-guide { bottom: 24px; }
+  .scroll-descent-guide { bottom: 96px; }
   .dossier-window { grid-template-columns: 1fr; }
   .relic-rail { flex-direction: row; overflow-x: auto; }
   .dossier-content-grid { grid-template-columns: 1fr; }

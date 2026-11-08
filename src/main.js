@@ -24,6 +24,7 @@ const sceneTransition = new SceneTransitionController();
 const compassWheel = new CompassWheelManager({
   openDossier: (seq) => openDossier(seq),
   openForge: () => openForge(),
+  openMap: () => openMap(),
   onNavigateSanctuary: () => sceneTransition.triggerAscent(),
   onNavigateCavern: () => sceneTransition.triggerCinematicDescent()
 });
@@ -74,6 +75,7 @@ window.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     closeDossier();
     closeForge();
+    closeMap();
   }
 });
 
@@ -326,6 +328,57 @@ if (btnConfirmPass) {
     }, 1000);
   });
 }
+
+// 11b. Tactical Expedition Atlas & Valley Map Management
+const mapOverlay = document.getElementById('expedition-map-overlay');
+const closeMapBtn = document.getElementById('close-map');
+
+function openMap() {
+  if (mapOverlay) {
+    sound.playStoneMechanism();
+    mapOverlay.classList.add('open');
+    document.body.classList.add('modal-open');
+  }
+}
+
+function closeMap() {
+  if (mapOverlay) {
+    sound.playClick();
+    mapOverlay.classList.remove('open');
+    document.body.classList.remove('modal-open');
+  }
+}
+
+if (closeMapBtn) {
+  closeMapBtn.addEventListener('click', closeMap);
+}
+
+if (mapOverlay) {
+  mapOverlay.addEventListener('click', (e) => {
+    if (e.target === mapOverlay) closeMap();
+  });
+}
+
+// Map Hotspot Pins
+const mapPins = document.querySelectorAll('.map-pin');
+mapPins.forEach((pin) => {
+  pin.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const action = pin.getAttribute('data-action');
+    closeMap();
+    setTimeout(() => {
+      if (action === 'sanctuary') {
+        sceneTransition.triggerAscent();
+      } else if (action === 'cavern') {
+        sceneTransition.triggerCinematicDescent();
+      } else if (action === 'permit') {
+        openForge();
+      } else if (action && action.startsWith('dossier:')) {
+        openDossier(action.split(':')[1]);
+      }
+    }, 280);
+  });
+});
 
 // 12. Live Synchronized Countdown Timer
 const hudDays = document.getElementById('hud-days');
