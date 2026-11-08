@@ -430,7 +430,7 @@ export class SceneTransitionController {
       this.sceneCave.style.pointerEvents = 'none';
 
       // Rocks scrub into camera and pile up
-      const fullWallTime = (this.rockVideo.duration && this.rockVideo.duration > 1.0) ? Math.max(1.0, this.rockVideo.duration - 0.15) : 5.0;
+      const fullWallTime = this.getFullWallTime();
       this.targetVideoTime = p * fullWallTime;
       this.fadeAlpha = Math.min(1.0, p / 0.08);
       this.partOffset = 0.0;
@@ -471,7 +471,7 @@ export class SceneTransitionController {
       this.sceneCave.style.visibility = 'visible';
       this.sceneCave.style.pointerEvents = 'none';
 
-      const fullWallTime = (this.rockVideo.duration && this.rockVideo.duration > 1.0) ? Math.max(1.0, this.rockVideo.duration - 0.15) : 5.0;
+      const fullWallTime = this.getFullWallTime();
       this.targetVideoTime = fullWallTime; // held at full wall
       this.fadeAlpha = 1.0;
       this.partOffset = 0.0;
@@ -508,7 +508,7 @@ export class SceneTransitionController {
       this.partOffset = p;
       this.dissolveProgress = p * 0.85;
       this.cloudDensity = Math.max(0, 1.0 - p);
-      const fullWallTime = (this.rockVideo.duration && this.rockVideo.duration > 1.0) ? Math.max(1.0, this.rockVideo.duration - 0.15) : 5.0;
+      const fullWallTime = this.getFullWallTime();
       this.targetVideoTime = fullWallTime;
       this.fadeAlpha = 1.0;
 
@@ -545,6 +545,13 @@ export class SceneTransitionController {
       this.isSeeking = true;
       this.rockVideo.currentTime = this.targetVideoTime;
     }
+  }
+
+  getFullWallTime() {
+    if (this.rockVideo.duration && this.rockVideo.duration > 7.0) {
+      return 6.2; // Video reaches 100% solid rock coverage by 6.0-6.2s
+    }
+    return (this.rockVideo.duration && this.rockVideo.duration > 1.0) ? Math.max(1.0, this.rockVideo.duration - 0.15) : 5.0;
   }
 
   triggerCinematicDescent() {
