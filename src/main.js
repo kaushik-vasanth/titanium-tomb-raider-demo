@@ -547,8 +547,8 @@ function igniteCampfire(e) {
 if (campfireChassis) {
   campfireChassis.addEventListener('click', igniteCampfire);
 }
-if (campfirePrompt) {
-  campfirePrompt.addEventListener('click', igniteCampfire);
+if (campfireWrap) {
+  campfireWrap.addEventListener('click', igniteCampfire);
 }
 
 // 14. Courtyard Ruined Exits / Gateways Navigation
