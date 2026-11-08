@@ -6,17 +6,7 @@ import { MountainAtmosphere } from './canvas-atmosphere.js';
 import { RockTransitionManager } from './rock-transition.js';
 import { sound } from './sound.js';
 
-// Import Maps for Atlas
-import mapAurel from '../assets/titaniumfest/valley-of-aurel.webp';
-import mapCampus from '../assets/rec-campus-map.jpg';
-
-// Preload maps for 0-latency display
-[mapAurel, mapCampus].forEach((src) => {
-  const img = new Image();
-  img.src = src;
-});
-
-// 1. Initialize Archaeological Surveyor Cursor
+// 1. Initialize Titanium Metallic Silver Arrow Cursor
 new SurveyorCursor();
 
 // 2. Initialize Canvas Atmosphere (Mist, Spray & Campfire Embers)
@@ -24,6 +14,16 @@ const atmosphere = new MountainAtmosphere('atmosphere-canvas');
 
 // 3. Initialize Cinematic Rock Avalanche Scroll-Driven Section Transition
 const rockTransition = new RockTransitionManager();
+
+// 4. Header Titanium Logo Home Navigation
+const headerLogoHome = document.getElementById('header-logo-home');
+if (headerLogoHome) {
+  headerLogoHome.addEventListener('click', (e) => {
+    e.preventDefault();
+    sound.playClick();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
 
 // 3. Multi-Plane 2.5D Parallax Tracking
 const heroArtLayer = document.getElementById('hero-art-layer');
@@ -76,102 +76,8 @@ window.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     closeDossier();
     closeForge();
-    closeMap();
   }
 });
-
-// 5. Audio SFX Dock Button with Bespoke Vector SVGs (No Emojis)
-const dockAudio = document.getElementById('dock-audio');
-const dockAudioIconWrap = document.getElementById('dock-audio-icon-wrap');
-const dockAudioTooltip = document.getElementById('dock-audio-tooltip');
-
-const soundOnSVG = `
-  <svg class="dock-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-    <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
-    <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
-  </svg>
-`;
-
-const soundOffSVG = `
-  <svg class="dock-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-    <line x1="23" y1="9" x2="17" y2="15" />
-    <line x1="17" y1="9" x2="23" y2="15" />
-  </svg>
-`;
-
-if (dockAudio) {
-  dockAudio.addEventListener('click', () => {
-    const isMuted = sound.toggleMute();
-    if (dockAudioIconWrap) {
-      dockAudioIconWrap.innerHTML = isMuted ? soundOffSVG : soundOnSVG;
-    }
-    if (dockAudioTooltip) {
-      dockAudioTooltip.textContent = isMuted ? 'Sound Effects: OFF' : 'Sound Effects: ON';
-    }
-    dockAudio.classList.toggle('active', !isMuted);
-    if (!isMuted) sound.playClick();
-  });
-}
-
-// 6. Dual-Map Modal: Valley of Aurel Atlas + REC Campus Grid
-const expeditionMapOverlay = document.getElementById('expedition-map-overlay');
-const dockMapBtn = document.getElementById('dock-map');
-const closeMapBtn = document.getElementById('close-map');
-const tabMapAurel = document.getElementById('tab-map-aurel');
-const tabMapCampus = document.getElementById('tab-map-campus');
-const mapDisplayImg = document.getElementById('map-display-img');
-const pinsAurelGroup = document.getElementById('pins-aurel-group');
-const pinsCampusGroup = document.getElementById('pins-campus-group');
-const mapHeaderTitle = document.getElementById('map-header-title');
-const mapHeaderCoords = document.getElementById('map-header-coords');
-
-function openMap() {
-  if (expeditionMapOverlay) {
-    expeditionMapOverlay.classList.add('open');
-    sound.playStoneMechanism();
-  }
-}
-
-function closeMap() {
-  if (expeditionMapOverlay) {
-    expeditionMapOverlay.classList.remove('open');
-    sound.playClick();
-  }
-}
-
-function setMapView(view) {
-  sound.playClick();
-  if (view === 'aurel') {
-    tabMapAurel.classList.add('active');
-    tabMapCampus.classList.remove('active');
-    mapDisplayImg.src = mapAurel;
-    pinsAurelGroup.style.display = 'block';
-    pinsCampusGroup.style.display = 'none';
-    mapHeaderTitle.textContent = 'THE WORLD ATLAS // VALLEY OF AUREL FESTIVAL GROUNDS';
-    mapHeaderCoords.textContent = 'BEYOND THE SKY GATE • AUREL';
-  } else {
-    tabMapCampus.classList.add('active');
-    tabMapAurel.classList.remove('active');
-    mapDisplayImg.src = mapCampus;
-    pinsAurelGroup.style.display = 'none';
-    pinsCampusGroup.style.display = 'block';
-    mapHeaderTitle.textContent = 'ARCHAEOLOGICAL SURVEY GRID // REC CHENNAI';
-    mapHeaderCoords.textContent = 'LAT 12.986° N • LON 80.005° E';
-  }
-}
-
-if (dockMapBtn) dockMapBtn.addEventListener('click', openMap);
-if (closeMapBtn) closeMapBtn.addEventListener('click', closeMap);
-if (tabMapAurel) tabMapAurel.addEventListener('click', () => setMapView('aurel'));
-if (tabMapCampus) tabMapCampus.addEventListener('click', () => setMapView('campus'));
-
-if (expeditionMapOverlay) {
-  expeditionMapOverlay.addEventListener('click', (e) => {
-    if (e.target === expeditionMapOverlay) closeMap();
-  });
-}
 
 // 7. Relic Archive Database (Synced with demo.titaniumfest.com)
 const relicData = {

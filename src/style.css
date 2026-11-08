@@ -152,110 +152,130 @@ body.survival-instinct-active #dock-survival {
 }
 
 /* ==========================================================================
-   SURVEYOR RETICLE CURSOR
+   METALLIC SILVER ARROW CURSOR (Matches Titanium Logo)
    ========================================================================== */
-.surveyor-cursor-ring {
+.silver-arrow-cursor {
   position: fixed;
   top: 0;
   left: 0;
-  width: 44px;
-  height: 44px;
-  margin: -22px 0 0 -22px;
-  border: 1.5px solid rgba(245, 158, 11, 0.7);
-  border-radius: 50%;
+  width: 24px;
+  height: 24px;
   pointer-events: none;
-  z-index: 9999;
-  transition: width 0.25s var(--ease-cinematic), height 0.25s var(--ease-cinematic), margin 0.25s var(--ease-cinematic), border-color 0.25s;
-  box-shadow: 0 0 14px rgba(245, 158, 11, 0.35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  z-index: 99999;
+  transform: translate3d(0, 0, 0);
+  transition: transform 0.05s ease-out;
 }
 
-.surveyor-reticle-inner {
-  width: 28px;
-  height: 28px;
-  border: 1px dashed rgba(255, 255, 255, 0.4);
-  border-radius: 50%;
-  animation: reticleSpin 14s linear infinite;
+.silver-arrow-svg {
+  display: block;
+  width: 24px;
+  height: 24px;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s ease;
 }
 
-@keyframes reticleSpin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.silver-arrow-cursor.cursor-click .silver-arrow-svg {
+  transform: scale(0.85);
 }
 
-.surveyor-cursor-dot {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 6px;
-  height: 6px;
-  margin: -3px 0 0 -3px;
-  background-color: var(--survival-bright);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 10000;
-  box-shadow: 0 0 8px var(--survival-gold);
+.silver-arrow-cursor.cursor-hover .silver-arrow-svg {
+  transform: scale(1.12);
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 14px rgba(203, 213, 225, 0.5));
 }
 
-.surveyor-coord-tag {
+.silver-arrow-cursor.cursor-flint .silver-arrow-svg {
+  transform: scale(1.18);
+  filter: drop-shadow(0 0 10px rgba(255, 120, 20, 0.95)) drop-shadow(0 0 20px rgba(255, 80, 0, 0.65));
+}
+
+.silver-cursor-label {
   position: absolute;
-  top: -18px;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 20px;
+  left: 18px;
   font-family: var(--font-mono);
-  font-size: 8px;
-  letter-spacing: 1px;
-  color: var(--survival-bright);
-  white-space: nowrap;
-  opacity: 0.7;
-}
-
-.surveyor-label {
-  position: absolute;
-  bottom: -22px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 2px;
-  color: #fff;
-  background: rgba(8, 12, 18, 0.88);
-  border: 1px solid var(--border-gold);
-  padding: 2px 7px;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #f8fafc;
+  background: rgba(15, 23, 42, 0.92);
+  border: 1px solid rgba(226, 232, 240, 0.45);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+  padding: 3px 8px;
   border-radius: 3px;
   white-space: nowrap;
   opacity: 0;
-  transition: opacity 0.2s;
-}
-
-.cursor-hover {
-  width: 62px;
-  height: 62px;
-  margin: -31px 0 0 -31px;
-  border-color: var(--ancient-cyan);
-  box-shadow: 0 0 25px var(--cyan-glow);
-}
-
-.cursor-hover .surveyor-reticle-inner {
-  border-color: var(--ancient-cyan);
-  animation-duration: 4s;
-}
-
-.cursor-click {
-  transform: scale(0.85);
+  pointer-events: none;
+  transition: opacity 0.2s ease;
 }
 
 .cursor-spark {
   position: fixed;
   width: 4px;
   height: 4px;
-  background: var(--survival-bright);
+  background: #ffffff;
   border-radius: 50%;
   pointer-events: none;
   z-index: 9998;
-  box-shadow: 0 0 8px var(--survival-gold);
+  box-shadow: 0 0 8px #ffffff;
+}
+
+/* ==========================================================================
+   TOP EXPEDITION HEADER WITH TITANIUM LOGO
+   ========================================================================== */
+.expedition-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 100;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(6, 9, 14, 0.8) 0%, rgba(6, 9, 14, 0) 100%);
+  backdrop-filter: blur(2px);
+  transition: all 0.3s ease;
+}
+
+.header-logo-link {
+  display: flex;
+  align-items: center;
+  pointer-events: auto;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), filter 0.25s ease;
+}
+
+.header-logo-link:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 16px rgba(255, 255, 255, 0.7));
+}
+
+.header-logo-img {
+  height: 36px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.85));
+}
+
+.header-right-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  pointer-events: auto;
+}
+
+.header-tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  border: 1px solid rgba(140, 160, 185, 0.25);
+  padding: 4px 10px;
+  border-radius: 3px;
+  background: rgba(10, 15, 22, 0.65);
 }
 
 /* ==========================================================================
