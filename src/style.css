@@ -429,7 +429,7 @@ body.survival-instinct-active #dock-survival {
 .hero-scroll-track {
   position: relative;
   width: 100vw;
-  height: 260vh; /* Smooth generous scroll track */
+  height: 180vh; /* Smooth, responsive cinematic descent track */
   background: #06090e;
 }
 
@@ -1624,17 +1624,15 @@ body.survival-instinct-active #dock-survival {
 }
 
 /* ==========================================================================
-   STICKY ROCK & CLOUD TRANSITION LAYERS (Techfest Inspired)
+   CINEMATIC ROCK & CLOUD TRANSITION OVERLAY (Techfest Inspired)
    ========================================================================== */
-.sticky-underlay-cavern {
-  position: absolute;
+.rock-transition-overlay {
+  position: fixed;
   inset: 0;
-  background: #0a0d14 url('/assets/cave-bg.png') center bottom / cover no-repeat;
-  filter: brightness(0.82) contrast(1.08) saturate(0.95);
-  opacity: 0;
-  transition: opacity 0.35s ease;
-  z-index: 6;
+  width: 100vw;
+  height: 100vh;
   pointer-events: none;
+  z-index: 80;
 }
 
 .cloud-canopy-canvas {
@@ -1645,8 +1643,7 @@ body.survival-instinct-active #dock-survival {
   height: 100%;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.25s ease;
-  z-index: 7;
+  z-index: 1;
 }
 
 .sticky-rock-canvas {
@@ -1657,8 +1654,7 @@ body.survival-instinct-active #dock-survival {
   height: 100%;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.25s ease;
-  z-index: 8;
+  z-index: 2;
 }
 
 .sticky-rock-video {
@@ -1685,7 +1681,7 @@ body.survival-instinct-active #dock-survival {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease, transform 0.3s ease;
-  z-index: 9;
+  z-index: 3;
 }
 
 .sticky-transition-tag.visible {

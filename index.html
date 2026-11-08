@@ -120,23 +120,23 @@
           <span class="descent-text">SCROLL TO DESCEND &bull; EXPEDITION ADVANCE</span>
           <div class="descent-line"></div>
         </div>
-
-        <!-- Seamless Underground Cavern Courtyard Underlay (Cross-faded under rocks cover) -->
-        <div class="sticky-underlay-cavern" id="sticky-cavern"></div>
-
-        <!-- Volumetric Mist & Cloud Canopy Canvas (Techfest style) -->
-        <canvas class="cloud-canopy-canvas" id="cloud-canopy-canvas"></canvas>
-
-        <!-- WebGL Luma-Keyed Flying Rocks Canvas (Rocks pile up directly over zooming mountain) -->
-        <canvas class="sticky-rock-canvas" id="sticky-rock-canvas"></canvas>
-        <video class="sticky-rock-video" id="sticky-rock-video" src="./assets/transition-rock.mp4" playsinline muted preload="auto"></video>
-        
-        <div class="sticky-transition-tag" id="sticky-transition-tag">
-          <span class="transition-pulse-orb"></span>
-          <span class="transition-tag-text" id="transition-tag-text">SEISMIC AVALANCHE ADVANCING...</span>
-        </div>
       </div>
     </section>
+
+    <!-- CINEMATIC ROCK & CLOUD TRANSITION OVERLAY (Techfest Inspired) -->
+    <div class="rock-transition-overlay" id="rock-transition-overlay">
+      <!-- Volumetric Mist & Cloud Canopy Canvas -->
+      <canvas class="cloud-canopy-canvas" id="cloud-canopy-canvas"></canvas>
+
+      <!-- WebGL Luma-Keyed Flying Rocks Canvas -->
+      <canvas class="sticky-rock-canvas" id="sticky-rock-canvas"></canvas>
+      <video class="sticky-rock-video" id="sticky-rock-video" src="./assets/transition-rock.mp4" playsinline muted preload="auto"></video>
+      
+      <div class="sticky-transition-tag" id="sticky-transition-tag">
+        <span class="transition-pulse-orb"></span>
+        <span class="transition-tag-text" id="transition-tag-text">SEISMIC AVALANCHE ADVANCING...</span>
+      </div>
+    </div>
 
     <!-- STAGE 2: MISTY RUINED EXPEDITION COURTYARD & INTERACTIVE CAMPFIRE -->
     <section class="cavern-stage" id="cavern-stage">
