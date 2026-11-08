@@ -2124,16 +2124,6 @@ body.survival-instinct-active #dock-survival {
   box-shadow: 0 0 25px rgba(16, 185, 129, 0.5);
   color: #10b981;
 }
-.wheel-node-item.node-courtyard:hover {
-  border-color: #f59e0b;
-  box-shadow: 0 0 25px rgba(245, 158, 11, 0.5);
-  color: #f59e0b;
-}
-.wheel-node-item.node-sanctuary:hover {
-  border-color: #38bdf8;
-  box-shadow: 0 0 25px rgba(56, 189, 248, 0.5);
-  color: #38bdf8;
-}
 
 .wheel-node-text {
   font-family: var(--font-mono);
