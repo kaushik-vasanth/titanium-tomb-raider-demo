@@ -446,3 +446,123 @@ function updateCountdown() {
 setInterval(updateCountdown, 1000);
 updateCountdown();
 
+// 13. Expedition Courtyard & Campfire Lighting Interaction
+const cavernStage = document.getElementById('cavern-stage');
+const cavernLighting = document.getElementById('cavern-lighting');
+const campfireWrap = document.getElementById('campfire-interactive-wrap');
+const courtyardExits = document.getElementById('courtyard-exits');
+const campfireChassis = document.getElementById('campfire-chassis');
+const campfirePrompt = document.getElementById('campfire-prompt');
+const campfirePromptText = campfirePrompt?.querySelector('.prompt-text');
+
+const btnScrollDown = document.getElementById('btn-scroll-down');
+const btnSurfaceReturn = document.getElementById('btn-surface-return');
+
+// Smooth vertical chamber transition between surface & courtyard
+if (btnScrollDown) {
+  btnScrollDown.addEventListener('click', () => {
+    sound.playClick();
+    cavernStage?.scrollIntoView({ behavior: 'smooth' });
+  });
+}
+
+if (btnSurfaceReturn) {
+  btnSurfaceReturn.addEventListener('click', () => {
+    sound.playClick();
+    document.getElementById('hero-stage')?.scrollIntoView({ behavior: 'smooth' });
+  });
+}
+
+// Spark explosion on flint strike
+function triggerFlintSparks(originX, originY) {
+  const sparkColors = ['#ffdd00', '#ff9900', '#ff5500', '#ff3300', '#ffffff'];
+  const count = 30;
+
+  for (let i = 0; i < count; i++) {
+    const spark = document.createElement('div');
+    spark.className = 'cursor-spark';
+    spark.style.position = 'fixed';
+    spark.style.zIndex = '999999';
+    spark.style.pointerEvents = 'none';
+    spark.style.borderRadius = '50%';
+    
+    const size = Math.random() * 5 + 3;
+    spark.style.width = `${size}px`;
+    spark.style.height = `${size}px`;
+    spark.style.background = sparkColors[Math.floor(Math.random() * sparkColors.length)];
+    spark.style.boxShadow = `0 0 10px ${spark.style.background}`;
+
+    spark.style.left = `${originX}px`;
+    spark.style.top = `${originY}px`;
+    document.body.appendChild(spark);
+
+    const angle = Math.random() * Math.PI * 2;
+    const distance = 40 + Math.random() * 120;
+    const destX = Math.cos(angle) * distance;
+    const destY = Math.sin(angle) * distance - (20 + Math.random() * 40); // bias upwards like fire embers
+
+    const anim = spark.animate(
+      [
+        { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+        { transform: `translate(${destX}px, ${destY}px) scale(0)`, opacity: 0 }
+      ],
+      {
+        duration: 500 + Math.random() * 400,
+        easing: 'cubic-bezier(0.1, 0.8, 0.25, 1)'
+      }
+    );
+
+    anim.onfinish = () => spark.remove();
+  }
+}
+
+let campfireLit = false;
+
+function igniteCampfire(e) {
+  const rect = campfireChassis?.getBoundingClientRect() || { left: window.innerWidth / 2, top: window.innerHeight * 0.75, width: 0, height: 0 };
+  const sparkX = e ? e.clientX : rect.left + rect.width / 2;
+  const sparkY = e ? e.clientY : rect.top + rect.height / 2;
+
+  // Strike flint sound
+  sound.playPickaxe();
+  triggerFlintSparks(sparkX, sparkY);
+
+  if (!campfireLit) {
+    campfireLit = true;
+    setTimeout(() => {
+      sound.playRelicDiscovery();
+    }, 120);
+
+    cavernStage?.classList.add('lit');
+    cavernLighting?.classList.add('lit');
+    campfireWrap?.classList.add('lit');
+    courtyardExits?.classList.add('lit');
+
+    if (campfirePromptText) {
+      campfirePromptText.textContent = 'CAMPFIRE BLAZING • EXITS ILLUMINATED';
+    }
+  }
+}
+
+if (campfireChassis) {
+  campfireChassis.addEventListener('click', igniteCampfire);
+}
+if (campfirePrompt) {
+  campfirePrompt.addEventListener('click', igniteCampfire);
+}
+
+// 14. Courtyard Ruined Exits / Gateways Navigation
+const courtyardGates = document.querySelectorAll('.courtyard-exit-gate');
+courtyardGates.forEach((gate) => {
+  gate.addEventListener('click', (e) => {
+    const topic = gate.getAttribute('data-topic');
+    if (!campfireLit) {
+      igniteCampfire(e);
+    }
+    if (topic) {
+      openDossier(topic);
+    }
+  });
+});
+
+

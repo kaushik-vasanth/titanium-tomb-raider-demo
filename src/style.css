@@ -43,8 +43,10 @@
 
 html, body {
   width: 100%;
-  height: 100%;
-  overflow: hidden;
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-behavior: smooth;
   background-color: var(--bg-deep);
   color: #fff;
   font-family: var(--font-sans);
@@ -1316,6 +1318,480 @@ body.survival-instinct-active #dock-survival {
   transform: rotate(-8deg);
 }
 
+/* ==========================================================================
+   SCROLL DESCENT GUIDE (HERO -> EXPEDITION COURTYARD)
+   ========================================================================== */
+.scroll-descent-guide {
+  position: absolute;
+  bottom: 84px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  z-index: 6;
+  cursor: pointer;
+  padding: 6px 16px;
+  background: rgba(10, 15, 22, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.65);
+  transition: all 0.25s ease;
+  animation: descentFloat 2.6s infinite ease-in-out;
+}
+
+.scroll-descent-guide:hover {
+  background: rgba(22, 30, 44, 0.95);
+  border-color: var(--survival-bright);
+  box-shadow: 0 0 25px rgba(245, 158, 11, 0.55);
+  transform: translateX(-50%) translateY(2px);
+}
+
+.descent-glyph {
+  font-size: 13px;
+  color: var(--survival-gold);
+  line-height: 1;
+}
+
+.descent-text {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #f1ede4;
+  text-shadow: 0 0 8px rgba(245, 158, 11, 0.3);
+}
+
+.descent-line {
+  width: 1px;
+  height: 10px;
+  background: linear-gradient(to bottom, var(--survival-gold), transparent);
+}
+
+@keyframes descentFloat {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(6px);
+  }
+}
+
+/* ==========================================================================
+   FLINT STRIKE CURSOR RETICLE
+   ========================================================================== */
+.cursor-flint {
+  width: 66px !important;
+  height: 66px !important;
+  margin: -33px 0 0 -33px !important;
+  border-color: #ff5500 !important;
+  box-shadow: 0 0 25px rgba(255, 85, 0, 0.8), inset 0 0 15px rgba(255, 140, 0, 0.4) !important;
+}
+
+.cursor-flint .surveyor-reticle-inner {
+  border-color: #ffaa00 !important;
+}
+
+.cursor-flint .surveyor-coord-tag {
+  color: #ffaa00 !important;
+}
+
+.cursor-flint .surveyor-label {
+  color: #ffaa00 !important;
+  border-color: rgba(255, 100, 0, 0.5) !important;
+  background: rgba(40, 15, 0, 0.85) !important;
+}
+
+/* ==========================================================================
+   STAGE 2: MISTY RUINED EXPEDITION COURTYARD & CAMPFIRE
+   ========================================================================== */
+.cavern-stage {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  overflow: hidden;
+  background-color: #0a0d14;
+  background-image: url('/assets/cave-bg.png');
+  background-position: center bottom;
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: brightness(0.82) contrast(1.08) saturate(0.95);
+  transition: filter 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+/* User requirement: "Light the Room a little bit, Its so dark, and when lighting the Camp Fire, Make the whole room luminous" */
+.cavern-stage.lit {
+  filter: brightness(1.3) contrast(1.12) saturate(1.22);
+}
+
+/* Ambient Lighting Overlay */
+.cavern-lighting-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: radial-gradient(circle 800px at 50% 80%, rgba(20, 28, 44, 0.2) 0%, rgba(8, 12, 18, 0.72) 70%, rgba(4, 6, 10, 0.9) 100%);
+  transition: background 1.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.5s ease;
+}
+
+.cavern-lighting-overlay.lit {
+  background: radial-gradient(circle 1000px at 50% 80%, rgba(255, 185, 55, 0.38) 0%, rgba(255, 125, 20, 0.22) 42%, rgba(24, 20, 20, 0.28) 75%, rgba(6, 8, 12, 0.6) 100%);
+  animation: ambientFirelight 3.8s infinite alternate ease-in-out;
+}
+
+@keyframes ambientFirelight {
+  0% {
+    opacity: 0.92;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 1;
+    filter: brightness(1.12);
+  }
+  100% {
+    opacity: 0.95;
+    filter: brightness(1.05);
+  }
+}
+
+/* Cavern Header Bar */
+.cavern-header-bar {
+  position: absolute;
+  top: 24px;
+  left: 32px;
+  right: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 10;
+  pointer-events: auto;
+}
+
+.cavern-breadcrumb {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cavern-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--survival-gold);
+  letter-spacing: 2.5px;
+  text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+}
+
+.cavern-chamber-title {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 2px;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9);
+}
+
+.btn-surface-return {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #f1ede4;
+  background: rgba(12, 18, 26, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-stone);
+  border-radius: 4px;
+  padding: 10px 18px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+}
+
+.btn-surface-return:hover {
+  background: rgba(22, 32, 48, 0.95);
+  border-color: var(--survival-bright);
+  color: #fff;
+  box-shadow: 0 0 20px var(--survival-glow);
+  transform: translateY(-2px);
+}
+
+/* Courtyard Exits Layer */
+.courtyard-exits-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.courtyard-exit-gate {
+  position: absolute;
+  pointer-events: auto;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0.6;
+  filter: grayscale(0.4) brightness(0.75);
+}
+
+.courtyard-exits-layer.lit .courtyard-exit-gate {
+  opacity: 1;
+  filter: grayscale(0) brightness(1.1);
+}
+
+/* Strategic Architecture Positions across the Courtyard */
+.exit-pos-1 {
+  left: 5%;
+  top: 44%;
+}
+
+.exit-pos-2 {
+  left: 22%;
+  top: 24%;
+}
+
+.exit-pos-3 {
+  left: 50%;
+  top: 15%;
+  transform: translateX(-50%);
+}
+
+.exit-pos-4 {
+  right: 22%;
+  top: 24%;
+}
+
+.exit-pos-5 {
+  right: 5%;
+  top: 44%;
+}
+
+.exit-runic-arch {
+  background: rgba(10, 16, 24, 0.88);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(140, 160, 185, 0.25);
+  border-top: 2px solid var(--survival-gold);
+  border-radius: 6px;
+  padding: 12px 18px;
+  min-width: 200px;
+  max-width: 260px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.courtyard-exit-gate:hover .exit-runic-arch {
+  border-color: var(--survival-bright);
+  border-top-color: #fff;
+  box-shadow: 0 0 30px var(--survival-glow), 0 16px 36px rgba(0, 0, 0, 0.95);
+  transform: translateY(-4px);
+}
+
+.exit-pos-3:hover .exit-runic-arch {
+  transform: translateY(-4px);
+}
+
+.exit-chapter-tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--survival-gold);
+  letter-spacing: 2px;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.exit-title {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 1px;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.exit-venue-tag {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  font-weight: 600;
+  color: var(--ancient-cyan);
+  letter-spacing: 1.5px;
+  display: block;
+}
+
+.exit-glow-flare {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--survival-bright), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.courtyard-exit-gate:hover .exit-glow-flare {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   COURTYARD CAMPFIRE INTERACTIVE HEARTH
+   ========================================================================== */
+.courtyard-campfire-wrap {
+  position: absolute;
+  bottom: 6%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 6;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.campfire-action-prompt {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #fff;
+  background: rgba(24, 12, 6, 0.92);
+  border: 1px solid rgba(255, 120, 20, 0.75);
+  box-shadow: 0 0 25px rgba(255, 80, 0, 0.55), inset 0 0 12px rgba(255, 140, 0, 0.2);
+  padding: 8px 18px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  transition: all 0.4s ease;
+  animation: promptPulse 2s infinite ease-in-out;
+  cursor: pointer;
+}
+
+.courtyard-campfire-wrap.lit .campfire-action-prompt {
+  background: rgba(18, 28, 20, 0.88);
+  border-color: rgba(16, 185, 129, 0.7);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+  color: #a7f3d0;
+  animation: none;
+}
+
+.prompt-flame-icon {
+  font-size: 14px;
+}
+
+.prompt-text {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+}
+
+@keyframes promptPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 20px rgba(255, 80, 0, 0.5);
+  }
+  50% {
+    transform: scale(1.04);
+    box-shadow: 0 0 35px rgba(255, 120, 20, 0.8);
+  }
+}
+
+.campfire-hearth-glow {
+  position: absolute;
+  bottom: 0;
+  width: 320px;
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(255, 140, 20, 0.2) 0%, transparent 70%);
+  transition: all 1.2s ease;
+  pointer-events: none;
+}
+
+.courtyard-campfire-wrap.lit .campfire-hearth-glow {
+  width: 520px;
+  height: 160px;
+  background: radial-gradient(ellipse at center, rgba(255, 170, 30, 0.75) 0%, rgba(255, 90, 0, 0.45) 45%, transparent 75%);
+  animation: hearthPulse 2.2s infinite alternate ease-in-out;
+}
+
+@keyframes hearthPulse {
+  0% { transform: scale(0.96); opacity: 0.88; }
+  100% { transform: scale(1.05); opacity: 1; }
+}
+
+.campfire-flame-chassis {
+  position: relative;
+  width: 250px;
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.campfire-flame-chassis:hover {
+  transform: scale(1.05);
+}
+
+.courtyard-campfire-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  opacity: 0.65;
+  filter: brightness(0.48) sepia(0.4) contrast(1.1);
+  transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.courtyard-campfire-wrap.lit .courtyard-campfire-img {
+  opacity: 1;
+  filter: brightness(1.26) saturate(1.3) drop-shadow(0 0 35px rgba(255, 160, 20, 0.95)) drop-shadow(0 0 75px rgba(255, 80, 0, 0.65));
+  animation: campfireFlicker 1.8s infinite alternate ease-in-out;
+}
+
+@keyframes campfireFlicker {
+  0% {
+    filter: brightness(1.22) saturate(1.25) drop-shadow(0 0 30px rgba(255, 150, 20, 0.9)) drop-shadow(0 0 65px rgba(255, 70, 0, 0.6));
+    transform: scale(1);
+  }
+  50% {
+    filter: brightness(1.34) saturate(1.35) drop-shadow(0 0 42px rgba(255, 180, 30, 1)) drop-shadow(0 0 85px rgba(255, 90, 0, 0.75));
+    transform: scale(1.02);
+  }
+  100% {
+    filter: brightness(1.26) saturate(1.3) drop-shadow(0 0 35px rgba(255, 160, 20, 0.95)) drop-shadow(0 0 75px rgba(255, 80, 0, 0.65));
+    transform: scale(0.99);
+  }
+}
+
+.campfire-bloom-halo {
+  position: absolute;
+  inset: -30px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle, rgba(255, 190, 40, 0.5) 0%, rgba(255, 85, 0, 0.25) 50%, transparent 75%);
+  transition: opacity 1.2s ease;
+}
+
+.courtyard-campfire-wrap.lit .campfire-bloom-halo {
+  opacity: 1;
+  animation: bloomBreathe 3s infinite alternate ease-in-out;
+}
+
+@keyframes bloomBreathe {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  100% { transform: scale(1.08); opacity: 1; }
+}
+
 
 
 
@@ -1334,8 +1810,27 @@ body.survival-instinct-active #dock-survival {
   .floating-hud-dock { right: 12px; }
   .brand-header-lockup { left: 16px; top: 16px; }
   .tomb-counter-container { bottom: 16px; }
+  .scroll-descent-guide { bottom: 80px; }
   .dossier-window { grid-template-columns: 1fr; }
   .relic-rail { flex-direction: row; overflow-x: auto; }
   .dossier-content-grid { grid-template-columns: 1fr; }
   .forge-box { grid-template-columns: 1fr; }
+
+  /* Cavern Courtyard Responsive */
+  .cavern-header-bar { left: 16px; right: 16px; top: 16px; }
+  .cavern-chamber-title { font-size: 16px; }
+  .btn-surface-return { padding: 8px 12px; font-size: 10px; }
+  
+  .exit-pos-1 { left: 4%; top: 32%; }
+  .exit-pos-2 { left: 4%; top: 18%; }
+  .exit-pos-3 { left: 50%; top: 8%; }
+  .exit-pos-4 { right: 4%; top: 18%; }
+  .exit-pos-5 { right: 4%; top: 32%; }
+  .exit-runic-arch { min-width: 140px; padding: 8px 12px; }
+  .exit-title { font-size: 12px; }
+  .exit-chapter-tag { font-size: 8px; }
+  .exit-venue-tag { font-size: 7.5px; }
+
+  .campfire-flame-chassis { width: 180px; height: 180px; }
+  .courtyard-campfire-wrap { bottom: 4%; }
 }

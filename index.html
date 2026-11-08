@@ -172,6 +172,102 @@
           </div>
         </div>
       </div>
+
+      <!-- Scroll Descent Guide Indicator -->
+      <div class="scroll-descent-guide" id="btn-scroll-down" data-cursor="scan" data-cursor-label="DESCEND">
+        <span class="descent-glyph">&darr;</span>
+        <span class="descent-text">DESCEND INTO EXPEDITION COURTYARD</span>
+        <div class="descent-line"></div>
+      </div>
+    </section>
+
+    <!-- STAGE 2: MISTY RUINED EXPEDITION COURTYARD & INTERACTIVE CAMPFIRE -->
+    <section class="cavern-stage" id="cavern-stage">
+      <!-- Ambient Lighting Filter Layers -->
+      <div class="cavern-lighting-overlay" id="cavern-lighting"></div>
+
+      <!-- Top Header: Sub-level Navigation & Ascent -->
+      <div class="cavern-header-bar">
+        <div class="cavern-breadcrumb">
+          <span class="cavern-tag">SANCTUARY SUB-LEVEL 02</span>
+          <h2 class="cavern-chamber-title">THE MISTY EXPEDITION COURTYARD</h2>
+        </div>
+
+        <button class="btn-surface-return" id="btn-surface-return" data-cursor="scan" data-cursor-label="SURFACE">
+          &uarr; ASCEND TO SANCTUARY
+        </button>
+      </div>
+
+      <!-- Interactive Ruined Exits / Gateways (Positioned on the Ruined Architecture) -->
+      <div class="courtyard-exits-layer" id="courtyard-exits">
+        <!-- Exit 1: The Automata Trials -->
+        <div class="courtyard-exit-gate exit-pos-1" data-topic="automata" data-cursor="scan" data-cursor-label="ROBOTICS">
+          <div class="exit-runic-arch">
+            <span class="exit-chapter-tag">CHAPTER I</span>
+            <h3 class="exit-title">The Automata Trials</h3>
+            <span class="exit-venue-tag">ROBOTICS ROVER ARENA</span>
+            <div class="exit-glow-flare"></div>
+          </div>
+        </div>
+
+        <!-- Exit 2: Cipher Run -->
+        <div class="courtyard-exit-gate exit-pos-2" data-topic="cipher" data-cursor="scan" data-cursor-label="ALGORITHMS">
+          <div class="exit-runic-arch">
+            <span class="exit-chapter-tag">CHAPTER I</span>
+            <h3 class="exit-title">Cipher Run</h3>
+            <span class="exit-venue-tag">TIMED ALGORITHM TRAIL</span>
+            <div class="exit-glow-flare"></div>
+          </div>
+        </div>
+
+        <!-- Exit 3: 36H Machine Forge -->
+        <div class="courtyard-exit-gate exit-pos-3" data-topic="design" data-cursor="scan" data-cursor-label="HACKATHON">
+          <div class="exit-runic-arch">
+            <span class="exit-chapter-tag">CHAPTER I</span>
+            <h3 class="exit-title">36H Machine Forge</h3>
+            <span class="exit-venue-tag">DESIGN UNDER PRESSURE</span>
+            <div class="exit-glow-flare"></div>
+          </div>
+        </div>
+
+        <!-- Exit 4: Sensor & Drone Labs -->
+        <div class="courtyard-exit-gate exit-pos-4" data-topic="sensor" data-cursor="scan" data-cursor-label="WORKSHOPS">
+          <div class="exit-runic-arch">
+            <span class="exit-chapter-tag">CHAPTER II</span>
+            <h3 class="exit-title">Build a Sensor Rig</h3>
+            <span class="exit-venue-tag">ELECTRONICS &amp; TELEMETRY</span>
+            <div class="exit-glow-flare"></div>
+          </div>
+        </div>
+
+        <!-- Exit 5: Ancient Amphitheater (Keynotes) -->
+        <div class="courtyard-exit-gate exit-pos-5" data-topic="speakers" data-cursor="scan" data-cursor-label="KEYNOTES">
+          <div class="exit-runic-arch">
+            <span class="exit-chapter-tag">CHAPTER IV</span>
+            <h3 class="exit-title">Ancient Amphitheater</h3>
+            <span class="exit-venue-tag">DISTINGUISHED KEYNOTES</span>
+            <div class="exit-glow-flare"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center Campfire Hearth (The user lights this using the cursor!) -->
+      <div class="courtyard-campfire-wrap" id="campfire-interactive-wrap">
+        <!-- Floating Action Prompt -->
+        <div class="campfire-action-prompt" id="campfire-prompt" data-cursor="flint" data-cursor-label="STRIKE FLINT">
+          <span class="prompt-flame-icon">🔥</span>
+          <span class="prompt-text">STRIKE FLINT TO IGNITE CAMPFIRE</span>
+        </div>
+
+        <!-- Hearth Glow Ring -->
+        <div class="campfire-hearth-glow" id="hearth-glow"></div>
+
+        <!-- Glowing Campfire Image Asset (User Uploaded) -->
+        <div class="campfire-flame-chassis" id="campfire-chassis" data-cursor="flint" data-cursor-label="STRIKE FLINT">
+          <img src="./assets/campfire-glowing.png" alt="Campfire" class="courtyard-campfire-img" id="campfire-img" />
+          <div class="campfire-bloom-halo" id="campfire-bloom"></div>
+        </div>
+      </div>
     </section>
 
     <!-- FLOATING HUD COMMAND DOCK (NO EMOJIS - TACTICAL SVG ICONS) -->
