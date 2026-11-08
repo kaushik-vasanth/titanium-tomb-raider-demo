@@ -1446,6 +1446,114 @@ body.survival-instinct-active #dock-survival {
 }
 
 /* ==========================================================================
+   CINEMATIC ROCK AVALANCHE SCROLL TRANSITION
+   ========================================================================== */
+.rock-transition-track {
+  position: relative;
+  width: 100vw;
+  height: 220vh;
+  pointer-events: none;
+  background: transparent;
+}
+
+.rock-transition-sticky {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 12;
+}
+
+.transition-backdrop-surface {
+  position: absolute;
+  inset: 0;
+  background: #080c12 url('/assets/bg-tomb-raider.png') center 38% / cover no-repeat;
+  filter: contrast(1.06) brightness(0.92);
+  transition: opacity 0.4s ease;
+  z-index: 1;
+  opacity: 1;
+}
+
+.transition-backdrop-cavern {
+  position: absolute;
+  inset: 0;
+  background: #0a0d14 url('/assets/cave-bg.png') center bottom / cover no-repeat;
+  filter: brightness(0.82) contrast(1.08) saturate(0.95);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 2;
+}
+
+.rock-transition-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 3;
+}
+
+.rock-transition-video {
+  display: none;
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+}
+
+.avalanche-hud-tag {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(10, 15, 22, 0.88);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  border-radius: 20px;
+  padding: 6px 16px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.85);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.avalanche-hud-tag.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.avalanche-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--survival-bright);
+  box-shadow: 0 0 8px var(--survival-gold);
+  animation: pulseDot 1s infinite alternate;
+}
+
+@keyframes pulseDot {
+  0% { transform: scale(0.8); opacity: 0.6; }
+  100% { transform: scale(1.2); opacity: 1; }
+}
+
+.avalanche-status {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+}
+
+/* ==========================================================================
    STAGE 2: MISTY RUINED EXPEDITION COURTYARD & CAMPFIRE
    ========================================================================== */
 .cavern-stage {

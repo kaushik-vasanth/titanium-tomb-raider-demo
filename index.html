@@ -58,6 +58,24 @@
       </div>
     </section>
 
+    <!-- CINEMATIC ROCK AVALANCHE SCROLL TRANSITION TRACK -->
+    <div class="rock-transition-track" id="rock-transition-track">
+      <div class="rock-transition-sticky" id="rock-transition-sticky">
+        <!-- Seamless Underlay Backdrops: Surface Sanctuary -> Underground Cavern -->
+        <div class="transition-backdrop-surface" id="backdrop-surface"></div>
+        <div class="transition-backdrop-cavern" id="backdrop-cavern"></div>
+
+        <!-- WebGL Luma-Keyed Flying Rocks & Stone Wall Canvas -->
+        <canvas class="rock-transition-canvas" id="rock-transition-canvas"></canvas>
+        <video class="rock-transition-video" id="rock-transition-video" src="./assets/transition-rock.mp4" playsinline muted preload="auto"></video>
+        
+        <div class="avalanche-hud-tag" id="avalanche-hud-tag">
+          <span class="avalanche-pulse-dot"></span>
+          <span class="avalanche-status">SEISMIC DESCENT // AVALANCHE IN PROGRESS</span>
+        </div>
+      </div>
+    </div>
+
     <!-- STAGE 2: MISTY RUINED EXPEDITION COURTYARD & INTERACTIVE CAMPFIRE -->
     <section class="cavern-stage" id="cavern-stage">
       <!-- Ambient Lighting Filter Layers -->

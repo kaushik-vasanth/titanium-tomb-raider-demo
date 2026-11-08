@@ -3,6 +3,7 @@
 
 import { SurveyorCursor } from './cursor.js';
 import { MountainAtmosphere } from './canvas-atmosphere.js';
+import { RockTransitionManager } from './rock-transition.js';
 import { sound } from './sound.js';
 
 // Import Maps for Atlas
@@ -20,6 +21,9 @@ new SurveyorCursor();
 
 // 2. Initialize Canvas Atmosphere (Mist, Spray & Campfire Embers)
 const atmosphere = new MountainAtmosphere('atmosphere-canvas');
+
+// 3. Initialize Cinematic Rock Avalanche Scroll-Driven Section Transition
+const rockTransition = new RockTransitionManager();
 
 // 3. Multi-Plane 2.5D Parallax Tracking
 const heroArtLayer = document.getElementById('hero-art-layer');
@@ -460,16 +464,17 @@ const btnSurfaceReturn = document.getElementById('btn-surface-return');
 
 // Smooth vertical chamber transition between surface & courtyard
 if (btnScrollDown) {
-  btnScrollDown.addEventListener('click', () => {
-    sound.playClick();
-    cavernStage?.scrollIntoView({ behavior: 'smooth' });
+  btnScrollDown.addEventListener('click', (e) => {
+    e.preventDefault();
+    rockTransition.triggerCinematicDescent();
   });
 }
 
 if (btnSurfaceReturn) {
-  btnSurfaceReturn.addEventListener('click', () => {
+  btnSurfaceReturn.addEventListener('click', (e) => {
+    e.preventDefault();
     sound.playClick();
-    document.getElementById('hero-stage')?.scrollIntoView({ behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 }
 
