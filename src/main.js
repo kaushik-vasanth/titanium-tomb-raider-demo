@@ -25,6 +25,7 @@ const compassWheel = new CompassWheelManager({
   openDossier: (seq) => openDossier(seq),
   openForge: () => openForge(),
   openMap: () => openMap(),
+  openAddingSoon: (target) => openAddingSoon(target),
   onNavigateSanctuary: () => sceneTransition.triggerAscent(),
   onNavigateCavern: () => sceneTransition.triggerCinematicDescent()
 });
@@ -569,7 +570,11 @@ const sectorData = {
 };
 
 function openAddingSoon(title = 'About Us') {
-  const data = sectorData[title] || sectorData['About Us'];
+  const data = sectorData[title] || {
+    code: 'EXP-2027-' + title.replace(/[^a-zA-Z0-9]/g, '').slice(0, 8).toUpperCase(),
+    coords: "LAT 8° 23' N // LON 77° 42' E",
+    desc: `Official details and dispatch intelligence for ${title} are currently being surveyed. Content will be unlocked shortly before TITANIUM 2027.`
+  };
 
   if (addingSoonTarget) addingSoonTarget.textContent = title;
   if (addingSoonHeadline) {

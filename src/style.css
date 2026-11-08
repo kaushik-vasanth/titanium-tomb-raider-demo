@@ -1584,7 +1584,8 @@ body.survival-instinct-active #dock-survival {
 }
 
 /* ==========================================================================
-   ARCHERY BOW ARROW DESCENT GUIDE (HERO -> EXPEDITION COURTYARD)
+   ORNATE FANTASY ARROW DESCENT GUIDE (HERO -> EXPEDITION COURTYARD)
+   NO BACKGROUND SOLIDS — Pure floating cutout pointing downwards
    ========================================================================== */
 .bow-arrow-descent-guide {
   position: absolute;
@@ -1596,31 +1597,37 @@ body.survival-instinct-active #dock-survival {
   justify-content: center;
   z-index: 6;
   cursor: pointer;
-  padding: 6px 12px;
-  background: rgba(10, 15, 22, 0.65);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(245, 158, 11, 0.35);
-  border-radius: 24px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7), 0 0 15px rgba(245, 158, 11, 0.15);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 0 !important;
+  background: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none;
   animation: bowArrowFloat 2.6s infinite ease-in-out;
 }
 
 .bow-arrow-descent-guide:hover {
-  background: rgba(22, 30, 44, 0.95);
-  border-color: #fbbf24;
-  box-shadow: 0 0 30px rgba(251, 191, 36, 0.65), 0 6px 25px rgba(0, 0, 0, 0.9);
-  transform: translateX(-50%) translateY(4px) scale(1.12);
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
-.archery-arrow-svg {
+.ornate-fantasy-arrow-img {
+  width: 38px;
+  height: auto;
   display: block;
-  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.9));
-  transition: transform 0.25s ease;
+  /* Rotate 180deg so arrowhead tip points downwards into cave */
+  transform: rotate(180deg);
+  filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.75)) drop-shadow(0 4px 14px rgba(0, 0, 0, 0.95));
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), filter 0.25s ease;
+  pointer-events: none;
+  user-select: none;
 }
 
-.bow-arrow-descent-guide:hover .archery-arrow-svg {
-  filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.85));
+.bow-arrow-descent-guide:hover .ornate-fantasy-arrow-img {
+  filter: drop-shadow(0 0 20px rgba(251, 191, 36, 1)) drop-shadow(0 0 35px #f59e0b) drop-shadow(0 6px 20px rgba(0, 0, 0, 0.95));
+  transform: rotate(180deg) scale(1.12);
 }
 
 @keyframes bowArrowFloat {
@@ -1628,7 +1635,7 @@ body.survival-instinct-active #dock-survival {
     transform: translateX(-50%) translateY(0);
   }
   50% {
-    transform: translateX(-50%) translateY(8px);
+    transform: translateX(-50%) translateY(10px);
   }
 }
 
@@ -2157,6 +2164,7 @@ body.survival-instinct-active #dock-survival {
 /* ==========================================================================
    CAVERN HOTSPOT POINTS (About Us, Events, Register)
    Linked strictly to Campfire — Revealed ONLY when campfire is lit
+   NO BACKGROUND SOLIDS — Pure floating beacons and text
    ========================================================================== */
 .cavern-hotspots-layer {
   position: absolute;
@@ -2170,24 +2178,22 @@ body.survival-instinct-active #dock-survival {
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  background: rgba(10, 16, 26, 0.88);
-  backdrop-filter: blur(14px);
-  border: 1px solid rgba(245, 158, 11, 0.35);
-  border-radius: 40px;
-  padding: 8px 18px 8px 10px;
+  background: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
   cursor: pointer;
   outline: none;
   user-select: none;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.75), 0 0 15px rgba(245, 158, 11, 0.15);
+  box-shadow: none !important;
   /* Hidden by default until campfire is lit */
   opacity: 0;
   pointer-events: none;
-  transform: translate(-50%, -50%) scale(0.8);
+  transform: translate(-50%, -50%) scale(0.85);
   transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.25s ease,
-              box-shadow 0.25s ease,
-              background 0.25s ease;
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Specific Hotspot Positions on the Ruined Scene */
@@ -2230,10 +2236,10 @@ body.survival-instinct-active #dock-survival {
 
 /* Hotspot Hover & Focus */
 .cave-hotspot:hover {
-  border-color: #fbbf24;
-  background: rgba(16, 24, 38, 0.95);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.9), 0 0 25px rgba(251, 191, 36, 0.5);
-  transform: translate(-50%, -54%) scale(1.05);
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  transform: translate(-50%, -54%) scale(1.08);
 }
 
 .hotspot-beacon {
@@ -2249,7 +2255,7 @@ body.survival-instinct-active #dock-survival {
   position: absolute;
   inset: -4px;
   border-radius: 50%;
-  border: 1.5px solid rgba(251, 191, 36, 0.65);
+  border: 1.5px solid rgba(251, 191, 36, 0.7);
   animation: beaconSonar 2.2s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
   pointer-events: none;
 }
@@ -2270,56 +2276,68 @@ body.survival-instinct-active #dock-survival {
   color: #0b111a;
   font-size: 13px;
   font-weight: 900;
-  box-shadow: 0 0 12px #fbbf24;
+  box-shadow: 0 0 16px #fbbf24;
 }
 
 .hotspot-label-card {
   display: flex;
   flex-direction: column;
   text-align: left;
+  background: none !important;
+  border: none !important;
 }
 
 .hotspot-sub {
   font-family: var(--font-mono);
   font-size: 8px;
   font-weight: 700;
-  letter-spacing: 1.8px;
+  letter-spacing: 2px;
   color: #fbbf24;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.6), 0 2px 6px rgba(0, 0, 0, 0.95);
   line-height: 1;
   margin-bottom: 2px;
 }
 
 .hotspot-title {
   font-family: var(--font-serif);
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 800;
-  letter-spacing: 1.2px;
+  letter-spacing: 1.5px;
   color: #ffffff;
   line-height: 1.1;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95), 0 0 16px rgba(251, 191, 36, 0.5);
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.cave-hotspot:hover .hotspot-title {
+  color: #fbbf24;
+  text-shadow: 0 0 20px rgba(251, 191, 36, 0.95), 0 2px 10px rgba(0, 0, 0, 0.95);
 }
 
 /* Small yellow text: "Lit the campfire" (Appears after 0.8s on Section 2 arrival) */
+/* NO BACKGROUND SOLIDS — pure glowing text */
 .campfire-lit-prompt {
   position: absolute;
-  top: -46px;
+  top: -42px;
   left: 50%;
-  transform: translateX(-50%) translateY(6px);
+  transform: translateX(-50%) translateY(4px);
   display: flex;
   align-items: center;
   gap: 7px;
   color: #fbbf24;
   font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 2.2px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 2.5px;
   text-transform: uppercase;
-  text-shadow: 0 0 10px rgba(251, 191, 36, 0.8), 0 0 22px rgba(245, 158, 11, 0.55);
-  background: rgba(10, 16, 26, 0.88);
-  border: 1px solid rgba(251, 191, 36, 0.55);
-  border-radius: 24px;
-  padding: 6px 16px;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.7), 0 0 16px rgba(251, 191, 36, 0.3);
+  background: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  text-shadow: 0 0 12px rgba(251, 191, 36, 0.95), 0 0 26px rgba(245, 158, 11, 0.75), 0 2px 8px rgba(0, 0, 0, 0.95);
   white-space: nowrap;
   pointer-events: none;
   opacity: 0;
@@ -2343,21 +2361,25 @@ body.survival-instinct-active #dock-survival {
 
 .campfire-lit-prompt .prompt-spark {
   color: #fef08a;
-  font-size: 13px;
+  font-size: 14px;
+  text-shadow: 0 0 10px #fbbf24;
   animation: sparkSpin 2.6s infinite ease-in-out alternate;
 }
 
 @keyframes promptFloatPulse {
   0%, 100% {
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.7), 0 0 14px rgba(251, 191, 36, 0.3);
-    border-color: rgba(251, 191, 36, 0.5);
+    text-shadow: 0 0 12px rgba(251, 191, 36, 0.9), 0 0 24px rgba(245, 158, 11, 0.65), 0 2px 8px rgba(0, 0, 0, 0.95);
     transform: translateX(-50%) translateY(0);
   }
   50% {
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.9), 0 0 26px rgba(251, 191, 36, 0.7);
-    border-color: #fbbf24;
-    transform: translateX(-50%) translateY(-4px);
+    text-shadow: 0 0 22px rgba(251, 191, 36, 1), 0 0 38px rgba(245, 158, 11, 0.9), 0 2px 10px rgba(0, 0, 0, 0.95);
+    transform: translateX(-50%) translateY(-5px);
   }
+}
+
+@keyframes sparkSpin {
+  0% { transform: scale(0.9) rotate(0deg); opacity: 0.8; }
+  100% { transform: scale(1.2) rotate(45deg); opacity: 1; }
 }
 
 @keyframes sparkSpin {
@@ -2722,13 +2744,13 @@ body.survival-instinct-active #dock-survival {
   .hotspot-statue { top: 22%; left: 50%; }
   .hotspot-waterfall { top: 38%; left: 24%; }
   .hotspot-ruins { top: 46%; left: 76%; }
-  .cave-hotspot { padding: 6px 14px 6px 8px; gap: 8px; }
-  .hotspot-title { font-size: 12px; }
+  .cave-hotspot { padding: 0 !important; gap: 8px; }
+  .hotspot-title { font-size: 13px; }
   .hotspot-sub { font-size: 7.5px; }
 
   .campfire-flame-chassis { width: 180px; height: 180px; }
   .courtyard-campfire-wrap { bottom: 4%; }
-  .campfire-lit-prompt { font-size: 10px; padding: 5px 12px; top: -38px; }
+  .campfire-lit-prompt { font-size: 11px; padding: 0 !important; top: -34px; }
 
   .adding-soon-container { padding: 32px 20px 24px; }
   .adding-soon-headline { font-size: 24px; }

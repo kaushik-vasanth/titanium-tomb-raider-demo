@@ -4,10 +4,11 @@
 import { sound } from './sound.js';
 
 export class CompassWheelManager {
-  constructor({ openDossier, openForge, openMap, onNavigateSanctuary, onNavigateCavern } = {}) {
+  constructor({ openDossier, openForge, openMap, openAddingSoon, onNavigateSanctuary, onNavigateCavern } = {}) {
     this.openDossier = openDossier;
     this.openForge = openForge;
     this.openMap = openMap;
+    this.openAddingSoon = openAddingSoon;
     this.onNavigateSanctuary = onNavigateSanctuary;
     this.onNavigateCavern = onNavigateCavern;
 
@@ -188,9 +189,12 @@ export class CompassWheelManager {
     setTimeout(() => {
       if (!action) return;
 
-      if (action.startsWith('link:')) {
-        const url = action.slice(5);
-        window.open(url, '_blank', 'noopener,noreferrer');
+      // Do NOT link anything to external websites! Show internal Adding Soon modal if requested
+      if (action.startsWith('soon:')) {
+        const title = action.slice(5);
+        if (this.openAddingSoon) {
+          this.openAddingSoon(title);
+        }
         return;
       }
 
