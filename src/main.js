@@ -407,30 +407,32 @@ function updateCountdown() {
 setInterval(updateCountdown, 1000);
 updateCountdown();
 
-// 13. Expedition Courtyard & Campfire Lighting Interaction
+// 13. Expedition Courtyard, Campfire Lighting & Hotspots (About Us, Events, Register)
 const cavernStage = document.getElementById('cavern-stage');
 const cavernLighting = document.getElementById('cavern-lighting');
 const campfireWrap = document.getElementById('campfire-interactive-wrap');
-const courtyardExits = document.getElementById('courtyard-exits');
 const campfireChassis = document.getElementById('campfire-chassis');
-const campfirePrompt = document.getElementById('campfire-prompt');
-const campfirePromptText = campfirePrompt?.querySelector('.prompt-text');
+const campfireLitPrompt = document.getElementById('campfire-lit-prompt');
+const caveHotspots = document.querySelectorAll('.cave-hotspot');
+
+// Separate Page (Adding Soon Modal)
+const addingSoonScreen = document.getElementById('adding-soon-screen');
+const closeAddingSoonBtn = document.getElementById('close-adding-soon');
+const returnFromSoonBtn = document.getElementById('btn-return-from-soon');
+const addingSoonBackdrop = document.getElementById('adding-soon-backdrop');
+const addingSoonHeadline = document.getElementById('adding-soon-headline');
+const addingSoonTarget = document.getElementById('adding-soon-target');
+const addingSoonParagraph = document.getElementById('adding-soon-paragraph');
+const addingSoonCode = document.getElementById('adding-soon-code');
+const addingSoonCoords = document.getElementById('adding-soon-coords');
 
 const btnScrollDown = document.getElementById('btn-scroll-down');
-const btnSurfaceReturn = document.getElementById('btn-surface-return');
 
 // Smooth vertical chamber transition between surface & courtyard
 if (btnScrollDown) {
   btnScrollDown.addEventListener('click', (e) => {
     e.preventDefault();
     sceneTransition.triggerCinematicDescent();
-  });
-}
-
-if (btnSurfaceReturn) {
-  btnSurfaceReturn.addEventListener('click', (e) => {
-    e.preventDefault();
-    sceneTransition.triggerAscent();
   });
 }
 
@@ -478,6 +480,42 @@ function triggerFlintSparks(originX, originY) {
 }
 
 let campfireLit = false;
+let campfirePromptTimer = null;
+
+// User requirement: "add a small yellow text Lit the campfire when the screen comes to the 2nd section wiith an delay of .8 seconds"
+function showCampfirePromptWithDelay() {
+  if (campfireLit) return;
+  if (campfirePromptTimer) {
+    clearTimeout(campfirePromptTimer);
+    campfirePromptTimer = null;
+  }
+  campfirePromptTimer = setTimeout(() => {
+    if (!campfireLit) {
+      campfireLitPrompt?.classList.add('visible');
+    }
+  }, 800);
+}
+
+function hideCampfirePrompt() {
+  if (campfirePromptTimer) {
+    clearTimeout(campfirePromptTimer);
+    campfirePromptTimer = null;
+  }
+  campfireLitPrompt?.classList.remove('visible');
+}
+
+window.addEventListener('scene:enter-cave', () => {
+  showCampfirePromptWithDelay();
+});
+
+window.addEventListener('scene:leave-cave', () => {
+  hideCampfirePrompt();
+});
+
+// Check if already in cave on initial load
+if (sceneTransition && sceneTransition.currentProgress > 0.85) {
+  showCampfirePromptWithDelay();
+}
 
 function igniteCampfire(e) {
   const rect = campfireChassis?.getBoundingClientRect() || { left: window.innerWidth / 2, top: window.innerHeight * 0.75, width: 0, height: 0 };
@@ -490,15 +528,14 @@ function igniteCampfire(e) {
 
   if (!campfireLit) {
     campfireLit = true;
+    hideCampfirePrompt();
 
+    // Make room luminous and ignite hearth
     cavernStage?.classList.add('lit');
     cavernLighting?.classList.add('lit');
     campfireWrap?.classList.add('lit');
-    courtyardExits?.classList.add('lit');
 
-    if (campfirePromptText) {
-      campfirePromptText.textContent = 'CAMPFIRE BLAZING • EXITS ILLUMINATED';
-    }
+    // The 3 points (About Us, Events, Register) are automatically revealed by CSS .cavern-stage.lit .cave-hotspot
   }
 }
 
@@ -508,19 +545,73 @@ if (campfireChassis) {
 if (campfireWrap) {
   campfireWrap.addEventListener('click', igniteCampfire);
 }
+if (campfireLitPrompt) {
+  campfireLitPrompt.addEventListener('click', igniteCampfire);
+}
 
-// 14. Courtyard Ruined Exits / Gateways Navigation
-const courtyardGates = document.querySelectorAll('.courtyard-exit-gate');
-courtyardGates.forEach((gate) => {
-  gate.addEventListener('click', (e) => {
-    const topic = gate.getAttribute('data-topic');
-    if (!campfireLit) {
-      igniteCampfire(e);
-    }
-    if (topic) {
-      openDossier(topic);
-    }
+// 14. Separate Page Handling ("_____ Adding soon")
+const sectorData = {
+  'About Us': {
+    code: 'EXP-2027-ABOUT',
+    coords: "LAT 8° 23' N // LON 77° 42' E",
+    desc: 'Learn about the vision, legacy, and engineering society behind TITANIUM 2027. Full archive, history, and keynote committee dossiers are being finalized and will be unlocked here soon.'
+  },
+  'Events': {
+    code: 'EXP-2027-EVENTS',
+    coords: "LAT 8° 21' N // LON 77° 40' E",
+    desc: 'The official master calendar of technical hackathons, robotics challenges, coding trails, and flagship keynote arenas is undergoing final calibration. Full event schedules will be added soon.'
+  },
+  'Register': {
+    code: 'EXP-2027-REGISTER',
+    coords: "LAT 8° 25' N // LON 77° 44' E",
+    desc: 'Expedition permits and attendee registration will open soon. Prepare your team credentials, college identification, and survival gear for the ultimate technology expedition.'
+  }
+};
+
+function openAddingSoon(title = 'About Us') {
+  const data = sectorData[title] || sectorData['About Us'];
+
+  if (addingSoonTarget) addingSoonTarget.textContent = title;
+  if (addingSoonHeadline) {
+    addingSoonHeadline.innerHTML = `<span id="adding-soon-target">${title}</span> <span class="accent-gold">Adding soon</span>`;
+  }
+  if (addingSoonCode) addingSoonCode.textContent = data.code;
+  if (addingSoonCoords) addingSoonCoords.textContent = data.coords;
+  if (addingSoonParagraph) addingSoonParagraph.textContent = data.desc;
+
+  sound.playRelicDiscovery();
+  if (addingSoonScreen) {
+    addingSoonScreen.classList.add('open');
+    addingSoonScreen.setAttribute('aria-hidden', 'false');
+  }
+  document.body.classList.add('modal-open');
+}
+
+function closeAddingSoon() {
+  sound.playClick();
+  if (addingSoonScreen) {
+    addingSoonScreen.classList.remove('open');
+    addingSoonScreen.setAttribute('aria-hidden', 'true');
+  }
+  document.body.classList.remove('modal-open');
+}
+
+caveHotspots.forEach((spot) => {
+  spot.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const target = spot.getAttribute('data-target') || 'About Us';
+    openAddingSoon(target);
   });
+});
+
+if (closeAddingSoonBtn) closeAddingSoonBtn.addEventListener('click', closeAddingSoon);
+if (returnFromSoonBtn) returnFromSoonBtn.addEventListener('click', closeAddingSoon);
+if (addingSoonBackdrop) addingSoonBackdrop.addEventListener('click', closeAddingSoon);
+
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && addingSoonScreen?.classList.contains('open')) {
+    closeAddingSoon();
+  }
 });
 
 

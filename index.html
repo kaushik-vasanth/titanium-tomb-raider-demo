@@ -172,72 +172,53 @@
             <!-- Ambient Lighting Filter Layers -->
             <div class="cavern-lighting-overlay" id="cavern-lighting"></div>
 
-            <!-- Top Header: Sub-level Navigation & Ascent -->
-            <div class="cavern-header-bar">
-              <div class="cavern-breadcrumb">
-                <h2 class="cavern-chamber-title">THE MISTY EXPEDITION COURTYARD</h2>
-              </div>
-
-              <button class="btn-surface-return" id="btn-surface-return" data-cursor="scan" data-cursor-label="SURFACE">
-                &uarr; ASCEND TO SANCTUARY
+            <!-- Interactive Hotspot Points (Linked to Campfire — Revealed upon ignition) -->
+            <div class="cavern-hotspots-layer" id="cavern-hotspots">
+              <!-- Point 1: On the statue behind stating "About Us" -->
+              <button class="cave-hotspot hotspot-statue" id="hotspot-about" data-target="About Us" data-cursor="scan" data-cursor-label="ABOUT US" aria-label="About Us">
+                <div class="hotspot-beacon">
+                  <span class="beacon-wave"></span>
+                  <span class="beacon-dot">✦</span>
+                </div>
+                <div class="hotspot-label-card">
+                  <span class="hotspot-sub">SECTOR I // MONUMENT</span>
+                  <span class="hotspot-title">About Us</span>
+                </div>
               </button>
-            </div>
 
-            <!-- Interactive Ruined Exits / Gateways (Positioned on the Ruined Architecture) -->
-            <div class="courtyard-exits-layer" id="courtyard-exits">
-              <!-- Exit 1: The Automata Trials -->
-              <div class="courtyard-exit-gate exit-pos-1" data-topic="automata" data-cursor="scan" data-cursor-label="ROBOTICS">
-                <div class="exit-runic-arch">
-                  <span class="exit-chapter-tag">CHAPTER I</span>
-                  <h3 class="exit-title">The Automata Trials</h3>
-                  <span class="exit-venue-tag">ROBOTICS ROVER ARENA</span>
-                  <div class="exit-glow-flare"></div>
+              <!-- Point 2: In the nearby waterfall stating "Events" -->
+              <button class="cave-hotspot hotspot-waterfall" id="hotspot-events" data-target="Events" data-cursor="scan" data-cursor-label="EVENTS" aria-label="Events">
+                <div class="hotspot-beacon">
+                  <span class="beacon-wave"></span>
+                  <span class="beacon-dot">✦</span>
                 </div>
-              </div>
+                <div class="hotspot-label-card">
+                  <span class="hotspot-sub">SECTOR II // CASCADE</span>
+                  <span class="hotspot-title">Events</span>
+                </div>
+              </button>
 
-              <!-- Exit 2: Cipher Run -->
-              <div class="courtyard-exit-gate exit-pos-2" data-topic="cipher" data-cursor="scan" data-cursor-label="ALGORITHMS">
-                <div class="exit-runic-arch">
-                  <span class="exit-chapter-tag">CHAPTER I</span>
-                  <h3 class="exit-title">Cipher Run</h3>
-                  <span class="exit-venue-tag">TIMED ALGORITHM TRAIL</span>
-                  <div class="exit-glow-flare"></div>
+              <!-- Point 3: In the entrance of the ruins stating "Register" -->
+              <button class="cave-hotspot hotspot-ruins" id="hotspot-register" data-target="Register" data-cursor="scan" data-cursor-label="REGISTER" aria-label="Register">
+                <div class="hotspot-beacon">
+                  <span class="beacon-wave"></span>
+                  <span class="beacon-dot">✦</span>
                 </div>
-              </div>
-
-              <!-- Exit 3: 36H Machine Forge -->
-              <div class="courtyard-exit-gate exit-pos-3" data-topic="design" data-cursor="scan" data-cursor-label="HACKATHON">
-                <div class="exit-runic-arch">
-                  <span class="exit-chapter-tag">CHAPTER I</span>
-                  <h3 class="exit-title">36H Machine Forge</h3>
-                  <span class="exit-venue-tag">DESIGN UNDER PRESSURE</span>
-                  <div class="exit-glow-flare"></div>
+                <div class="hotspot-label-card">
+                  <span class="hotspot-sub">SECTOR III // ENTRANCE</span>
+                  <span class="hotspot-title">Register</span>
                 </div>
-              </div>
-
-              <!-- Exit 4: Sensor & Drone Labs -->
-              <div class="courtyard-exit-gate exit-pos-4" data-topic="sensor" data-cursor="scan" data-cursor-label="WORKSHOPS">
-                <div class="exit-runic-arch">
-                  <span class="exit-chapter-tag">CHAPTER II</span>
-                  <h3 class="exit-title">Build a Sensor Rig</h3>
-                  <span class="exit-venue-tag">ELECTRONICS &amp; TELEMETRY</span>
-                  <div class="exit-glow-flare"></div>
-                </div>
-              </div>
-
-              <!-- Exit 5: Ancient Amphitheater (Keynotes) -->
-              <div class="courtyard-exit-gate exit-pos-5" data-topic="speakers" data-cursor="scan" data-cursor-label="KEYNOTES">
-                <div class="exit-runic-arch">
-                  <span class="exit-chapter-tag">CHAPTER IV</span>
-                  <h3 class="exit-title">Ancient Amphitheater</h3>
-                  <span class="exit-venue-tag">DISTINGUISHED KEYNOTES</span>
-                  <div class="exit-glow-flare"></div>
-                </div>
-              </div>
+              </button>
             </div>
 
             <!-- Center Campfire Hearth (The user lights this using the cursor!) -->
             <div class="courtyard-campfire-wrap" id="campfire-interactive-wrap">
+              <!-- Small Yellow Guide Text: Appears 0.8s after entering Cave section -->
+              <div class="campfire-lit-prompt" id="campfire-lit-prompt" data-cursor="flint" data-cursor-label="STRIKE">
+                <span class="prompt-spark">✦</span>
+                <span class="prompt-text">Lit the campfire</span>
+              </div>
+
               <!-- Hearth Glow Ring -->
               <div class="campfire-hearth-glow" id="hearth-glow"></div>
 
@@ -260,6 +241,67 @@
           <video class="sticky-rock-video" id="sticky-rock-video" src="./assets/transition-rock.mp4" playsinline muted preload="auto"></video>
         </div>
 
+      </div>
+    </div>
+
+    <!-- SEPARATE PAGE: EXPEDITION DISPATCH (Adding Soon) -->
+    <div class="adding-soon-screen" id="adding-soon-screen" aria-hidden="true">
+      <div class="adding-soon-backdrop" id="adding-soon-backdrop"></div>
+      <div class="adding-soon-container">
+        <button class="adding-soon-close-btn" id="close-adding-soon" data-cursor="hover" data-cursor-label="CLOSE" aria-label="Close">
+          <span>✕</span>
+          <span class="close-label">ESC // CLOSE</span>
+        </button>
+
+        <div class="adding-soon-content">
+          <div class="adding-soon-seal">
+            <div class="seal-glow"></div>
+            <div class="seal-inner-ring">
+              <svg viewBox="0 0 100 100" class="seal-svg">
+                <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.6" />
+                <polygon points="50,15 85,75 15,75" fill="none" stroke="currentColor" stroke-width="1.8" />
+                <circle cx="50" cy="52" r="14" fill="none" stroke="currentColor" stroke-width="1.5" />
+                <line x1="50" y1="28" x2="50" y2="72" stroke="currentColor" stroke-width="1.2" />
+                <line x1="30" y1="52" x2="70" y2="52" stroke="currentColor" stroke-width="1.2" />
+              </svg>
+            </div>
+          </div>
+
+          <div class="adding-soon-badge-row">
+            <span class="adding-soon-tag">TITANIUM '27 // EXPEDITION ARCHIVE</span>
+            <span class="adding-soon-status">SURVEY IN PROGRESS</span>
+          </div>
+
+          <h1 class="adding-soon-headline" id="adding-soon-headline">
+            <span id="adding-soon-target">About Us</span> <span class="accent-gold">Adding soon</span>
+          </h1>
+          <div class="adding-soon-divider"></div>
+
+          <p class="adding-soon-paragraph" id="adding-soon-paragraph">
+            Our field researchers and archaeologists are currently surveying this territory. The full chapter dossier, interactive schedule, and expedition permits are being forged and will be unlocked soon.
+          </p>
+
+          <div class="adding-soon-meta-grid">
+            <div class="meta-box">
+              <div class="meta-label">DISPATCH CODE</div>
+              <div class="meta-value" id="adding-soon-code">EXP-2027-AU</div>
+            </div>
+            <div class="meta-box">
+              <div class="meta-label">SECTOR COORDINATES</div>
+              <div class="meta-value" id="adding-soon-coords">LAT 8° 23' N // LON 77° 42' E</div>
+            </div>
+            <div class="meta-box">
+              <div class="meta-label">CLEARANCE STATUS</div>
+              <div class="meta-value status-pending">ADDING SOON</div>
+            </div>
+          </div>
+
+          <div class="adding-soon-actions">
+            <button class="btn-expedition-primary" id="btn-return-from-soon" data-cursor="hover" data-cursor-label="RETURN">
+              &larr; RETURN TO COURTYARD
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 

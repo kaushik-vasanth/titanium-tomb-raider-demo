@@ -2154,184 +2154,215 @@ body.survival-instinct-active #dock-survival {
   }
 }
 
-/* Cavern Header Bar */
-.cavern-header-bar {
-  position: absolute;
-  top: 24px;
-  left: 32px;
-  right: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  z-index: 10;
-  pointer-events: auto;
-}
-
-.cavern-breadcrumb {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.cavern-tag {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--survival-gold);
-  letter-spacing: 2.5px;
-  text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
-}
-
-.cavern-chamber-title {
-  font-family: var(--font-serif);
-  font-size: 22px;
-  font-weight: 800;
-  color: #fff;
-  letter-spacing: 2px;
-  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9);
-}
-
-.btn-surface-return {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  color: #f1ede4;
-  background: rgba(12, 18, 26, 0.85);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--border-stone);
-  border-radius: 4px;
-  padding: 10px 18px;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
-}
-
-.btn-surface-return:hover {
-  background: rgba(22, 32, 48, 0.95);
-  border-color: var(--survival-bright);
-  color: #fff;
-  box-shadow: 0 0 20px var(--survival-glow);
-  transform: translateY(-2px);
-}
-
-/* Courtyard Exits Layer */
-.courtyard-exits-layer {
+/* ==========================================================================
+   CAVERN HOTSPOT POINTS (About Us, Events, Register)
+   Linked strictly to Campfire — Revealed ONLY when campfire is lit
+   ========================================================================== */
+.cavern-hotspots-layer {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  z-index: 5;
+  z-index: 6;
 }
 
-.courtyard-exit-gate {
+.cave-hotspot {
   position: absolute;
-  pointer-events: auto;
-  cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  opacity: 0.6;
-  filter: grayscale(0.4) brightness(0.75);
-}
-
-.courtyard-exits-layer.lit .courtyard-exit-gate {
-  opacity: 1;
-  filter: grayscale(0) brightness(1.1);
-}
-
-/* Strategic Architecture Positions across the Courtyard */
-.exit-pos-1 {
-  left: 5%;
-  top: 44%;
-}
-
-.exit-pos-2 {
-  left: 22%;
-  top: 24%;
-}
-
-.exit-pos-3 {
-  left: 50%;
-  top: 15%;
-  transform: translateX(-50%);
-}
-
-.exit-pos-4 {
-  right: 22%;
-  top: 24%;
-}
-
-.exit-pos-5 {
-  right: 5%;
-  top: 44%;
-}
-
-.exit-runic-arch {
-  background: rgba(10, 16, 24, 0.88);
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(10, 16, 26, 0.88);
   backdrop-filter: blur(14px);
-  border: 1px solid rgba(140, 160, 185, 0.25);
-  border-top: 2px solid var(--survival-gold);
-  border-radius: 6px;
-  padding: 12px 18px;
-  min-width: 200px;
-  max-width: 260px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: 40px;
+  padding: 8px 18px 8px 10px;
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.75), 0 0 15px rgba(245, 158, 11, 0.15);
+  /* Hidden by default until campfire is lit */
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0.8);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s ease,
+              box-shadow 0.25s ease,
+              background 0.25s ease;
+}
+
+/* Specific Hotspot Positions on the Ruined Scene */
+/* Point 1: On the statue behind */
+.hotspot-statue {
+  top: 28%;
+  left: 50%;
+}
+
+/* Point 2: In the nearby waterfall */
+.hotspot-waterfall {
+  top: 40%;
+  left: 20%;
+}
+
+/* Point 3: In the entrance of the ruins */
+.hotspot-ruins {
+  top: 46%;
+  left: 80%;
+}
+
+/* REVEAL LINK TO CAMPFIRE: ONLY REVEALED WHEN CAMPFIRE IS LIT */
+.cavern-stage.lit .cave-hotspot {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.cavern-stage.lit .hotspot-statue {
+  transition-delay: 0.2s;
+}
+
+.cavern-stage.lit .hotspot-waterfall {
+  transition-delay: 0.35s;
+}
+
+.cavern-stage.lit .hotspot-ruins {
+  transition-delay: 0.5s;
+}
+
+/* Hotspot Hover & Focus */
+.cave-hotspot:hover {
+  border-color: #fbbf24;
+  background: rgba(16, 24, 38, 0.95);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.9), 0 0 25px rgba(251, 191, 36, 0.5);
+  transform: translate(-50%, -54%) scale(1.05);
+}
+
+.hotspot-beacon {
   position: relative;
-  overflow: hidden;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.courtyard-exit-gate:hover .exit-runic-arch {
-  border-color: var(--survival-bright);
-  border-top-color: #fff;
-  box-shadow: 0 0 30px var(--survival-glow), 0 16px 36px rgba(0, 0, 0, 0.95);
-  transform: translateY(-4px);
+.beacon-wave {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(251, 191, 36, 0.65);
+  animation: beaconSonar 2.2s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
+  pointer-events: none;
 }
 
-.exit-pos-3:hover .exit-runic-arch {
-  transform: translateY(-4px);
+@keyframes beaconSonar {
+  0% { transform: scale(0.7); opacity: 1; }
+  100% { transform: scale(1.75); opacity: 0; }
 }
 
-.exit-chapter-tag {
+.beacon-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fef08a 0%, #f59e0b 60%, #b45309 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0b111a;
+  font-size: 13px;
+  font-weight: 900;
+  box-shadow: 0 0 12px #fbbf24;
+}
+
+.hotspot-label-card {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.hotspot-sub {
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 700;
-  color: var(--survival-gold);
-  letter-spacing: 2px;
-  display: block;
+  letter-spacing: 1.8px;
+  color: #fbbf24;
+  line-height: 1;
   margin-bottom: 2px;
 }
 
-.exit-title {
+.hotspot-title {
   font-family: var(--font-serif);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 800;
-  color: #fff;
-  letter-spacing: 1px;
-  line-height: 1.2;
-  margin-bottom: 4px;
+  letter-spacing: 1.2px;
+  color: #ffffff;
+  line-height: 1.1;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
 }
 
-.exit-venue-tag {
-  font-family: var(--font-mono);
-  font-size: 8.5px;
-  font-weight: 600;
-  color: var(--ancient-cyan);
-  letter-spacing: 1.5px;
-  display: block;
-}
-
-.exit-glow-flare {
+/* Small yellow text: "Lit the campfire" (Appears after 0.8s on Section 2 arrival) */
+.campfire-lit-prompt {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--survival-bright), transparent);
+  top: -46px;
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #fbbf24;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2.2px;
+  text-transform: uppercase;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.8), 0 0 22px rgba(245, 158, 11, 0.55);
+  background: rgba(10, 16, 26, 0.88);
+  border: 1px solid rgba(251, 191, 36, 0.55);
+  border-radius: 24px;
+  padding: 6px 16px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.7), 0 0 16px rgba(251, 191, 36, 0.3);
+  white-space: nowrap;
+  pointer-events: none;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 10;
+  user-select: none;
 }
 
-.courtyard-exit-gate:hover .exit-glow-flare {
+.campfire-lit-prompt.visible {
   opacity: 1;
+  pointer-events: auto;
+  cursor: pointer;
+  transform: translateX(-50%) translateY(0);
+  animation: promptFloatPulse 2.2s infinite ease-in-out;
+}
+
+.courtyard-campfire-wrap.lit .campfire-lit-prompt {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.campfire-lit-prompt .prompt-spark {
+  color: #fef08a;
+  font-size: 13px;
+  animation: sparkSpin 2.6s infinite ease-in-out alternate;
+}
+
+@keyframes promptFloatPulse {
+  0%, 100% {
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.7), 0 0 14px rgba(251, 191, 36, 0.3);
+    border-color: rgba(251, 191, 36, 0.5);
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.9), 0 0 26px rgba(251, 191, 36, 0.7);
+    border-color: #fbbf24;
+    transform: translateX(-50%) translateY(-4px);
+  }
+}
+
+@keyframes sparkSpin {
+  0% { transform: scale(0.9) rotate(0deg); opacity: 0.8; }
+  100% { transform: scale(1.2) rotate(45deg); opacity: 1; }
 }
 
 /* ==========================================================================
@@ -2688,20 +2719,232 @@ body.survival-instinct-active #dock-survival {
   .forge-box { grid-template-columns: 1fr; }
 
   /* Cavern Courtyard Responsive */
-  .cavern-header-bar { left: 16px; right: 16px; top: 16px; }
-  .cavern-chamber-title { font-size: 16px; }
-  .btn-surface-return { padding: 8px 12px; font-size: 10px; }
-  
-  .exit-pos-1 { left: 4%; top: 32%; }
-  .exit-pos-2 { left: 4%; top: 18%; }
-  .exit-pos-3 { left: 50%; top: 8%; }
-  .exit-pos-4 { right: 4%; top: 18%; }
-  .exit-pos-5 { right: 4%; top: 32%; }
-  .exit-runic-arch { min-width: 140px; padding: 8px 12px; }
-  .exit-title { font-size: 12px; }
-  .exit-chapter-tag { font-size: 8px; }
-  .exit-venue-tag { font-size: 7.5px; }
+  .hotspot-statue { top: 22%; left: 50%; }
+  .hotspot-waterfall { top: 38%; left: 24%; }
+  .hotspot-ruins { top: 46%; left: 76%; }
+  .cave-hotspot { padding: 6px 14px 6px 8px; gap: 8px; }
+  .hotspot-title { font-size: 12px; }
+  .hotspot-sub { font-size: 7.5px; }
 
   .campfire-flame-chassis { width: 180px; height: 180px; }
   .courtyard-campfire-wrap { bottom: 4%; }
+  .campfire-lit-prompt { font-size: 10px; padding: 5px 12px; top: -38px; }
+
+  .adding-soon-container { padding: 32px 20px 24px; }
+  .adding-soon-headline { font-size: 24px; }
+  .adding-soon-meta-grid { grid-template-columns: 1fr; gap: 8px; }
+}
+
+/* ==========================================================================
+   SEPARATE PAGE: EXPEDITION DISPATCH (ADDING SOON)
+   ========================================================================== */
+.adding-soon-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 24px;
+}
+
+.adding-soon-screen.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.adding-soon-backdrop {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(14, 22, 34, 0.94) 0%, rgba(6, 10, 16, 0.98) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.adding-soon-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 680px;
+  background: rgba(11, 17, 26, 0.92);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-top: 3px solid #fbbf24;
+  border-radius: 12px;
+  padding: 44px 40px 36px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 40px rgba(245, 158, 11, 0.15);
+  transform: translateY(24px) scale(0.96);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.adding-soon-screen.open .adding-soon-container {
+  transform: translateY(0) scale(1);
+}
+
+.adding-soon-close-btn {
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  color: #94a3b8;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.adding-soon-close-btn:hover {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: #fbbf24;
+  color: #ffffff;
+}
+
+.adding-soon-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.adding-soon-seal {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  margin-bottom: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.seal-glow {
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.35) 0%, transparent 70%);
+  filter: blur(8px);
+}
+
+.seal-inner-ring {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  color: #fbbf24;
+}
+
+.seal-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.adding-soon-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.adding-soon-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #fbbf24;
+}
+
+.adding-soon-status {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 3px;
+  padding: 3px 8px;
+}
+
+.adding-soon-headline {
+  font-family: var(--font-serif);
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #ffffff;
+  margin: 0 0 16px;
+  line-height: 1.2;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+}
+
+.adding-soon-headline .accent-gold {
+  color: #fbbf24;
+  text-shadow: 0 0 20px rgba(251, 191, 36, 0.6);
+}
+
+.adding-soon-divider {
+  width: 90px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #fbbf24, transparent);
+  margin-bottom: 20px;
+}
+
+.adding-soon-paragraph {
+  font-family: var(--font-sans);
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: #cbd5e1;
+  max-width: 540px;
+  margin: 0 0 28px;
+}
+
+.adding-soon-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 32px;
+}
+
+.meta-box {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 12px 8px;
+}
+
+.meta-label {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 1.5px;
+  margin-bottom: 4px;
+}
+
+.meta-value {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: #f1ede4;
+  letter-spacing: 1px;
+}
+
+.meta-value.status-pending {
+  color: #fbbf24;
+}
+
+.adding-soon-actions {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }

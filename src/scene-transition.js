@@ -48,6 +48,7 @@ export class SceneTransitionController {
 
     this.hasPlayedCrash = false;
     this.isSeeking = false;
+    this.inCave = false;
     this.isAnimatingDescent = false;
 
     // Mouse Parallax coordinates
@@ -372,6 +373,11 @@ export class SceneTransitionController {
   }
 
   applyTimeline(progress) {
+    if (progress <= 0.85 && this.inCave) {
+      this.inCave = false;
+      window.dispatchEvent(new CustomEvent('scene:leave-cave'));
+    }
+
     // Stage 1 (0–20%): Island Visible
     if (progress <= 0.20) {
       this.sceneIsland.style.opacity = '1';
@@ -482,6 +488,10 @@ export class SceneTransitionController {
 
     // Stage 4 (55–85%): Rocks move away towards sides, gradually uncovering Cave
     else if (progress > 0.55 && progress <= 0.85) {
+      if (this.inCave) {
+        this.inCave = false;
+        window.dispatchEvent(new CustomEvent('scene:leave-cave'));
+      }
       const p = (progress - 0.55) / 0.30; // 0 to 1
 
       this.sceneIsland.style.opacity = '0';
@@ -520,6 +530,11 @@ export class SceneTransitionController {
       this.partOffset = 1.0;
       this.dissolveProgress = 1.0;
       this.cloudDensity = 0.0;
+
+      if (!this.inCave) {
+        this.inCave = true;
+        window.dispatchEvent(new CustomEvent('scene:enter-cave'));
+      }
     }
 
     // Scrub video
