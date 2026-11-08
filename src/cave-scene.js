@@ -49,10 +49,10 @@ export class CaveScene {
 
     this.container.appendChild(this.renderer.domElement);
 
-    // 2. Scene & Fog
+    // 2. Scene & Fog - Atmospheric subterranean stone dusk (visible pre-lit lighting)
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x06080c);
-    this.scene.fog = new THREE.FogExp2(0x06080c, 0.045);
+    this.scene.background = new THREE.Color(0x0e141f);
+    this.scene.fog = new THREE.FogExp2(0x0e1522, 0.016);
 
     // 3. Camera
     this.camera = new THREE.PerspectiveCamera(52, this.width / this.height, 0.1, 120);
@@ -61,22 +61,37 @@ export class CaveScene {
     this.cameraTarget = new THREE.Vector3(0, 1.2, 0);
     this.camera.lookAt(this.cameraTarget);
 
-    // 4. Cavern Lighting
-    // Faint ambient light (cold blue moonlight leaking from ceiling)
-    this.ambientLight = new THREE.AmbientLight(0x182436, 0.5);
+    // 4. Cavern Lighting (Richly lit, visible moody stone atmosphere)
+    // Slate-blue atmospheric ambient light
+    this.ambientLight = new THREE.AmbientLight(0x4d688a, 1.4);
     this.scene.add(this.ambientLight);
 
-    // Cold moonlight direction from cavern ceiling fissure
-    this.moonLight = new THREE.DirectionalLight(0x4a75a0, 0.6);
-    this.moonLight.position.set(2, 12, 3);
+    // Primary moonlight streaming from cavern roof fissure
+    this.moonLight = new THREE.DirectionalLight(0x82b4e8, 1.4);
+    this.moonLight.position.set(4, 18, 6);
     this.scene.add(this.moonLight);
 
-    // Central Campfire PointLight (Warm orange-red, starts very dim/unlit)
-    this.fireLight = new THREE.PointLight(0xff6600, 0.08, 30, 1.8);
+    // Secondary fill light from opposite wall
+    this.fillLight = new THREE.DirectionalLight(0x426691, 0.9);
+    this.fillLight.position.set(-6, 14, -5);
+    this.scene.add(this.fillLight);
+
+    // Central Campfire PointLight (Warm ember glow initially, flares to room-illuminating blaze)
+    this.fireLight = new THREE.PointLight(0xff7711, 0.35, 45, 1.6);
     this.fireLight.position.set(0, 0.9, 0);
     this.fireLight.castShadow = true;
     this.fireLight.shadow.bias = -0.002;
     this.scene.add(this.fireLight);
+
+    // Secondary ceiling bounce light (illuminates cavern roof, stalactites and upper chamber)
+    this.fireCeilingBounce = new THREE.PointLight(0xffa533, 0.0, 80, 1.1);
+    this.fireCeilingBounce.position.set(0, 5.5, 0);
+    this.scene.add(this.fireCeilingBounce);
+
+    // Wide foreground cavern fill light (floods entire stone chamber with luminous warm bounce)
+    this.fireCavernFill = new THREE.PointLight(0xff8822, 0.0, 95, 1.0);
+    this.fireCavernFill.position.set(0, 2.5, 3.5);
+    this.scene.add(this.fireCavernFill);
   }
 
   createCavern() {
@@ -98,9 +113,9 @@ export class CaveScene {
     floorGeo.computeVertexNormals();
 
     const floorMat = new THREE.MeshStandardMaterial({
-      color: 0x141a22,
-      roughness: 0.92,
-      metalness: 0.08,
+      color: 0x242d3a,
+      roughness: 0.78,
+      metalness: 0.1,
       flatShading: true
     });
     this.floor = new THREE.Mesh(floorGeo, floorMat);
@@ -111,33 +126,48 @@ export class CaveScene {
     const domeGeo = new THREE.SphereGeometry(22, 36, 24, 0, Math.PI * 2, 0, Math.PI * 0.65);
     domeGeo.scale(-1, 1, 1); // Invert normals so inside is visible
     const domeMat = new THREE.MeshStandardMaterial({
-      color: 0x0f151e,
-      roughness: 0.96,
-      metalness: 0.04,
+      color: 0x1d2734,
+      roughness: 0.82,
+      metalness: 0.08,
       flatShading: true
     });
     const dome = new THREE.Mesh(domeGeo, domeMat);
     dome.position.set(0, 0, 0);
     this.scene.add(dome);
 
-    // 3. Stalactites & Stone Pillars in shadows
+    // 3. Stalactites & Stone Pillars
     const pillarMat = new THREE.MeshStandardMaterial({
-      color: 0x121822,
-      roughness: 0.9,
+      color: 0x263345,
+      roughness: 0.76,
+      metalness: 0.08,
       flatShading: true
     });
 
     const pillarPositions = [
-      [-6.5, -3.5], [6.5, -3.5], [-9, 2], [9, 2], [-4, -8], [4, -8]
+      [-6.5, -3.5], [6.5, -3.5], [-9, 2], [9, 2], [-4, -8], [4, -8],
+      [-11, -2], [11, -2], [-2, -11], [2, -11]
     ];
 
     pillarPositions.forEach(([px, pz]) => {
-      const pillarGeo = new THREE.CylinderGeometry(0.5, 0.9, 12, 7);
+      const pillarGeo = new THREE.CylinderGeometry(0.45, 0.95, 12, 7);
       const pillar = new THREE.Mesh(pillarGeo, pillarMat);
       pillar.position.set(px, 5, pz);
       pillar.castShadow = true;
       pillar.receiveShadow = true;
       this.scene.add(pillar);
+    });
+
+    // Hanging Stalactites from Cavern Ceiling
+    const stalactitePositions = [
+      [-3, 7, -2], [3, 7.5, -2], [0, 8, -4], [-5, 7.2, 1], [5, 7.2, 1],
+      [-2, 7.8, 3], [2, 7.8, 3]
+    ];
+    stalactitePositions.forEach(([sx, sy, sz]) => {
+      const stalactiteGeo = new THREE.ConeGeometry(0.4, 2.5 + Math.random(), 6);
+      const stalactite = new THREE.Mesh(stalactiteGeo, pillarMat);
+      stalactite.rotation.x = Math.PI; // Pointing down
+      stalactite.position.set(sx, sy, sz);
+      this.scene.add(stalactite);
     });
   }
 
@@ -337,10 +367,11 @@ export class CaveScene {
     group.position.set(x, 0, z);
     group.rotation.y = cfg.angle; // Face towards center campfire
 
-    // Stone Archway Material
+    // Stone Archway Material (Carved ancient temple stone)
     const archMat = new THREE.MeshStandardMaterial({
-      color: 0x1c2430,
-      roughness: 0.88,
+      color: 0x303c4c,
+      roughness: 0.74,
+      metalness: 0.12,
       flatShading: true
     });
 
@@ -367,8 +398,8 @@ export class CaveScene {
     // Deep Tunnel Corridor Interior (Extending 15 units backward)
     const tunnelGeo = new THREE.BoxGeometry(2.8, 4.0, 15);
     const tunnelMat = new THREE.MeshStandardMaterial({
-      color: 0x05070a,
-      roughness: 1.0,
+      color: 0x141a24,
+      roughness: 0.88,
       side: THREE.BackSide
     });
     const tunnel = new THREE.Mesh(tunnelGeo, tunnelMat);
@@ -380,7 +411,7 @@ export class CaveScene {
     const glowMat = new THREE.MeshBasicMaterial({
       color: cfg.color,
       transparent: true,
-      opacity: 0.05, // Starts dim until fire is lit!
+      opacity: 0.22, // Visible ambient beacon glow
       blending: THREE.AdditiveBlending,
       side: THREE.DoubleSide
     });
@@ -393,12 +424,17 @@ export class CaveScene {
     const runeMat = new THREE.MeshBasicMaterial({
       color: cfg.color,
       transparent: true,
-      opacity: 0.08,
+      opacity: 0.45,
       blending: THREE.AdditiveBlending
     });
     const runePlane = new THREE.Mesh(runeGeo, runeMat);
     runePlane.position.set(0, 4.4, 0.46);
     group.add(runePlane);
+
+    // Local Archway Portal Light (Radiates colorful glow into surrounding stone)
+    const portalLight = new THREE.PointLight(cfg.color, 0.65, 16, 1.8);
+    portalLight.position.set(0, 3.8, 0.5);
+    group.add(portalLight);
 
     // Interactive Portal Hitbox
     const hitGeo = new THREE.BoxGeometry(3.4, 4.5, 2.0);
@@ -410,7 +446,8 @@ export class CaveScene {
       config: cfg,
       portalGroup: group,
       glowPlane: glowPlane,
-      runePlane: runePlane
+      runePlane: runePlane,
+      portalLight: portalLight
     };
     group.add(hitbox);
 
@@ -419,6 +456,7 @@ export class CaveScene {
       hitbox: hitbox,
       glowPlane: glowPlane,
       runePlane: runePlane,
+      portalLight: portalLight,
       config: cfg,
       targetCameraPos: new THREE.Vector3(x, 1.9, z).add(
         new THREE.Vector3(Math.sin(cfg.angle) * -12, 0, -Math.cos(cfg.angle) * -12)
@@ -480,32 +518,53 @@ export class CaveScene {
       sound.playRelicDiscovery();
     }, 280);
 
-    // 2. Spawn HTML spark effect at campfire screen position
+    // 2. Spawn HTML spark effect at campfire screen position & luminous chamber bloom
     this.triggerCampfireSparks();
 
-    // 3. Show flames and animate light expansion
+    // 3. Show flames and animate luminous light expansion across the entire room
     this.flameCoreGroup.visible = true;
 
-    // GSAP / Frame expansion of light
+    // GSAP / Frame expansion of light to flood the whole chamber with luminosity
     const startTime = performance.now();
-    const duration = 1400;
+    const duration = 1500;
 
     const animateLight = () => {
       const elapsed = performance.now() - startTime;
       const progress = Math.min(1, elapsed / duration);
       const ease = 1 - Math.pow(1 - progress, 3); // Cubic ease out
 
-      // Light expands from 0.08 to 2.4
-      this.fireLight.intensity = 0.08 + ease * 2.32;
-      this.fireLight.distance = 8 + ease * 32;
+      // 1. Central hearth blaze expands to immense 9.2 intensity and 95m reach
+      this.fireLight.intensity = 0.35 + ease * 8.85;
+      this.fireLight.distance = 45 + ease * 50;
 
-      // Cavern ambient slightly warms up
-      this.ambientLight.color.setRGB(0.1 + ease * 0.12, 0.14 + ease * 0.06, 0.22);
+      // 2. Cavern ceiling bounce illuminates stalactites, arches, and high rock dome
+      if (this.fireCeilingBounce) {
+        this.fireCeilingBounce.intensity = ease * 5.2;
+      }
 
-      // Portals ignite and reveal their glowing runes!
+      // 3. Wide chamber fill floods the entire room with radiant golden bounce light
+      if (this.fireCavernFill) {
+        this.fireCavernFill.intensity = ease * 4.0;
+      }
+
+      // 4. Cavern ambient warms up from slate-blue to glorious luminous golden amber
+      const r = 0.30 + ease * 0.55;
+      const g = 0.40 + ease * 0.18;
+      const b = 0.54 - ease * 0.24;
+      this.ambientLight.color.setRGB(r, g, b);
+      this.ambientLight.intensity = 1.4 + ease * 1.8; // Reaches 3.2 intensity!
+
+      // 5. Atmospheric fog clears slightly and warms up
+      this.scene.fog.color.setRGB(0.06 + ease * 0.16, 0.09 + ease * 0.10, 0.14 - ease * 0.05);
+      this.scene.fog.density = 0.016 - ease * 0.005;
+
+      // 6. Portals ignite with brilliant radiance and high-power local beams!
       this.portals.forEach((p) => {
-        p.glowPlane.material.opacity = 0.05 + ease * 0.55;
-        p.runePlane.material.opacity = 0.08 + ease * 0.92;
+        p.glowPlane.material.opacity = 0.22 + ease * 0.68;
+        p.runePlane.material.opacity = 0.45 + ease * 0.55;
+        if (p.portalLight) {
+          p.portalLight.intensity = 0.65 + ease * 2.2;
+        }
       });
 
       if (progress < 1) {
@@ -520,27 +579,43 @@ export class CaveScene {
   }
 
   triggerCampfireSparks() {
-    // Project 3D campfire position to 2D screen coordinates
+    // 1. Full-Chamber Luminous Radiant Bloom
+    const bloom = document.createElement('div');
+    bloom.className = 'cavern-luminous-bloom';
+    bloom.style.cssText = `
+      position: fixed; inset: 0; pointer-events: none; z-index: 50;
+      background: radial-gradient(circle at 50% 65%, rgba(255, 185, 70, 0.45) 0%, rgba(255, 120, 20, 0.20) 45%, transparent 75%);
+      opacity: 0; transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    `;
+    document.body.appendChild(bloom);
+    requestAnimationFrame(() => {
+      bloom.style.opacity = '1';
+      setTimeout(() => {
+        bloom.style.opacity = '0.35'; // Leaves a rich warm ambient glow
+      }, 700);
+    });
+
+    // 2. Project 3D campfire position to 2D screen coordinates for spark physics
     const campfirePos = new THREE.Vector3(0, 0.4, 0);
     campfirePos.project(this.camera);
 
     const x = ((campfirePos.x + 1) * this.width) / 2;
     const y = ((-campfirePos.y + 1) * this.height) / 2;
 
-    const sparkCount = 28;
+    const sparkCount = 38;
     for (let i = 0; i < sparkCount; i++) {
       const spark = document.createElement('div');
       spark.className = 'cursor-spark';
-      spark.style.width = '6px';
-      spark.style.height = '6px';
-      spark.style.backgroundColor = i % 2 === 0 ? '#ffdd55' : '#ff5500';
-      spark.style.boxShadow = '0 0 14px #ffaa00';
+      spark.style.width = '7px';
+      spark.style.height = '7px';
+      spark.style.backgroundColor = i % 2 === 0 ? '#ffdd55' : '#ff6600';
+      spark.style.boxShadow = '0 0 16px #ffaa00';
       document.body.appendChild(spark);
 
       const angle = Math.random() * Math.PI * 2;
-      const speed = 40 + Math.random() * 85;
+      const speed = 45 + Math.random() * 110;
       const vx = Math.cos(angle) * speed;
-      const vy = Math.sin(angle) * speed - 35; // Bias upwards
+      const vy = Math.sin(angle) * speed - 45; // Bias upwards
 
       spark.style.left = `${x}px`;
       spark.style.top = `${y}px`;
@@ -550,7 +625,7 @@ export class CaveScene {
           { transform: 'translate(0, 0) scale(1)', opacity: 1 },
           { transform: `translate(${vx}px, ${vy}px) scale(0)`, opacity: 0 }
         ],
-        { duration: 600 + Math.random() * 300, easing: 'cubic-bezier(0, .8, .3, 1)' }
+        { duration: 700 + Math.random() * 400, easing: 'cubic-bezier(0, .8, .3, 1)' }
       );
 
       anim.onfinish = () => spark.remove();
@@ -645,25 +720,33 @@ export class CaveScene {
     const delta = this.clock.getDelta();
     const time = this.clock.getElapsedTime();
 
-    // 1. Campfire Flame & Light Flicker Animation
+    // 1. Campfire Flame & Light Flicker Animation (Room-wide luminous lighting)
     if (this.isLit) {
-      // Natural organic flicker on fire light
+      // Natural organic flicker on fire lights
       const flicker =
-        Math.sin(time * 14.5) * 0.18 +
-        Math.cos(time * 26.2) * 0.12 +
-        Math.sin(time * 38.8) * 0.08;
-      this.fireLight.intensity = 2.4 + flicker;
+        Math.sin(time * 14.5) * 0.45 +
+        Math.cos(time * 26.2) * 0.32 +
+        Math.sin(time * 38.8) * 0.18;
+
+      this.fireLight.intensity = 8.8 + flicker;
+
+      if (this.fireCeilingBounce) {
+        this.fireCeilingBounce.intensity = 5.0 + flicker * 0.4;
+      }
+      if (this.fireCavernFill) {
+        this.fireCavernFill.intensity = 3.8 + flicker * 0.3;
+      }
 
       // Flame mesh organic scale deformation
       if (this.flameMesh) {
-        this.flameMesh.scale.x = 1.0 + Math.sin(time * 16) * 0.12;
-        this.flameMesh.scale.z = 1.0 + Math.cos(time * 18) * 0.12;
-        this.flameMesh.scale.y = 1.0 + Math.sin(time * 22) * 0.18;
+        this.flameMesh.scale.x = 1.25 + Math.sin(time * 16) * 0.16;
+        this.flameMesh.scale.z = 1.25 + Math.cos(time * 18) * 0.16;
+        this.flameMesh.scale.y = 1.45 + Math.sin(time * 22) * 0.22;
       }
       if (this.innerFlameMesh) {
-        this.innerFlameMesh.scale.x = 1.0 + Math.cos(time * 19) * 0.08;
-        this.innerFlameMesh.scale.z = 1.0 + Math.sin(time * 21) * 0.08;
-        this.innerFlameMesh.scale.y = 1.0 + Math.cos(time * 25) * 0.14;
+        this.innerFlameMesh.scale.x = 1.15 + Math.cos(time * 19) * 0.12;
+        this.innerFlameMesh.scale.z = 1.15 + Math.sin(time * 21) * 0.12;
+        this.innerFlameMesh.scale.y = 1.35 + Math.cos(time * 25) * 0.18;
       }
 
       // 2. Rising Ember Particle Physics

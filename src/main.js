@@ -6,21 +6,12 @@ import { MountainAtmosphere } from './canvas-atmosphere.js';
 import { sound } from './sound.js';
 import { CaveScene } from './cave-scene.js';
 
-// Import All 7 Collectible Event Cards for Vite Bundling
-import card01 from '../assets/event_cards/01_technical_events.png';
-import card02 from '../assets/event_cards/02_hackathons.png';
-import card03 from '../assets/event_cards/03_non_technical_events.png';
-import card04 from '../assets/event_cards/04_workshops.png';
-import card05 from '../assets/event_cards/05_fpv_drone_racing.png';
-import card06 from '../assets/event_cards/06_robowars.png';
-import card07 from '../assets/event_cards/07_main_stage.png';
-
-// Import Maps
+// Import Maps for Atlas
 import mapAurel from '../assets/titaniumfest/valley-of-aurel.webp';
 import mapCampus from '../assets/rec-campus-map.jpg';
 
-// Preload card images for 0-latency display
-[card01, card02, card03, card04, card05, card06, card07, mapAurel, mapCampus].forEach((src) => {
+// Preload maps for 0-latency display
+[mapAurel, mapCampus].forEach((src) => {
   const img = new Image();
   img.src = src;
 });
@@ -182,7 +173,6 @@ if (expeditionMapOverlay) {
 // 7. Relic Archive Database (Synced with demo.titaniumfest.com)
 const relicData = {
   automata: {
-    img: card06,
     cat: 'CHAPTER I // ROBOTICS & AUTONOMOUS ROVERS',
     title: 'The Automata Trials',
     bounty: 'ARENA BOUNTY: ₹6,00,000 INR',
@@ -194,7 +184,6 @@ const relicData = {
     ]
   },
   cipher: {
-    img: card01,
     cat: 'CHAPTER I // ALGORITHMIC & TIMED CODE SPRINT',
     title: 'Cipher Run // The Algorithm Trail',
     bounty: 'NATIONAL CODING BOUNTY: ₹5,00,000 INR',
@@ -206,7 +195,6 @@ const relicData = {
     ]
   },
   design: {
-    img: card02,
     cat: 'CHAPTER I // RAPID ENGINEERING UNDER PRESSURE',
     title: 'Design Under Pressure',
     bounty: '36H HACKATHON BOUNTY: ₹6,00,000 INR',
@@ -218,7 +206,6 @@ const relicData = {
     ]
   },
   sensor: {
-    img: card04,
     cat: 'CHAPTER II // HANDS-ON ELECTRONICS & TELEMETRY',
     title: 'Build a Sensor Rig',
     bounty: 'CREDENTIAL: CERTIFIED SENSOR ARCHITECT',
@@ -230,7 +217,6 @@ const relicData = {
     ]
   },
   prototype: {
-    img: card05,
     cat: 'CHAPTER II // RAPID PHYSICAL FABRICATION',
     title: 'From Sketch to Prototype',
     bounty: 'CREDENTIAL: MASTER MAKER CERTIFICATE',
@@ -242,7 +228,6 @@ const relicData = {
     ]
   },
   exhibits: {
-    img: card03,
     cat: 'CHAPTER III // INTERACTIVE OPTICS & MOTION',
     title: 'Light Through Matter & Machines in Motion',
     bounty: 'EXHIBIT ACCESS: OPEN TO ALL ATTENDEES',
@@ -254,7 +239,6 @@ const relicData = {
     ]
   },
   speakers: {
-    img: card07,
     cat: 'CHAPTER IV // DISTINGUISHED GLOBAL KEYNOTES',
     title: 'Field Notes from the Frontier',
     bounty: 'HEADLINER ACCESS: ALL-ACCESS PASS',
@@ -272,10 +256,6 @@ const relicDossierOverlay = document.getElementById('relic-dossier-overlay');
 const closeDossierBtn = document.getElementById('close-dossier');
 const dockDossierBtn = document.getElementById('dock-dossier');
 const railItems = document.querySelectorAll('.rail-item');
-
-const dossierCardImg = document.getElementById('dossier-card-img');
-const collectibleCardWrap = document.getElementById('collectible-card-wrap');
-const cardFoilSheen = document.getElementById('card-foil-sheen');
 
 const dossierCat = document.getElementById('dossier-cat');
 const dossierTitle = document.getElementById('dossier-title');
@@ -302,16 +282,6 @@ function loadRelic(seqKey) {
   railItems.forEach((item) => {
     item.classList.toggle('active', item.getAttribute('data-seq') === seqKey);
   });
-
-  if (dossierCardImg) {
-    dossierCardImg.style.opacity = '0.3';
-    dossierCardImg.style.transform = 'scale(0.95)';
-    setTimeout(() => {
-      dossierCardImg.src = data.img;
-      dossierCardImg.style.opacity = '1';
-      dossierCardImg.style.transform = 'scale(1)';
-    }, 120);
-  }
 
   if (dossierCat) dossierCat.textContent = data.cat;
   if (dossierTitle) dossierTitle.textContent = data.title;
@@ -350,36 +320,6 @@ if (btnDossierEnter) {
   btnDossierEnter.addEventListener('click', () => {
     closeDossier();
     openForge();
-  });
-}
-
-// 9. 3D Tilt & Holographic Foil Reflection on Collectible Card
-if (collectibleCardWrap) {
-  collectibleCardWrap.addEventListener('mousemove', (e) => {
-    const rect = collectibleCardWrap.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-
-    const rotX = ((y - centerY) / centerY) * -18;
-    const rotY = ((x - centerX) / centerX) * 18;
-
-    collectibleCardWrap.style.transform = `perspective(800px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.04, 1.04, 1.04)`;
-
-    if (cardFoilSheen) {
-      cardFoilSheen.style.opacity = '1';
-      const pctX = (x / rect.width) * 100;
-      const pctY = (y / rect.height) * 100;
-      cardFoilSheen.style.background = `radial-gradient(circle at ${pctX}% ${pctY}%, rgba(255,255,255,0.4) 10%, rgba(245,158,11,0.3) 40%, transparent 75%)`;
-    }
-  });
-
-  collectibleCardWrap.addEventListener('mouseleave', () => {
-    collectibleCardWrap.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-    if (cardFoilSheen) {
-      cardFoilSheen.style.opacity = '0';
-    }
   });
 }
 

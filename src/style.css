@@ -1023,92 +1023,38 @@ body.survival-instinct-active #dock-survival {
   color: #fff;
 }
 
-/* Right Content Dossier with 3D Holographic Vertical Trading Card + Intel */
+/* Right Content Dossier: Sleek Archaeological Tablet & Mission Intel */
 .dossier-detail-pane {
-  padding: 40px 48px;
+  padding: 44px 56px;
   overflow-y: auto;
   display: flex;
-  align-items: center;
-}
-
-.dossier-content-grid {
-  width: 100%;
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 45px;
-  align-items: center;
-}
-
-.dossier-card-showcase {
-  display: flex;
   flex-direction: column;
-  align-items: center;
-  perspective: 1000px;
+  justify-content: center;
 }
 
-.collectible-card-wrap {
-  position: relative;
-  width: 260px;
-  height: 410px;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95), 0 0 30px rgba(245, 158, 11, 0.25);
-  border: 1px solid var(--border-gold);
-  transform-style: preserve-3d;
-  transition: transform 0.12s ease-out, box-shadow 0.2s;
-  background: #090e16;
-}
-
-.collectible-card-wrap:hover {
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.98), 0 0 45px var(--survival-glow);
-}
-
-.collectible-card-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.card-foil-sheen {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0;
-  mix-blend-mode: color-dodge;
-  transition: opacity 0.3s;
-}
-
-.card-hint {
-  margin-top: 12px;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 2px;
-  color: var(--survival-gold);
-}
-
-/* Dossier Intel Column */
 .dossier-intel-col {
+  width: 100%;
+  max-width: 740px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
 }
 
 .dossier-meta-row {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   flex-wrap: wrap;
 }
 
 .dossier-category-badge {
   font-family: var(--font-mono);
   font-size: 10px;
-  letter-spacing: 2px;
+  letter-spacing: 2.5px;
   color: var(--ancient-cyan);
   background: rgba(0, 229, 255, 0.1);
-  padding: 4px 10px;
-  border: 1px solid rgba(0, 229, 255, 0.3);
+  padding: 5px 12px;
+  border: 1px solid rgba(0, 229, 255, 0.35);
   border-radius: 3px;
 }
 
@@ -1118,7 +1064,7 @@ body.survival-instinct-active #dock-survival {
   letter-spacing: 2px;
   color: var(--survival-bright);
   background: rgba(245, 158, 11, 0.15);
-  padding: 4px 10px;
+  padding: 5px 12px;
   border: 1px solid var(--border-gold);
   border-radius: 3px;
   font-weight: 700;
@@ -1126,43 +1072,55 @@ body.survival-instinct-active #dock-survival {
 
 .dossier-headline {
   font-family: var(--font-serif);
-  font-size: 32px;
+  font-size: 38px;
   font-weight: 800;
   letter-spacing: 2px;
   color: #fff;
   line-height: 1.15;
 }
 
+.dossier-title-divider {
+  width: 90px;
+  height: 2.5px;
+  background: linear-gradient(90deg, var(--survival-gold), transparent);
+  margin-top: -6px;
+}
+
 .dossier-brief-text {
-  font-size: 14px;
-  line-height: 1.65;
-  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.75;
+  color: #cbd5e1;
+  max-width: 700px;
 }
 
 .dossier-spec-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin: 10px 0;
+  gap: 18px;
+  margin: 8px 0;
+  background: rgba(14, 21, 31, 0.7);
+  border: 1px solid var(--border-stone);
+  border-radius: 6px;
+  padding: 18px 22px;
 }
 
 .spec-box-lbl {
   font-family: var(--font-mono);
   font-size: 9px;
   letter-spacing: 1.5px;
-  color: var(--text-dim);
+  color: var(--survival-gold);
 }
 
 .spec-box-val {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
-  color: #e2e8f0;
-  margin-top: 2px;
+  color: #f1f5f9;
+  margin-top: 4px;
 }
 
 .dossier-action-bar {
-  margin-top: 14px;
+  margin-top: 10px;
   display: flex;
   gap: 16px;
 }
