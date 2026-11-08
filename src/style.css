@@ -1323,7 +1323,7 @@ body.survival-instinct-active #dock-survival {
    ========================================================================== */
 .scroll-descent-guide {
   position: absolute;
-  bottom: 84px;
+  bottom: 34px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -1810,7 +1810,7 @@ body.survival-instinct-active #dock-survival {
   .floating-hud-dock { right: 12px; }
   .brand-header-lockup { left: 16px; top: 16px; }
   .tomb-counter-container { bottom: 16px; }
-  .scroll-descent-guide { bottom: 80px; }
+  .scroll-descent-guide { bottom: 24px; }
   .dossier-window { grid-template-columns: 1fr; }
   .relic-rail { flex-direction: row; overflow-x: auto; }
   .dossier-content-grid { grid-template-columns: 1fr; }
