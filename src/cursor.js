@@ -83,6 +83,38 @@ export class SurveyorCursor {
         }
       }
     });
+
+    // Custom 3D Cavern Hover Event Listener
+    window.addEventListener('cavern-hover', (e) => {
+      const detail = e.detail;
+      if (detail) {
+        if (detail.type === 'campfire') {
+          this.setCustomCursor('flint', 'STRIKE FLINT');
+        } else if (detail.type === 'portal') {
+          this.setCustomCursor('tunnel', 'ENTER 3D PASSAGE');
+        }
+      } else {
+        this.setCustomCursor(null);
+      }
+    });
+  }
+
+  setCustomCursor(mode, label = '') {
+    if (mode) {
+      this.mode = mode;
+      this.ring.classList.add('cursor-hover', `cursor-${mode}`);
+      if (label && this.labelEl) {
+        this.labelEl.textContent = label;
+        this.labelEl.style.opacity = '1';
+      }
+    } else {
+      this.ring.classList.remove('cursor-hover', 'cursor-flint', 'cursor-tunnel');
+      this.mode = 'default';
+      if (this.labelEl) {
+        this.labelEl.textContent = '';
+        this.labelEl.style.opacity = '0';
+      }
+    }
   }
 
   spawnSparks(x, y) {

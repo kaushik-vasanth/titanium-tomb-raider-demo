@@ -4,6 +4,7 @@
 import { SurveyorCursor } from './cursor.js';
 import { MountainAtmosphere } from './canvas-atmosphere.js';
 import { sound } from './sound.js';
+import { CaveScene } from './cave-scene.js';
 
 // Import All 7 Collectible Event Cards for Vite Bundling
 import card01 from '../assets/event_cards/01_technical_events.png';
@@ -505,3 +506,70 @@ function updateCountdown() {
 
 setInterval(updateCountdown, 1000);
 updateCountdown();
+
+// 13. Subterranean 3D Campfire Cavern & Interactive Portal Exits
+let caveSceneInstance = null;
+try {
+  caveSceneInstance = new CaveScene('cave-3d-canvas', (topicId) => {
+    openDossier(topicId);
+  });
+} catch (err) {
+  console.warn('WebGL CaveScene initialization notice:', err);
+}
+
+// Scroll Descent & Surface Return controls
+const btnScrollDown = document.getElementById('btn-scroll-down');
+const btnSurfaceReturn = document.getElementById('btn-surface-return');
+const cavernStage = document.getElementById('cavern-stage');
+const heroStage = document.getElementById('hero-stage');
+
+if (btnScrollDown && cavernStage) {
+  btnScrollDown.addEventListener('click', () => {
+    cavernStage.scrollIntoView({ behavior: 'smooth' });
+    sound.playClick();
+  });
+}
+
+if (btnSurfaceReturn && heroStage) {
+  btnSurfaceReturn.addEventListener('click', () => {
+    heroStage.scrollIntoView({ behavior: 'smooth' });
+    sound.playClick();
+  });
+}
+
+// Campfire lit event listener -> hide prompt box & play sound
+const campfirePromptBox = document.getElementById('campfire-prompt-box');
+const portalFocusBanner = document.getElementById('portal-focus-banner');
+const focusChapter = document.getElementById('focus-chapter');
+const focusTitle = document.getElementById('focus-title');
+const focusSubtitle = document.getElementById('focus-subtitle');
+
+window.addEventListener('campfire-lit', () => {
+  if (campfirePromptBox) {
+    campfirePromptBox.classList.add('lit');
+    setTimeout(() => {
+      campfirePromptBox.style.display = 'none';
+    }, 600);
+  }
+});
+
+// Cavern hover event listener -> update cursor and portal banner
+window.addEventListener('cavern-hover', (e) => {
+  const detail = e.detail;
+  if (!detail) {
+    if (portalFocusBanner) portalFocusBanner.style.display = 'none';
+    return;
+  }
+
+  if (detail.type === 'portal' && detail.config) {
+    if (portalFocusBanner) {
+      if (focusChapter) focusChapter.textContent = detail.config.chapter || 'EXPEDITION EXIT';
+      if (focusTitle) focusTitle.textContent = detail.config.title;
+      if (focusSubtitle) focusSubtitle.textContent = `${detail.config.subtitle} • CLICK TO DIVE INTO 3D PASSAGE`;
+      portalFocusBanner.style.display = 'flex';
+    }
+  } else if (detail.type === 'campfire') {
+    if (portalFocusBanner) portalFocusBanner.style.display = 'none';
+  }
+});
+
