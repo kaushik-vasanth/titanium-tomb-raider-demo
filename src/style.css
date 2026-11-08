@@ -85,8 +85,78 @@ body.survival-instinct-active .hero-art-layer img {
   filter: grayscale(0.85) contrast(1.25) brightness(0.68) hue-rotate(180deg) !important;
 }
 
+body.survival-instinct-active .cavern-stage {
+  filter: grayscale(0.8) contrast(1.22) brightness(0.65) hue-rotate(180deg) !important;
+}
+
 body.survival-instinct-active .survival-tint {
   opacity: 1;
+}
+
+/* 1. Instinct Mode: Metallic Titanium Logo Radiant Gold/Yellow Shine */
+body.survival-instinct-active .main-title-logo-img {
+  filter: drop-shadow(0 0 25px #fbbf24) drop-shadow(0 0 50px #f59e0b) drop-shadow(0 0 90px rgba(245, 158, 11, 0.95)) brightness(1.3) contrast(1.15) !important;
+  animation: instinctGoldPulse 2s infinite alternate ease-in-out !important;
+}
+
+body.survival-instinct-active .eyebrow-text {
+  color: var(--survival-bright) !important;
+  text-shadow: 0 0 16px var(--survival-gold);
+}
+
+body.survival-instinct-active .sub-text {
+  color: var(--survival-bright) !important;
+  text-shadow: 0 0 16px var(--survival-gold);
+}
+
+/* 2. Instinct Mode: Courtyard Campfire Radiant Gold/Yellow Archaeological Flare */
+body.survival-instinct-active .courtyard-campfire-img {
+  opacity: 1 !important;
+  filter: drop-shadow(0 0 35px #fbbf24) drop-shadow(0 0 70px #f59e0b) drop-shadow(0 0 115px rgba(245, 158, 11, 0.95)) brightness(1.38) saturate(1.45) !important;
+  animation: instinctCampfireGoldPulse 1.8s infinite alternate ease-in-out !important;
+}
+
+body.survival-instinct-active .campfire-hearth-glow {
+  opacity: 1 !important;
+  width: 520px !important;
+  height: 160px !important;
+  background: radial-gradient(ellipse at center, rgba(251, 191, 36, 0.85) 0%, rgba(245, 158, 11, 0.55) 45%, transparent 75%) !important;
+  animation: hearthPulse 1.8s infinite alternate ease-in-out !important;
+}
+
+body.survival-instinct-active .campfire-bloom-halo {
+  opacity: 1 !important;
+  background: radial-gradient(circle, rgba(255, 220, 40, 0.65) 0%, rgba(245, 158, 11, 0.4) 50%, transparent 75%) !important;
+  animation: bloomBreathe 2.4s infinite alternate ease-in-out !important;
+}
+
+body.survival-instinct-active .campfire-action-prompt {
+  background: rgba(35, 20, 5, 0.95) !important;
+  border-color: #fbbf24 !important;
+  box-shadow: 0 0 30px rgba(245, 158, 11, 0.95), inset 0 0 15px rgba(251, 191, 36, 0.5) !important;
+  color: #fff !important;
+}
+
+@keyframes instinctGoldPulse {
+  0% {
+    filter: drop-shadow(0 0 22px #fbbf24) drop-shadow(0 0 45px #f59e0b) drop-shadow(0 0 80px rgba(245, 158, 11, 0.8)) brightness(1.22) contrast(1.1);
+    transform: scale(1);
+  }
+  100% {
+    filter: drop-shadow(0 0 34px #fde047) drop-shadow(0 0 65px #f59e0b) drop-shadow(0 0 115px rgba(245, 158, 11, 1)) brightness(1.38) contrast(1.2);
+    transform: scale(1.02);
+  }
+}
+
+@keyframes instinctCampfireGoldPulse {
+  0% {
+    filter: drop-shadow(0 0 30px #fbbf24) drop-shadow(0 0 60px #f59e0b) drop-shadow(0 0 95px rgba(245, 158, 11, 0.8)) brightness(1.25) saturate(1.3);
+    transform: scale(1);
+  }
+  100% {
+    filter: drop-shadow(0 0 48px #fde047) drop-shadow(0 0 85px #f59e0b) drop-shadow(0 0 135px rgba(245, 158, 11, 1)) brightness(1.42) saturate(1.5);
+    transform: scale(1.03);
+  }
 }
 
 body.survival-instinct-active .game-hotspot .hotspot-beacon-pulse {
