@@ -55,6 +55,15 @@ export class StickyTransitionManager {
     this.rockVideo.preload = 'auto';
     this.rockVideo.load();
 
+    const playPromise = this.rockVideo.play();
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          this.rockVideo.pause();
+        })
+        .catch(() => {});
+    }
+
     this.rockVideo.addEventListener('seeked', () => {
       this.isSeeking = false;
     });
@@ -95,14 +104,16 @@ export class StickyTransitionManager {
         vec4 tex = texture2D(u_video, v_uv);
         float luma = dot(tex.rgb, vec3(0.299, 0.587, 0.114));
         
-        // Key out pure black background while keeping rocks solid & opaque
+        // Key out dark/black background: anything under u_lumaCutoff is 0.0 (completely transparent)
         float rockMask = smoothstep(u_lumaCutoff, u_lumaCutoff + u_lumaSoftness, luma);
         
         // Dissolve rocks after screen is covered to reveal section 2
         float dissolve = 1.0 - smoothstep(0.0, 1.0, u_dissolveProgress);
         
         float finalAlpha = tex.a * rockMask * u_fadeAlpha * dissolve;
-        gl_FragColor = vec4(tex.rgb, finalAlpha);
+        
+        // Premultiplied alpha: transparent parts output zero RGB so NO BLACK TINT is drawn!
+        gl_FragColor = vec4(tex.rgb * finalAlpha, finalAlpha);
       }
     `;
 
@@ -160,13 +171,14 @@ export class StickyTransitionManager {
     this.uFadeAlpha = gl.getUniformLocation(program, 'u_fadeAlpha');
     this.uDissolveProgress = gl.getUniformLocation(program, 'u_dissolveProgress');
 
-    gl.uniform1f(this.uLumaCutoff, 0.035);
-    gl.uniform1f(this.uLumaSoftness, 0.045);
+    // MP4 black video levels are around 0.063, cutoff at 0.08 cleanly eliminates black residue
+    gl.uniform1f(this.uLumaCutoff, 0.08);
+    gl.uniform1f(this.uLumaSoftness, 0.06);
     gl.uniform1f(this.uFadeAlpha, 0.0);
     gl.uniform1f(this.uDissolveProgress, 0.0);
 
     gl.enable(gl.BLEND);
-    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
   }
 
   compileShader(type, source) {
@@ -317,13 +329,43 @@ export class StickyTransitionManager {
   getScrollProgress() {
     if (!this.track) return { inside: false, progress: 0 };
 
-    const scrollY = window.scrollY;
+    const scrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
     const trackTop = this.track.offsetTop;
     const trackHeight = this.track.offsetHeight;
     const viewHeight = window.innerHeight;
     const maxScroll = trackHeight - viewHeight;
 
     if (maxScroll <= 0) return { inside: false, progress: 0 };
+
+    // HARD PINNING ENFORCEMENT:
+    // If inside scroll range, physically keep viewport locked at top: 0!
+    if (scrollY >= trackTop && scrollY < trackTop + maxScroll) {
+      if (this.viewport) {
+        this.viewport.style.position = 'fixed';
+        this.viewport.style.top = '0px';
+        this.viewport.style.left = '0px';
+        this.viewport.style.width = '100vw';
+        this.viewport.style.height = '100vh';
+      }
+    } else if (scrollY >= trackTop + maxScroll) {
+      // Past track: anchor at bottom of track
+      if (this.viewport) {
+        this.viewport.style.position = 'absolute';
+        this.viewport.style.top = `${maxScroll}px`;
+        this.viewport.style.left = '0px';
+        this.viewport.style.width = '100vw';
+        this.viewport.style.height = '100vh';
+      }
+    } else {
+      // At the very top
+      if (this.viewport) {
+        this.viewport.style.position = 'fixed';
+        this.viewport.style.top = '0px';
+        this.viewport.style.left = '0px';
+        this.viewport.style.width = '100vw';
+        this.viewport.style.height = '100vh';
+      }
+    }
 
     if (scrollY <= trackTop) {
       return { inside: true, progress: 0, atTop: true };
@@ -370,12 +412,12 @@ export class StickyTransitionManager {
 
         // 3. ROCKS PILE UP DIRECTLY OVER THE ZOOMING MOUNTAIN
         this.targetVideoTime = p * 5.0; // scrubs video to 5.0s (full rock wall pile)
-        this.fadeAlpha = progress <= 0.005 ? 0 : Math.min(1.0, progress / 0.04);
+        this.fadeAlpha = progress <= 0.008 ? 0 : Math.min(1.0, (progress - 0.008) / 0.05);
         this.dissolveProgress = 0.0;
         this.cloudDensity = p; // atmospheric billowing clouds roll in over mountain
 
-        this.rockCanvas.style.opacity = progress <= 0.005 ? '0' : '1';
-        if (this.cloudCanvas) this.cloudCanvas.style.opacity = progress <= 0.005 ? '0' : '1';
+        this.rockCanvas.style.opacity = progress <= 0.008 ? '0' : '1';
+        if (this.cloudCanvas) this.cloudCanvas.style.opacity = progress <= 0.008 ? '0' : '1';
         if (this.cavernUnderlay) this.cavernUnderlay.style.opacity = '0';
         this.hasPlayedCrash = false;
 
@@ -482,7 +524,7 @@ export class StickyTransitionManager {
     gl.bindTexture(gl.TEXTURE_2D, this.texture);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this.rockVideo);
 
-    gl.uniform1f(this.uFadeAlpha, this.fadeAlpha || 1.0);
+    gl.uniform1f(this.uFadeAlpha, this.fadeAlpha || 0.0);
     gl.uniform1f(this.uDissolveProgress, this.dissolveProgress || 0.0);
 
     gl.clearColor(0, 0, 0, 0);
@@ -492,12 +534,14 @@ export class StickyTransitionManager {
   }
 
   drawClouds(density) {
-    if (!this.cloudCtx || density <= 0.02) return;
+    if (!this.cloudCtx) return;
 
     const ctx = this.cloudCtx;
     const w = this.cloudCanvas.width;
     const h = this.cloudCanvas.height;
     ctx.clearRect(0, 0, w, h);
+
+    if (density <= 0.01) return;
 
     const time = performance.now() * 0.001;
 

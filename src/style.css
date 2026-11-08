@@ -41,11 +41,18 @@
   user-select: none;
 }
 
-html, body {
+html {
   width: 100%;
   min-height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow-x: clip;
+  background-color: var(--bg-deep);
+}
+
+body {
+  width: 100%;
+  min-height: 100%;
+  overflow-x: clip;
+  overflow-y: visible;
   scroll-behavior: smooth;
   background-color: var(--bg-deep);
   color: #fff;
