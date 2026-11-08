@@ -1584,63 +1584,51 @@ body.survival-instinct-active #dock-survival {
 }
 
 /* ==========================================================================
-   SCROLL DESCENT GUIDE (HERO -> EXPEDITION COURTYARD)
+   ARCHERY BOW ARROW DESCENT GUIDE (HERO -> EXPEDITION COURTYARD)
    ========================================================================== */
-.scroll-descent-guide {
+.bow-arrow-descent-guide {
   position: absolute;
   bottom: 104px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 3px;
+  justify-content: center;
   z-index: 6;
   cursor: pointer;
-  padding: 6px 16px;
-  background: rgba(10, 15, 22, 0.85);
+  padding: 6px 12px;
+  background: rgba(10, 15, 22, 0.65);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(245, 158, 11, 0.45);
-  border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.65);
-  transition: all 0.25s ease;
-  animation: descentFloat 2.6s infinite ease-in-out;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7), 0 0 15px rgba(245, 158, 11, 0.15);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: bowArrowFloat 2.6s infinite ease-in-out;
 }
 
-.scroll-descent-guide:hover {
+.bow-arrow-descent-guide:hover {
   background: rgba(22, 30, 44, 0.95);
-  border-color: var(--survival-bright);
-  box-shadow: 0 0 25px rgba(245, 158, 11, 0.55);
-  transform: translateX(-50%) translateY(2px);
+  border-color: #fbbf24;
+  box-shadow: 0 0 30px rgba(251, 191, 36, 0.65), 0 6px 25px rgba(0, 0, 0, 0.9);
+  transform: translateX(-50%) translateY(4px) scale(1.12);
 }
 
-.descent-glyph {
-  font-size: 13px;
-  color: var(--survival-gold);
-  line-height: 1;
+.archery-arrow-svg {
+  display: block;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.9));
+  transition: transform 0.25s ease;
 }
 
-.descent-text {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: #f1ede4;
-  text-shadow: 0 0 8px rgba(245, 158, 11, 0.3);
+.bow-arrow-descent-guide:hover .archery-arrow-svg {
+  filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.85));
 }
 
-.descent-line {
-  width: 1px;
-  height: 10px;
-  background: linear-gradient(to bottom, var(--survival-gold), transparent);
-}
-
-@keyframes descentFloat {
+@keyframes bowArrowFloat {
   0%, 100% {
     transform: translateX(-50%) translateY(0);
   }
   50% {
-    transform: translateX(-50%) translateY(6px);
+    transform: translateX(-50%) translateY(8px);
   }
 }
 
@@ -1709,54 +1697,6 @@ body.survival-instinct-active #dock-survival {
   position: absolute;
   top: -9999px;
   left: -9999px;
-}
-
-.sticky-transition-tag {
-  position: absolute;
-  bottom: 32px;
-  left: 50%;
-  transform: translateX(-50%) translateY(8px);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(10, 15, 22, 0.88);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(245, 158, 11, 0.5);
-  border-radius: 20px;
-  padding: 6px 16px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.85);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  z-index: 3;
-}
-
-.sticky-transition-tag.visible {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
-.transition-pulse-orb {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--survival-bright);
-  box-shadow: 0 0 8px var(--survival-gold);
-  animation: pulseDot 1s infinite alternate;
-}
-
-@keyframes pulseDot {
-  0% { transform: scale(0.8); opacity: 0.6; }
-  100% { transform: scale(1.2); opacity: 1; }
-}
-
-.transition-tag-text {
-  font-family: var(--font-mono);
-  font-size: 9.5px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: #fff;
-  text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
 }
 
 /* ==========================================================================
@@ -2741,7 +2681,7 @@ body.survival-instinct-active #dock-survival {
   .floating-hud-dock { right: 12px; }
   .brand-header-lockup { left: 16px; top: 16px; }
   .tomb-counter-container { bottom: 16px; }
-  .scroll-descent-guide { bottom: 96px; }
+  .bow-arrow-descent-guide { bottom: 96px; }
   .dossier-window { grid-template-columns: 1fr; }
   .relic-rail { flex-direction: row; overflow-x: auto; }
   .dossier-content-grid { grid-template-columns: 1fr; }

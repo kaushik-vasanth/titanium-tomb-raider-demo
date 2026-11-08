@@ -75,6 +75,57 @@ class ExpeditionSoundEngine {
     osc.stop(t + 0.25);
   }
 
+  // 1b. Flint & Steel Stone Spark Strike (Campfire ignition)
+  playFlintStrike() {
+    if (this.muted) return;
+    this.init();
+    if (!this.ctx) return;
+
+    const t = this.ctx.currentTime;
+
+    // Fast high-frequency spark scrape
+    const bufferSize = Math.floor(this.ctx.sampleRate * 0.06);
+    const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.2));
+    }
+
+    const noise = this.ctx.createBufferSource();
+    noise.buffer = buffer;
+
+    const filter = this.ctx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.setValueAtTime(5200, t);
+    filter.Q.setValueAtTime(6, t);
+
+    const gain = this.ctx.createGain();
+    gain.gain.setValueAtTime(0.4, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
+
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(this.ctx.destination);
+    noise.start(t);
+
+    // High metallic stone clink
+    const osc = this.ctx.createOscillator();
+    const oscGain = this.ctx.createGain();
+
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(2600, t);
+    osc.frequency.exponentialRampToValueAtTime(1300, t + 0.06);
+
+    oscGain.gain.setValueAtTime(0.3, t);
+    oscGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.06);
+
+    osc.connect(oscGain);
+    oscGain.connect(this.ctx.destination);
+
+    osc.start(t);
+    osc.stop(t + 0.06);
+  }
+
   // 2. Survival Instinct Mode - Resonant scanning drone & harmonic crystal ring
   playSurvivalInstinct(active) {
     if (this.muted) return;

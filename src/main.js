@@ -484,15 +484,12 @@ function igniteCampfire(e) {
   const sparkX = e ? e.clientX : rect.left + rect.width / 2;
   const sparkY = e ? e.clientY : rect.top + rect.height / 2;
 
-  // Strike flint sound
-  sound.playPickaxe();
+  // Strike flint sound only — that's enough
+  sound.playFlintStrike();
   triggerFlintSparks(sparkX, sparkY);
 
   if (!campfireLit) {
     campfireLit = true;
-    setTimeout(() => {
-      sound.playRelicDiscovery();
-    }, 120);
 
     cavernStage?.classList.add('lit');
     cavernLighting?.classList.add('lit');

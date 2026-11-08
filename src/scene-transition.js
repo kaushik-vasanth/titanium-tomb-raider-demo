@@ -29,8 +29,6 @@ export class SceneTransitionController {
     this.cloudCanvas = document.getElementById('cloud-canopy-canvas');
     this.rockCanvas = document.getElementById('sticky-rock-canvas');
     this.rockVideo = document.getElementById('sticky-rock-video');
-    this.tag = document.getElementById('sticky-transition-tag');
-    this.tagText = document.getElementById('transition-tag-text');
 
     if (!this.container || !this.viewport || !this.rockCanvas || !this.rockVideo) {
       console.warn('Scene transition elements not found in DOM.');
@@ -407,7 +405,6 @@ export class SceneTransitionController {
         this.btnScrollDown.style.pointerEvents = 'auto';
       }
 
-      if (this.tag) this.tag.classList.remove('visible');
       this.hasPlayedCrash = false;
 
       if (this.rockVideo.currentTime > 0.1 && !this.isSeeking) {
@@ -453,10 +450,6 @@ export class SceneTransitionController {
         this.btnScrollDown.style.opacity = String(Math.max(0, 1.0 - p * 3.2));
       }
 
-      if (this.tag) {
-        this.tag.classList.add('visible');
-        if (this.tagText) this.tagText.textContent = 'SEISMIC AVALANCHE ADVANCING...';
-      }
       this.hasPlayedCrash = false;
     }
 
@@ -485,11 +478,6 @@ export class SceneTransitionController {
         this.hasPlayedCrash = true;
         sound.playStoneMechanism();
       }
-
-      if (this.tag) {
-        this.tag.classList.add('visible');
-        if (this.tagText) this.tagText.textContent = 'SEISMIC DESCENT // ENTERING COURTYARD';
-      }
     }
 
     // Stage 4 (55–85%): Rocks move away towards sides, gradually uncovering Cave
@@ -514,11 +502,6 @@ export class SceneTransitionController {
 
       this.rockCanvas.style.opacity = '1';
       if (this.cloudCanvas) this.cloudCanvas.style.opacity = '1';
-
-      if (this.tag) {
-        this.tag.classList.add('visible');
-        if (this.tagText) this.tagText.textContent = 'MISTY RUINED COURTYARD UNVEILED';
-      }
     }
 
     // Stage 5 (85–100%): Cave fully revealed and interactive
@@ -533,7 +516,6 @@ export class SceneTransitionController {
 
       this.rockCanvas.style.opacity = '0';
       if (this.cloudCanvas) this.cloudCanvas.style.opacity = '0';
-      if (this.tag) this.tag.classList.remove('visible');
 
       this.partOffset = 1.0;
       this.dissolveProgress = 1.0;

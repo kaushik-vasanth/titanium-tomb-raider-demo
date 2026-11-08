@@ -116,11 +116,53 @@
           <!-- Vignette and Depth Shading -->
           <div class="hero-vignette" id="hero-vignette"></div>
 
-          <!-- Scroll Descent Guide Indicator -->
-          <div class="scroll-descent-guide" id="btn-scroll-down" data-cursor="scan" data-cursor-label="DESCEND">
-            <span class="descent-glyph">&darr;</span>
-            <span class="descent-text">SCROLL TO DESCEND &bull; EXPEDITION ADVANCE</span>
-            <div class="descent-line"></div>
+          <!-- Archery Bow Arrow Descent Indicator (Pointing Downwards) -->
+          <div class="bow-arrow-descent-guide" id="btn-scroll-down" data-cursor="scan" data-cursor-label="DESCEND" title="Descend to Cavern Courtyard">
+            <svg class="archery-arrow-svg" viewBox="0 0 36 84" width="28" height="68" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <filter id="arrow-glow" x="-30%" y="-30%" width="160%" height="160%">
+                  <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#f59e0b" flood-opacity="0.45" />
+                </filter>
+                <linearGradient id="shaft-metal" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#334155" />
+                  <stop offset="50%" stop-color="#e2e8f0" />
+                  <stop offset="100%" stop-color="#475569" />
+                </linearGradient>
+                <linearGradient id="head-steel" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#94a3b8" />
+                  <stop offset="50%" stop-color="#cbd5e1" />
+                  <stop offset="100%" stop-color="#ffffff" />
+                </linearGradient>
+              </defs>
+
+              <!-- Top Arrow Nock (Notch for bowstring) -->
+              <path d="M16 2 L20 2 L20 6 L18 8 L16 6 Z" fill="#94a3b8" />
+              <rect x="17" y="1" width="2" height="3" fill="#f59e0b" />
+
+              <!-- Feather Fletching (Dual Barbed Aerodynamic Vanes) -->
+              <path d="M17 9 L8 15 L8 28 L17 21 Z" fill="#f59e0b" opacity="0.9" />
+              <path d="M17 12 L10 16 M17 16 L10 20 M17 20 L10 24" stroke="#78350f" stroke-width="0.8" />
+              
+              <path d="M19 9 L28 15 L28 28 L19 21 Z" fill="#f59e0b" opacity="0.9" />
+              <path d="M19 12 L26 16 M19 16 L26 20 M19 20 L26 24" stroke="#78350f" stroke-width="0.8" />
+
+              <!-- Twine cord wrapping below fletching -->
+              <rect x="16" y="27" width="4" height="4" rx="0.5" fill="#d97706" />
+
+              <!-- Carbon/Steel Arrow Shaft -->
+              <rect x="17" y="8" width="2" height="51" rx="1" fill="url(#shaft-metal)" />
+
+              <!-- Twine binding at broadhead socket -->
+              <rect x="16" y="56" width="4" height="4" rx="0.5" fill="#d97706" />
+
+              <!-- Hunting Broadhead Arrowhead (Pointing DOWN) -->
+              <path d="M18 80 L8 59 L14 62 L14 56 L22 56 L22 62 L28 59 Z" fill="url(#head-steel)" stroke="#fbbf24" stroke-width="1.2" filter="url(#arrow-glow)" />
+              <!-- Center razor spine ridge -->
+              <line x1="18" y1="56" x2="18" y2="79" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" />
+              <!-- Aerodynamic blade cutouts -->
+              <polygon points="14,64 11,62 16,70" fill="#0f172a" opacity="0.75" />
+              <polygon points="22,64 25,62 20,70" fill="#0f172a" opacity="0.75" />
+            </svg>
           </div>
         </section>
 
@@ -216,11 +258,6 @@
           <!-- WebGL Luma-Keyed Flying Rocks Canvas -->
           <canvas class="sticky-rock-canvas" id="sticky-rock-canvas"></canvas>
           <video class="sticky-rock-video" id="sticky-rock-video" src="./assets/transition-rock.mp4" playsinline muted preload="auto"></video>
-          
-          <div class="sticky-transition-tag" id="sticky-transition-tag">
-            <span class="transition-pulse-orb"></span>
-            <span class="transition-tag-text" id="transition-tag-text">SEISMIC AVALANCHE ADVANCING...</span>
-          </div>
         </div>
 
       </div>
