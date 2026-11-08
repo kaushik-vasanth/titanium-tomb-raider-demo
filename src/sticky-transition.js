@@ -1,15 +1,18 @@
 // Sticky Rock & Cloud Transition Manager
-// Inspired by IIT Bombay Techfest (techfest.org) & AAA Game Cinematic Transitions
-// Page sticks while rocks & clouds fly in to 100% cover the screen, seamlessly swap to Section 2,
-// then rocks & clouds dissolve away, revealing the Misty Cavern Courtyard & Campfire
+// Inspired by IIT Bombay Techfest (techfest.org) & AAA Game Cinematic Camera Pushes
+// First page (Sanctuary) is sticky: zooms deep into the mountain behind while rocks fly in and pile up on screen,
+// covers 100%, swaps to Section 2 (Courtyard), and rocks dissolve away to reveal the campfire.
 
 import { sound } from './sound.js';
 
 export class StickyTransitionManager {
   constructor() {
-    this.track = document.getElementById('sticky-transition-track');
-    this.viewport = document.getElementById('sticky-transition-viewport');
-    this.surfaceUnderlay = document.getElementById('sticky-surface');
+    this.track = document.getElementById('hero-stage');
+    this.viewport = document.getElementById('hero-sticky-viewport');
+    this.heroArtLayer = document.getElementById('hero-art-layer');
+    this.heroAmbientLayer = document.getElementById('hero-ambient-layer');
+    this.mainTitleBox = document.getElementById('main-title-box');
+    this.btnScrollDown = document.getElementById('btn-scroll-down');
     this.cavernUnderlay = document.getElementById('sticky-cavern');
     this.cloudCanvas = document.getElementById('cloud-canopy-canvas');
     this.rockCanvas = document.getElementById('sticky-rock-canvas');
@@ -30,6 +33,14 @@ export class StickyTransitionManager {
     this.isAutoDescending = false;
     this.isSeeking = false;
     this.targetVideoTime = 0;
+
+    // Mouse Parallax coordinates
+    this.parallaxX = 0;
+    this.parallaxY = 0;
+    this.titleParallaxX = 0;
+    this.titleParallaxY = 0;
+    this.titleRotX = 0;
+    this.titleRotY = 0;
 
     this.initVideo();
     this.initWebGL();
@@ -221,7 +232,7 @@ export class StickyTransitionManager {
   }
 
   initClouds() {
-    const count = 30;
+    const count = 32;
     this.cloudPuffs = [];
     const w = window.innerWidth;
     const h = window.innerHeight;
@@ -230,7 +241,7 @@ export class StickyTransitionManager {
       this.cloudPuffs.push({
         x: Math.random() * w,
         y: Math.random() * h,
-        radius: Math.random() * 200 + 150,
+        radius: Math.random() * 220 + 160,
         seed: Math.random() * Math.PI * 2
       });
     }
@@ -240,6 +251,17 @@ export class StickyTransitionManager {
     window.addEventListener('resize', () => {
       this.updateSizes();
       this.initClouds();
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      const xPct = (e.clientX / window.innerWidth - 0.5) * 2;
+      const yPct = (e.clientY / window.innerHeight - 0.5) * 2;
+      this.parallaxX = -xPct * 10;
+      this.parallaxY = -yPct * 8;
+      this.titleParallaxX = -xPct * 18;
+      this.titleParallaxY = -yPct * 12;
+      this.titleRotX = -yPct * 4;
+      this.titleRotY = xPct * 4;
     });
 
     const btnScrollDown = document.getElementById('btn-scroll-down');
@@ -271,7 +293,7 @@ export class StickyTransitionManager {
 
     const startScroll = window.scrollY;
     const distance = targetScroll - startScroll;
-    const duration = 2400;
+    const duration = 2600;
     const startTime = performance.now();
 
     const animateScroll = (now) => {
@@ -299,52 +321,88 @@ export class StickyTransitionManager {
     const trackTop = this.track.offsetTop;
     const trackHeight = this.track.offsetHeight;
     const viewHeight = window.innerHeight;
+    const maxScroll = trackHeight - viewHeight;
 
-    const start = trackTop - viewHeight * 0.1;
-    const end = trackTop + trackHeight - viewHeight;
+    if (maxScroll <= 0) return { inside: false, progress: 0 };
 
-    if (scrollY < start) {
-      return { inside: false, progress: 0, before: true };
+    if (scrollY <= trackTop) {
+      return { inside: true, progress: 0, atTop: true };
     }
-    if (scrollY > end) {
+    if (scrollY >= trackTop + maxScroll) {
       return { inside: false, progress: 1, after: true };
     }
 
-    const progress = Math.max(0, Math.min(1, (scrollY - trackTop) / (trackHeight - viewHeight)));
+    const progress = Math.max(0, Math.min(1, (scrollY - trackTop) / maxScroll));
     return { inside: true, progress };
   }
 
   renderLoop() {
-    const { inside, progress, before, after } = this.getScrollProgress();
+    const { inside, progress, atTop, after } = this.getScrollProgress();
 
-    if (inside) {
-      this.rockCanvas.style.opacity = '1';
-      if (this.cloudCanvas) this.cloudCanvas.style.opacity = '1';
-
-      // Phase 1: Rocks advance and cover screen (0.0 to 0.48)
-      // At 0.48 - 0.52: Screen is 100% COVERED. Underlay switches to Cavern.
-      // Phase 2: Rocks & clouds dissolve & disappear (0.52 to 1.0)
+    if (inside && progress < 1) {
+      // Phase 1: Zoom onto mountain behind while rocks fly in and pile up
       if (progress < 0.5) {
-        const coverNorm = progress / 0.5; // 0 to 1
-        this.targetVideoTime = coverNorm * 5.0; // scrubs video to 5.0s (full wall)
-        this.fadeAlpha = Math.min(1, progress / 0.08);
-        this.dissolveProgress = 0.0;
-        this.cloudDensity = coverNorm; // clouds thicken to 1.0
+        const p = progress / 0.5; // 0 to 1
 
-        if (this.surfaceUnderlay) this.surfaceUnderlay.style.opacity = '1';
+        // 1. ZOOM ONTO THE MOUNTAIN BEHIND (from 1.0x up to 2.5x deep into mountain pass)
+        const mountainScale = 1.0 + p * 1.5;
+        if (this.heroArtLayer) {
+          this.heroArtLayer.style.transformOrigin = '50% 36%';
+          this.heroArtLayer.style.transform = `translate3d(${this.parallaxX}px, ${this.parallaxY}px, 0) scale(${mountainScale})`;
+        }
+        if (this.heroAmbientLayer) {
+          this.heroAmbientLayer.style.transform = `scale(${1.0 + p * 0.8})`;
+        }
+
+        // 2. HERO UI SMOOTHLY FADES & PUSHES FORWARD
+        const uiFade = Math.max(0, 1.0 - p * 3.2);
+        const uiScale = 1.0 + p * 0.35;
+        const uiY = -p * 120;
+        if (this.mainTitleBox) {
+          this.mainTitleBox.style.opacity = String(uiFade);
+          this.mainTitleBox.style.transform = `translateX(-50%) translate3d(${this.titleParallaxX}px, ${this.titleParallaxY + uiY}px, 0) scale(${uiScale}) rotateY(${this.titleRotY}deg) rotateX(${this.titleRotX}deg)`;
+          this.mainTitleBox.style.pointerEvents = uiFade > 0.05 ? 'auto' : 'none';
+        }
+        if (this.btnScrollDown) {
+          this.btnScrollDown.style.opacity = String(Math.max(0, 1.0 - p * 4.0));
+          this.btnScrollDown.style.pointerEvents = p < 0.2 ? 'auto' : 'none';
+        }
+
+        // 3. ROCKS PILE UP DIRECTLY OVER THE ZOOMING MOUNTAIN
+        this.targetVideoTime = p * 5.0; // scrubs video to 5.0s (full rock wall pile)
+        this.fadeAlpha = progress <= 0.005 ? 0 : Math.min(1.0, progress / 0.04);
+        this.dissolveProgress = 0.0;
+        this.cloudDensity = p; // atmospheric billowing clouds roll in over mountain
+
+        this.rockCanvas.style.opacity = progress <= 0.005 ? '0' : '1';
+        if (this.cloudCanvas) this.cloudCanvas.style.opacity = progress <= 0.005 ? '0' : '1';
         if (this.cavernUnderlay) this.cavernUnderlay.style.opacity = '0';
         this.hasPlayedCrash = false;
 
         if (this.tagText) this.tagText.textContent = 'SEISMIC AVALANCHE ADVANCING...';
       } else {
-        // Underlay has swapped to Cavern! Rocks dissolve & disappear
-        const dissolveNorm = (progress - 0.5) / 0.5; // 0 to 1
-        this.targetVideoTime = 5.0 + dissolveNorm * 0.3;
-        this.fadeAlpha = 1.0;
-        this.dissolveProgress = dissolveNorm; // rocks dissolve away to 0
-        this.cloudDensity = 1.0 - dissolveNorm; // clouds disperse
+        // Phase 2: Underlay has swapped to Cavern! Rocks dissolve & clouds disperse
+        const d = (progress - 0.5) / 0.5; // 0 to 1
 
-        if (this.surfaceUnderlay) this.surfaceUnderlay.style.opacity = '0';
+        if (this.heroArtLayer) {
+          this.heroArtLayer.style.transform = `translate3d(${this.parallaxX}px, ${this.parallaxY}px, 0) scale(2.5)`;
+        }
+        if (this.mainTitleBox) {
+          this.mainTitleBox.style.opacity = '0';
+          this.mainTitleBox.style.pointerEvents = 'none';
+        }
+        if (this.btnScrollDown) {
+          this.btnScrollDown.style.opacity = '0';
+          this.btnScrollDown.style.pointerEvents = 'none';
+        }
+
+        this.targetVideoTime = 5.0 + d * 0.2;
+        this.fadeAlpha = 1.0;
+        this.dissolveProgress = d; // rocks dissolve away to 0
+        this.cloudDensity = 1.0 - d; // clouds disperse
+
+        this.rockCanvas.style.opacity = d >= 0.98 ? '0' : '1';
+        if (this.cloudCanvas) this.cloudCanvas.style.opacity = d >= 0.98 ? '0' : '1';
         if (this.cavernUnderlay) this.cavernUnderlay.style.opacity = '1';
 
         if (!this.hasPlayedCrash) {
@@ -356,7 +414,7 @@ export class StickyTransitionManager {
       }
 
       if (this.tag) {
-        if (progress > 0.1 && progress < 0.9) {
+        if (progress > 0.08 && progress < 0.92) {
           this.tag.classList.add('visible');
         } else {
           this.tag.classList.remove('visible');
@@ -372,13 +430,38 @@ export class StickyTransitionManager {
       this.drawRockFrame();
       this.drawClouds(this.cloudDensity || 0);
     } else {
+      // Outside / Beyond sticky track
       this.rockCanvas.style.opacity = '0';
       if (this.cloudCanvas) this.cloudCanvas.style.opacity = '0';
-      if (this.surfaceUnderlay) this.surfaceUnderlay.style.opacity = '0';
-      if (this.cavernUnderlay) this.cavernUnderlay.style.opacity = '0';
       if (this.tag) this.tag.classList.remove('visible');
 
-      if (before) {
+      if (after) {
+        // Scrolled down into Section 2
+        if (this.cavernUnderlay) this.cavernUnderlay.style.opacity = '1';
+        if (this.mainTitleBox) {
+          this.mainTitleBox.style.opacity = '0';
+          this.mainTitleBox.style.pointerEvents = 'none';
+        }
+        if (this.btnScrollDown) {
+          this.btnScrollDown.style.opacity = '0';
+          this.btnScrollDown.style.pointerEvents = 'none';
+        }
+      } else {
+        // At the very top (Page 1 in full view)
+        if (this.heroArtLayer) {
+          this.heroArtLayer.style.transform = `translate3d(${this.parallaxX}px, ${this.parallaxY}px, 0) scale(1.0)`;
+        }
+        if (this.mainTitleBox) {
+          this.mainTitleBox.style.opacity = '1';
+          this.mainTitleBox.style.transform = `translateX(-50%) translate3d(${this.titleParallaxX}px, ${this.titleParallaxY}px, 0) scale(1.0) rotateY(${this.titleRotY}deg) rotateX(${this.titleRotX}deg)`;
+          this.mainTitleBox.style.pointerEvents = 'auto';
+        }
+        if (this.btnScrollDown) {
+          this.btnScrollDown.style.opacity = '1';
+          this.btnScrollDown.style.pointerEvents = 'auto';
+        }
+        if (this.cavernUnderlay) this.cavernUnderlay.style.opacity = '0';
+
         this.targetVideoTime = 0;
         if (this.rockVideo.currentTime > 0.1 && !this.isSeeking) {
           this.isSeeking = true;

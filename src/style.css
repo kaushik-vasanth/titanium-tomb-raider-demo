@@ -417,26 +417,38 @@ body.survival-instinct-active #dock-survival {
 }
 
 /* ==========================================================================
-   HERO STAGE & 2.5D MULTI-PLANE PARALLAX
+   HERO STAGE & STICKY SCROLL TRACK (ZOOMS ONTO MOUNTAIN AS ROCKS PILE UP)
    ========================================================================== */
-.hero-stage {
+.hero-scroll-track {
   position: relative;
+  width: 100vw;
+  height: 260vh; /* Smooth generous scroll track */
+  background: #06090e;
+}
+
+.hero-sticky-viewport {
+  position: sticky;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 10;
 }
 
 .hero-ambient-layer {
   position: absolute;
-  inset: -5%;
-  width: 110%;
-  height: 110%;
+  inset: -8%;
+  width: 116%;
+  height: 116%;
   z-index: 1;
   filter: blur(25px) brightness(0.45);
   pointer-events: none;
+  transform-origin: 50% 36%;
+  will-change: transform;
 }
 
 .hero-ambient-img {
@@ -447,12 +459,13 @@ body.survival-instinct-active #dock-survival {
 
 .hero-art-layer {
   position: absolute;
-  inset: -3%;
-  width: 106%;
-  height: 106%;
+  inset: -6%;
+  width: 112%;
+  height: 112%;
   z-index: 2;
-  transition: transform 0.15s ease-out;
   pointer-events: none;
+  transform-origin: 50% 36%;
+  will-change: transform;
 }
 
 .hero-clean-bg {
@@ -1604,37 +1617,8 @@ body.survival-instinct-active #dock-survival {
 }
 
 /* ==========================================================================
-   STICKY ROCK & CLOUD TRANSITION TRACK (Techfest Inspired)
+   STICKY ROCK & CLOUD TRANSITION LAYERS (Techfest Inspired)
    ========================================================================== */
-.sticky-transition-track {
-  position: relative;
-  width: 100vw;
-  height: 250vh; /* Scroll length for full sticky sequence */
-  pointer-events: none;
-  background: transparent;
-}
-
-.sticky-transition-viewport {
-  position: sticky;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 15;
-}
-
-.sticky-underlay-surface {
-  position: absolute;
-  inset: 0;
-  background: #080c12 url('/assets/bg-tomb-raider.png') center 38% / cover no-repeat;
-  filter: contrast(1.06) brightness(0.92);
-  transition: opacity 0.35s ease;
-  z-index: 1;
-  opacity: 1;
-}
-
 .sticky-underlay-cavern {
   position: absolute;
   inset: 0;
@@ -1642,7 +1626,8 @@ body.survival-instinct-active #dock-survival {
   filter: brightness(0.82) contrast(1.08) saturate(0.95);
   opacity: 0;
   transition: opacity 0.35s ease;
-  z-index: 2;
+  z-index: 6;
+  pointer-events: none;
 }
 
 .cloud-canopy-canvas {
@@ -1654,7 +1639,7 @@ body.survival-instinct-active #dock-survival {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.25s ease;
-  z-index: 3;
+  z-index: 7;
 }
 
 .sticky-rock-canvas {
@@ -1666,7 +1651,7 @@ body.survival-instinct-active #dock-survival {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.25s ease;
-  z-index: 4;
+  z-index: 8;
 }
 
 .sticky-rock-video {
@@ -1693,7 +1678,7 @@ body.survival-instinct-active #dock-survival {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease, transform 0.3s ease;
-  z-index: 5;
+  z-index: 9;
 }
 
 .sticky-transition-tag.visible {

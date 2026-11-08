@@ -36,27 +36,13 @@ if (headerLogoHome) {
   });
 }
 
-// 3. Multi-Plane 2.5D Parallax Tracking
-const heroArtLayer = document.getElementById('hero-art-layer');
-const mainTitleBox = document.getElementById('main-title-box');
+// 3. Multi-Plane 2.5D Parallax Tracking for HUD elements
 const counterBox = document.getElementById('tomb-counter-box');
-
-if (heroArtLayer || mainTitleBox || counterBox) {
+if (counterBox) {
   window.addEventListener('mousemove', (e) => {
     const xPct = (e.clientX / window.innerWidth - 0.5) * 2;
     const yPct = (e.clientY / window.innerHeight - 0.5) * 2;
-
-    if (heroArtLayer) {
-      heroArtLayer.style.transform = `translate3d(${-xPct * 8}px, ${-yPct * 8}px, 0)`;
-    }
-
-    if (mainTitleBox) {
-      mainTitleBox.style.transform = `translateX(-50%) translate3d(${-xPct * 16}px, ${-yPct * 12}px, 0) rotateY(${xPct * 4}deg) rotateX(${-yPct * 4}deg)`;
-    }
-
-    if (counterBox) {
-      counterBox.style.transform = `translateX(-50%) translate3d(${-xPct * 8}px, ${-yPct * 4}px, 0)`;
-    }
+    counterBox.style.transform = `translateX(-50%) translate3d(${-xPct * 8}px, ${-yPct * 4}px, 0)`;
   });
 }
 

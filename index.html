@@ -74,64 +74,60 @@
       </div>
     </header>
 
-    <!-- MAIN HERO STAGE -->
-    <section class="hero-stage" id="hero-stage">
-      <!-- Layer 1: Ambient edge-bleed backdrop -->
-      <div class="hero-ambient-layer">
-        <img src="./assets/bg-tomb-raider.png" alt="" class="hero-ambient-img" />
-      </div>
+    <!-- MAIN HERO STAGE (STICKY SCROLL TRACK: ZOOMS ONTO MOUNTAIN AS ROCKS PILE UP) -->
+    <section class="hero-scroll-track" id="hero-stage">
+      <div class="hero-sticky-viewport" id="hero-sticky-viewport">
+        <!-- Layer 1: Ambient edge-bleed backdrop -->
+        <div class="hero-ambient-layer" id="hero-ambient-layer">
+          <img src="./assets/bg-tomb-raider.png" alt="" class="hero-ambient-img" />
+        </div>
 
-      <!-- Layer 2: Pristine Mountain Sanctuary Background Art -->
-      <div class="hero-art-layer" id="hero-art-layer">
-        <img src="./assets/bg-tomb-raider.png" alt="RECs TITANIUM 2027 Tomb Raider Mountain Sanctuary" class="hero-clean-bg" id="hero-bg" />
-      </div>
+        <!-- Layer 2: Pristine Mountain Sanctuary Background Art (Zooms onto mountain as rocks pile up) -->
+        <div class="hero-art-layer" id="hero-art-layer">
+          <img src="./assets/bg-tomb-raider.png" alt="RECs TITANIUM 2027 Tomb Raider Mountain Sanctuary" class="hero-clean-bg" id="hero-bg" />
+        </div>
 
-      <!-- Layer 3: Interactive Canvas Atmosphere (Mist, Spray & Embers) -->
-      <canvas id="atmosphere-canvas"></canvas>
+        <!-- Layer 3: Interactive Canvas Atmosphere (Mist, Spray & Embers) -->
+        <canvas id="atmosphere-canvas"></canvas>
 
-      <!-- Layer 4: Independent 3D Floating Foreground Logos & Brand Lockups -->
-      <div class="hero-brand-layer" id="hero-brand-layer">
-        <!-- Center 3D Floating Fest Title -->
-        <div class="main-title-container" id="main-title-box">
-          <div class="fest-eyebrow">
-            <span class="eyebrow-line"></span>
-            <span class="eyebrow-text">RAJALAKSHMI ENGINEERING COLLEGE PRESENTS</span>
-            <span class="eyebrow-line rev"></span>
-          </div>
+        <!-- Layer 4: Independent 3D Floating Foreground Logos & Brand Lockups -->
+        <div class="hero-brand-layer" id="hero-brand-layer">
+          <!-- Center 3D Floating Fest Title -->
+          <div class="main-title-container" id="main-title-box">
+            <div class="fest-eyebrow">
+              <span class="eyebrow-line"></span>
+              <span class="eyebrow-text">RAJALAKSHMI ENGINEERING COLLEGE PRESENTS</span>
+              <span class="eyebrow-line rev"></span>
+            </div>
 
-          <!-- Official Metallic TITANIUM 2027 Logo -->
-          <img src="./assets/logo-titanium-2027.png" alt="TITANIUM 2027" class="main-title-logo-img" id="main-title-img" data-cursor="scan" data-cursor-label="TITANIUM 2027" />
+            <!-- Official Metallic TITANIUM 2027 Logo -->
+            <img src="./assets/logo-titanium-2027.png" alt="TITANIUM 2027" class="main-title-logo-img" id="main-title-img" data-cursor="scan" data-cursor-label="TITANIUM 2027" />
 
-          <div class="main-title-sub">
-            <span class="sub-line"></span>
-            <span class="sub-text">A FESTIVAL BEYOND THE SKY GATE &bull; VALLEY OF AUREL</span>
-            <span class="sub-line rev"></span>
+            <div class="main-title-sub">
+              <span class="sub-line"></span>
+              <span class="sub-text">A FESTIVAL BEYOND THE SKY GATE &bull; VALLEY OF AUREL</span>
+              <span class="sub-line rev"></span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Vignette and Depth Shading -->
-      <div class="hero-vignette"></div>
+        <!-- Vignette and Depth Shading -->
+        <div class="hero-vignette" id="hero-vignette"></div>
 
-      <!-- Scroll Descent Guide Indicator -->
-      <div class="scroll-descent-guide" id="btn-scroll-down" data-cursor="scan" data-cursor-label="DESCEND">
-        <span class="descent-glyph">&darr;</span>
-        <span class="descent-text">DESCEND INTO EXPEDITION COURTYARD</span>
-        <div class="descent-line"></div>
-      </div>
-    </section>
+        <!-- Scroll Descent Guide Indicator -->
+        <div class="scroll-descent-guide" id="btn-scroll-down" data-cursor="scan" data-cursor-label="DESCEND">
+          <span class="descent-glyph">&darr;</span>
+          <span class="descent-text">SCROLL TO DESCEND &bull; EXPEDITION ADVANCE</span>
+          <div class="descent-line"></div>
+        </div>
 
-    <!-- STICKY ROCK & CLOUD TRANSITION TRACK (Techfest Inspired) -->
-    <div class="sticky-transition-track" id="sticky-transition-track">
-      <div class="sticky-transition-viewport" id="sticky-transition-viewport">
-        <!-- Seamless Underlays: Surface Sanctuary -> Underground Cavern -->
-        <div class="sticky-underlay-surface" id="sticky-surface"></div>
+        <!-- Seamless Underground Cavern Courtyard Underlay (Cross-faded under rocks cover) -->
         <div class="sticky-underlay-cavern" id="sticky-cavern"></div>
 
         <!-- Volumetric Mist & Cloud Canopy Canvas (Techfest style) -->
         <canvas class="cloud-canopy-canvas" id="cloud-canopy-canvas"></canvas>
 
-        <!-- WebGL Luma-Keyed Flying Rocks Canvas -->
+        <!-- WebGL Luma-Keyed Flying Rocks Canvas (Rocks pile up directly over zooming mountain) -->
         <canvas class="sticky-rock-canvas" id="sticky-rock-canvas"></canvas>
         <video class="sticky-rock-video" id="sticky-rock-video" src="./assets/transition-rock.mp4" playsinline muted preload="auto"></video>
         
@@ -140,7 +136,7 @@
           <span class="transition-tag-text" id="transition-tag-text">SEISMIC AVALANCHE ADVANCING...</span>
         </div>
       </div>
-    </div>
+    </section>
 
     <!-- STAGE 2: MISTY RUINED EXPEDITION COURTYARD & INTERACTIVE CAMPFIRE -->
     <section class="cavern-stage" id="cavern-stage">
