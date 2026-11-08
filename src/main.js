@@ -570,15 +570,24 @@ const sectorData = {
 };
 
 function openAddingSoon(title = 'About Us') {
-  const data = sectorData[title] || {
-    code: 'EXP-2027-' + title.replace(/[^a-zA-Z0-9]/g, '').slice(0, 8).toUpperCase(),
+  const normTitle = (title === 'ABOUT US' || title === 'About Us') ? 'About Us' : title;
+  const data = sectorData[normTitle] || {
+    code: 'EXP-2027-' + normTitle.replace(/[^a-zA-Z0-9]/g, '').slice(0, 8).toUpperCase(),
     coords: "LAT 8° 23' N // LON 77° 42' E",
-    desc: `Official details and dispatch intelligence for ${title} are currently being surveyed. Content will be unlocked shortly before TITANIUM 2027.`
+    desc: `Official details and dispatch intelligence for ${normTitle} are currently being surveyed. Content will be unlocked shortly before TITANIUM 2027.`
   };
 
-  if (addingSoonTarget) addingSoonTarget.textContent = title;
+  if (addingSoonTarget) addingSoonTarget.textContent = normTitle;
   if (addingSoonHeadline) {
-    addingSoonHeadline.innerHTML = `<span id="adding-soon-target">${title}</span> <span class="accent-gold">Adding soon</span>`;
+    if (normTitle === 'About Us') {
+      addingSoonHeadline.innerHTML = `Adding <span class="accent-gold">About Us</span> Soon`;
+    } else if (normTitle === 'Events') {
+      addingSoonHeadline.innerHTML = `Adding <span class="accent-gold">Events</span> Soon`;
+    } else if (normTitle === 'Register') {
+      addingSoonHeadline.innerHTML = `Adding <span class="accent-gold">Register</span> Soon`;
+    } else {
+      addingSoonHeadline.innerHTML = `Adding <span class="accent-gold">${normTitle}</span> Soon`;
+    }
   }
   if (addingSoonCode) addingSoonCode.textContent = data.code;
   if (addingSoonCoords) addingSoonCoords.textContent = data.coords;

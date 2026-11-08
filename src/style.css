@@ -566,6 +566,7 @@ body.survival-instinct-active #dock-survival {
   display: flex;
   align-items: center;
   gap: 14px;
+  transition: transform 0.15s ease-out;
 }
 
 .brand-crest-box {
@@ -1589,7 +1590,7 @@ body.survival-instinct-active #dock-survival {
    ========================================================================== */
 .bow-arrow-descent-guide {
   position: absolute;
-  bottom: 104px;
+  bottom: 84px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -1604,7 +1605,7 @@ body.survival-instinct-active #dock-survival {
   border: none !important;
   box-shadow: none !important;
   outline: none;
-  animation: bowArrowFloat 2.6s infinite ease-in-out;
+  animation: bowArrowFloat 2.4s infinite ease-in-out;
 }
 
 .bow-arrow-descent-guide:hover {
@@ -1614,20 +1615,20 @@ body.survival-instinct-active #dock-survival {
 }
 
 .ornate-fantasy-arrow-img {
-  width: 38px;
+  width: 58px;
   height: auto;
   display: block;
   /* Rotate 180deg so arrowhead tip points downwards into cave */
   transform: rotate(180deg);
-  filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.75)) drop-shadow(0 4px 14px rgba(0, 0, 0, 0.95));
+  filter: drop-shadow(0 0 16px #fbbf24) drop-shadow(0 0 32px rgba(245, 158, 11, 0.9)) drop-shadow(0 6px 18px rgba(0, 0, 0, 0.95)) brightness(1.15) contrast(1.1);
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), filter 0.25s ease;
   pointer-events: none;
   user-select: none;
 }
 
 .bow-arrow-descent-guide:hover .ornate-fantasy-arrow-img {
-  filter: drop-shadow(0 0 20px rgba(251, 191, 36, 1)) drop-shadow(0 0 35px #f59e0b) drop-shadow(0 6px 20px rgba(0, 0, 0, 0.95));
-  transform: rotate(180deg) scale(1.12);
+  filter: drop-shadow(0 0 28px #fbbf24) drop-shadow(0 0 50px #f59e0b) drop-shadow(0 0 80px rgba(251, 191, 36, 0.75)) brightness(1.3);
+  transform: rotate(180deg) scale(1.16);
 }
 
 @keyframes bowArrowFloat {
@@ -1635,7 +1636,7 @@ body.survival-instinct-active #dock-survival {
     transform: translateX(-50%) translateY(0);
   }
   50% {
-    transform: translateX(-50%) translateY(10px);
+    transform: translateX(-50%) translateY(12px);
   }
 }
 
@@ -1810,17 +1811,7 @@ body.survival-instinct-active #dock-survival {
 }
 
 .compass-dock-badge {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(10, 15, 22, 0.88);
-  backdrop-filter: blur(8px);
-  padding: 4px 12px;
-  border-radius: 20px;
-  border: 1px solid rgba(245, 158, 11, 0.25);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
-  pointer-events: none;
-  transition: all 0.25s ease;
+  display: none !important;
 }
 
 .compass-dock-dot {
@@ -2734,7 +2725,8 @@ body.survival-instinct-active #dock-survival {
   .floating-hud-dock { right: 12px; }
   .brand-header-lockup { left: 16px; top: 16px; }
   .tomb-counter-container { bottom: 16px; }
-  .bow-arrow-descent-guide { bottom: 96px; }
+  .bow-arrow-descent-guide { bottom: 76px; }
+  .ornate-fantasy-arrow-img { width: 48px; }
   .dossier-window { grid-template-columns: 1fr; }
   .relic-rail { flex-direction: row; overflow-x: auto; }
   .dossier-content-grid { grid-template-columns: 1fr; }

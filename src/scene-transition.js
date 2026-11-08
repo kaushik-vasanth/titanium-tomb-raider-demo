@@ -331,15 +331,35 @@ export class SceneTransitionController {
       ScrollTrigger.refresh();
     });
 
+    const brandHeaderLockup = document.querySelector('.brand-header-lockup');
+    const counterBox = document.getElementById('tomb-counter-box');
+
     window.addEventListener('mousemove', (e) => {
       const xPct = (e.clientX / window.innerWidth - 0.5) * 2;
       const yPct = (e.clientY / window.innerHeight - 0.5) * 2;
-      this.parallaxX = -xPct * 10;
-      this.parallaxY = -yPct * 8;
-      this.titleParallaxX = -xPct * 18;
-      this.titleParallaxY = -yPct * 12;
-      this.titleRotX = -yPct * 4;
-      this.titleRotY = xPct * 4;
+      this.parallaxX = -xPct * 8;
+      this.parallaxY = -yPct * 6;
+      this.titleParallaxX = -xPct * 22;
+      this.titleParallaxY = -yPct * 16;
+      this.titleRotX = -yPct * 5;
+      this.titleRotY = xPct * 5;
+
+      // Direct responsive 3D cursor-repel movement on logo (as in Assassin's Creed site)
+      if (this.currentProgress <= 0.20) {
+        if (this.mainTitleBox) {
+          this.mainTitleBox.style.transform = `translateX(-50%) translate3d(${this.titleParallaxX}px, ${this.titleParallaxY}px, 0) scale(1.0) rotateY(${this.titleRotY}deg) rotateX(${this.titleRotX}deg)`;
+        }
+        if (this.heroArtLayer) {
+          this.heroArtLayer.style.transformOrigin = '50% 36%';
+          this.heroArtLayer.style.transform = `translate3d(${this.parallaxX}px, ${this.parallaxY}px, 0) scale(1.0)`;
+        }
+        if (brandHeaderLockup) {
+          brandHeaderLockup.style.transform = `translate3d(${-xPct * 10}px, ${-yPct * 6}px, 0)`;
+        }
+        if (counterBox) {
+          counterBox.style.transform = `translateX(-50%) translate3d(${-xPct * 8}px, ${-yPct * 4}px, 0)`;
+        }
+      }
     });
 
     if (this.btnScrollDown) {
