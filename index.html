@@ -8,6 +8,59 @@
     <link rel="stylesheet" href="./src/style.css" />
   </head>
   <body>
+    <!-- 1. CINEMATIC TITANIUM "T" EXPEDITION LOADER -->
+    <div class="titanium-loader" id="titanium-loader">
+      <div class="loader-chassis">
+        <!-- Rotating Astrolabe Rings -->
+        <div class="loader-astrolabe-outer"></div>
+        <div class="loader-astrolabe-inner"></div>
+
+        <!-- Central Metallic Chiseled "T" Emblem -->
+        <div class="loader-t-emblem">
+          <svg viewBox="0 0 100 100" class="loader-t-svg" width="90" height="90">
+            <defs>
+              <linearGradient id="tChromeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffffff" />
+                <stop offset="25%" stop-color="#e2e8f0" />
+                <stop offset="55%" stop-color="#cbd5e1" />
+                <stop offset="80%" stop-color="#475569" />
+                <stop offset="100%" stop-color="#1e293b" />
+              </linearGradient>
+              <linearGradient id="tGoldTrim" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#fbbf24" />
+                <stop offset="50%" stop-color="#f59e0b" />
+                <stop offset="100%" stop-color="#d97706" />
+              </linearGradient>
+              <filter id="tLoaderGlow" x="-30%" y="-30%" width="160%" height="160%">
+                <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.9" />
+                <feDropShadow dx="0" dy="0" stdDeviation="10" flood-color="#fbbf24" flood-opacity="0.65" />
+              </filter>
+            </defs>
+            <g filter="url(#tLoaderGlow)">
+              <!-- Titanium Chiseled "T" Body -->
+              <polygon points="12,18 88,18 80,35 59,35 59,86 41,86 41,35 20,35" fill="url(#tChromeGrad)" stroke="#ffffff" stroke-width="1.2" stroke-linejoin="round" />
+              <!-- Specular Center Ridge Highlight Line -->
+              <polyline points="50,18 50,86" stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.95" />
+              <!-- Gold Bevel Accent -->
+              <polyline points="15,26 85,26" stroke="url(#tGoldTrim)" stroke-width="1.5" opacity="0.9" />
+            </g>
+          </svg>
+        </div>
+
+        <!-- Telemetry Progress Bar & Label -->
+        <div class="loader-status-container">
+          <span class="loader-brand-title">TITANIUM 2027</span>
+          <div class="loader-bar-track">
+            <div class="loader-bar-fill" id="loader-bar-fill"></div>
+          </div>
+          <div class="loader-telemetry-row">
+            <span class="loader-status-text" id="loader-status-text">CALIBRATING EXPEDITION GRIDS...</span>
+            <span class="loader-pct-text" id="loader-pct-text">0%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Survival Instinct Atmospheric Scan Tint Layer -->
     <div class="survival-tint"></div>
 
@@ -68,20 +121,23 @@
       </div>
     </section>
 
-    <!-- CINEMATIC ROCK AVALANCHE SCROLL TRANSITION TRACK -->
-    <div class="rock-transition-track" id="rock-transition-track">
-      <div class="rock-transition-sticky" id="rock-transition-sticky">
-        <!-- Seamless Underlay Backdrops: Surface Sanctuary -> Underground Cavern -->
-        <div class="transition-backdrop-surface" id="backdrop-surface"></div>
-        <div class="transition-backdrop-cavern" id="backdrop-cavern"></div>
+    <!-- STICKY ROCK & CLOUD TRANSITION TRACK (Techfest Inspired) -->
+    <div class="sticky-transition-track" id="sticky-transition-track">
+      <div class="sticky-transition-viewport" id="sticky-transition-viewport">
+        <!-- Seamless Underlays: Surface Sanctuary -> Underground Cavern -->
+        <div class="sticky-underlay-surface" id="sticky-surface"></div>
+        <div class="sticky-underlay-cavern" id="sticky-cavern"></div>
 
-        <!-- WebGL Luma-Keyed Flying Rocks & Stone Wall Canvas -->
-        <canvas class="rock-transition-canvas" id="rock-transition-canvas"></canvas>
-        <video class="rock-transition-video" id="rock-transition-video" src="./assets/transition-rock.mp4" playsinline muted preload="auto"></video>
+        <!-- Volumetric Mist & Cloud Canopy Canvas (Techfest style) -->
+        <canvas class="cloud-canopy-canvas" id="cloud-canopy-canvas"></canvas>
+
+        <!-- WebGL Luma-Keyed Flying Rocks Canvas -->
+        <canvas class="sticky-rock-canvas" id="sticky-rock-canvas"></canvas>
+        <video class="sticky-rock-video" id="sticky-rock-video" src="./assets/transition-rock.mp4" playsinline muted preload="auto"></video>
         
-        <div class="avalanche-hud-tag" id="avalanche-hud-tag">
-          <span class="avalanche-pulse-dot"></span>
-          <span class="avalanche-status">SEISMIC DESCENT // AVALANCHE IN PROGRESS</span>
+        <div class="sticky-transition-tag" id="sticky-transition-tag">
+          <span class="transition-pulse-orb"></span>
+          <span class="transition-tag-text" id="transition-tag-text">SEISMIC AVALANCHE ADVANCING...</span>
         </div>
       </div>
     </div>
@@ -321,6 +377,94 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- 2. BOTTOM SCREEN ANCIENT EXPEDITION COMPASS BUTTON -->
+    <div class="compass-dock" id="compass-dock">
+      <button class="compass-btn" id="btn-compass-nav" data-cursor="scan" data-cursor-label="NAV WHEEL">
+        <div class="compass-bezel">
+          <span class="compass-cardinal compass-n">N</span>
+          <span class="compass-cardinal compass-e">E</span>
+          <span class="compass-cardinal compass-s">S</span>
+          <span class="compass-cardinal compass-w">W</span>
+          <div class="compass-needle" id="compass-btn-needle">
+            <div class="needle-north"></div>
+            <div class="needle-south"></div>
+            <div class="needle-pivot"></div>
+          </div>
+        </div>
+      </button>
+      <span class="compass-dock-label">COMPASS MENU</span>
+    </div>
+
+    <!-- 3. RADIAL EXPEDITION MENU WHEEL MODAL -->
+    <div class="compass-wheel-overlay" id="compass-wheel-overlay">
+      <div class="wheel-backdrop-vignette"></div>
+
+      <div class="compass-wheel-chassis">
+        <!-- Outer Azimuth Degree Dial -->
+        <div class="wheel-azimuth-dial"></div>
+
+        <!-- Central Compass Core Hub -->
+        <div class="wheel-core-hub" id="wheel-core-hub">
+          <div class="wheel-core-needle" id="wheel-core-needle">
+            <div class="wheel-needle-n"></div>
+            <div class="wheel-needle-s"></div>
+            <div class="wheel-needle-center"></div>
+          </div>
+          <div class="wheel-core-info">
+            <span class="wheel-active-chapter" id="wheel-active-chapter">EXPEDITION ATLAS</span>
+            <h3 class="wheel-active-title" id="wheel-active-title">SELECT DESTINATION</h3>
+          </div>
+        </div>
+
+        <!-- Radial Spokes & Destination Wedges -->
+        <nav class="wheel-nodes-ring" id="wheel-nodes-ring">
+          <button class="wheel-node-item" data-action="sanctuary" data-angle="-90" data-label="VALLEY SANCTUARY" data-sub="SURFACE GATE // HOME">
+            <div class="wheel-node-icon">🏔️</div>
+            <span class="wheel-node-text">SANCTUARY</span>
+          </button>
+
+          <button class="wheel-node-item" data-action="cavern" data-angle="-45" data-label="THE EXPEDITION COURTYARD" data-sub="SUB-LEVEL 02 // CAMPFIRE">
+            <div class="wheel-node-icon">🔥</div>
+            <span class="wheel-node-text">COURTYARD</span>
+          </button>
+
+          <button class="wheel-node-item" data-action="dossier:automata" data-angle="0" data-label="THE AUTOMATA TRIALS" data-sub="CHAPTER I // ROBOTICS">
+            <div class="wheel-node-icon">🤖</div>
+            <span class="wheel-node-text">ROBOTICS</span>
+          </button>
+
+          <button class="wheel-node-item" data-action="dossier:cipher" data-angle="45" data-label="CIPHER RUN" data-sub="CHAPTER I // ALGORITHMS">
+            <div class="wheel-node-icon">⚡</div>
+            <span class="wheel-node-text">CIPHER RUN</span>
+          </button>
+
+          <button class="wheel-node-item" data-action="dossier:design" data-angle="90" data-label="DESIGN UNDER PRESSURE" data-sub="CHAPTER I // 36H HACKATHON">
+            <div class="wheel-node-icon">🛠️</div>
+            <span class="wheel-node-text">HACKATHON</span>
+          </button>
+
+          <button class="wheel-node-item" data-action="dossier:sensor" data-angle="135" data-label="BUILD A SENSOR RIG" data-sub="CHAPTER II // ELECTRONICS">
+            <div class="wheel-node-icon">📡</div>
+            <span class="wheel-node-text">WORKSHOPS</span>
+          </button>
+
+          <button class="wheel-node-item" data-action="dossier:speakers" data-angle="180" data-label="FIELD NOTES FROM THE FRONTIER" data-sub="CHAPTER IV // KEYNOTES">
+            <div class="wheel-node-icon">🎙️</div>
+            <span class="wheel-node-text">KEYNOTES</span>
+          </button>
+
+          <button class="wheel-node-item" data-action="permit" data-angle="225" data-label="SURVIVOR ID FORGE" data-sub="EXPEDITION CREDENTIAL">
+            <div class="wheel-node-icon">🪪</div>
+            <span class="wheel-node-text">ID PERMIT</span>
+          </button>
+        </nav>
+
+        <button class="wheel-close-btn" id="btn-close-wheel" data-cursor="scan" data-cursor-label="CLOSE">
+          ESC // CLOSE WHEEL
+        </button>
       </div>
     </div>
 

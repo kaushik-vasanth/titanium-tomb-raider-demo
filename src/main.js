@@ -3,17 +3,28 @@
 
 import { SurveyorCursor } from './cursor.js';
 import { MountainAtmosphere } from './canvas-atmosphere.js';
-import { RockTransitionManager } from './rock-transition.js';
+import { StickyTransitionManager } from './sticky-transition.js';
+import { TitaniumLoader } from './loader.js';
+import { CompassWheelManager } from './compass-wheel.js';
 import { sound } from './sound.js';
 
-// 1. Initialize Titanium Metallic Silver Arrow Cursor
+// 1. Initialize Cinematic Titanium "T" Expedition Loader
+new TitaniumLoader();
+
+// 2. Initialize Titanium Metallic Silver Arrow Cursor
 new SurveyorCursor();
 
-// 2. Initialize Canvas Atmosphere (Mist, Spray & Campfire Embers)
+// 3. Initialize Canvas Atmosphere (Mist, Spray & Campfire Embers)
 const atmosphere = new MountainAtmosphere('atmosphere-canvas');
 
-// 3. Initialize Cinematic Rock Avalanche Scroll-Driven Section Transition
-const rockTransition = new RockTransitionManager();
+// 4. Initialize Sticky Rock & Cloud Section Transition (Techfest Inspired)
+const stickyTransition = new StickyTransitionManager();
+
+// 5. Initialize Ancient Expedition Compass Dock & Radial Menu Wheel
+const compassWheel = new CompassWheelManager({
+  openDossier: (seq) => openDossier(seq),
+  openForge: () => openForge()
+});
 
 // 4. Header Titanium Logo Home Navigation
 const headerLogoHome = document.getElementById('header-logo-home');
@@ -372,7 +383,7 @@ const btnSurfaceReturn = document.getElementById('btn-surface-return');
 if (btnScrollDown) {
   btnScrollDown.addEventListener('click', (e) => {
     e.preventDefault();
-    rockTransition.triggerCinematicDescent();
+    stickyTransition.triggerCinematicDescent();
   });
 }
 
