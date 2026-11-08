@@ -113,8 +113,8 @@ export class SceneTransitionController {
     const fsSource = `
       precision mediump float;
       uniform sampler2D u_video;
-      uniform float u_lumaCutoff;
-      uniform float u_lumaSoftness;
+      uniform float u_chromaThreshold;
+      uniform float u_chromaSoftness;
       uniform float u_fadeAlpha;
       uniform float u_partOffset;       // 0.0 to 1.0: moves rocks away towards left & right sides
       uniform float u_dissolveProgress; // 0.0 to 1.0
@@ -137,10 +137,32 @@ export class SceneTransitionController {
         }
 
         vec4 tex = texture2D(u_video, uv);
-        float luma = dot(tex.rgb, vec3(0.299, 0.587, 0.114));
         
-        // Key out dark black background: anything under u_lumaCutoff is 0.0 (completely transparent)
-        float rockMask = smoothstep(u_lumaCutoff, u_lumaCutoff + u_lumaSoftness, luma);
+        // --- CHROMA KEY GREEN SCREEN REMOVAL ---
+        // Green excess over maximum of red and blue channels (Petro Vlahos algorithm)
+        float maxRB = max(tex.r, tex.b);
+        float greenExcess = tex.g - maxRB;
+        
+        // Green dominance ratio (captures saturated bright greens)
+        float greenRatio = tex.g / max(0.001, (tex.r + tex.b) * 0.5);
+        
+        // Chroma key mask: 1.0 where green screen, 0.0 where solid rock
+        float diffMask = smoothstep(u_chromaThreshold, u_chromaThreshold + u_chromaSoftness, greenExcess);
+        float ratioMask = smoothstep(1.22, 1.42, greenRatio) * smoothstep(0.12, 0.22, tex.g);
+        float isGreen = max(diffMask, ratioMask);
+        
+        float rockMask = 1.0 - isGreen;
+        
+        // Discard fully keyed-out green screen pixels early
+        if (rockMask <= 0.002) {
+          discard;
+        }
+        
+        // Despill: Strip out any green light reflecting on rock edges (green spill)
+        vec3 cleanColor = tex.rgb;
+        if (cleanColor.g > maxRB) {
+          cleanColor.g = mix(cleanColor.g, maxRB, 0.95);
+        }
         
         // Center clearing opening: as rocks move away to sides, center clears progressively
         float centerDist = abs(v_uv.x - 0.5);
@@ -153,8 +175,8 @@ export class SceneTransitionController {
         
         float finalAlpha = tex.a * rockMask * u_fadeAlpha * dissolve;
         
-        // Output premultiplied color so transparent background has ZERO dark tint
-        gl_FragColor = vec4(tex.rgb * finalAlpha, finalAlpha);
+        // Premultiplied alpha output ensures ZERO dark/tinted borders
+        gl_FragColor = vec4(cleanColor * finalAlpha, finalAlpha);
       }
     `;
 
@@ -207,15 +229,15 @@ export class SceneTransitionController {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 
-    this.uLumaCutoff = gl.getUniformLocation(program, 'u_lumaCutoff');
-    this.uLumaSoftness = gl.getUniformLocation(program, 'u_lumaSoftness');
+    this.uChromaThreshold = gl.getUniformLocation(program, 'u_chromaThreshold');
+    this.uChromaSoftness = gl.getUniformLocation(program, 'u_chromaSoftness');
     this.uFadeAlpha = gl.getUniformLocation(program, 'u_fadeAlpha');
     this.uPartOffset = gl.getUniformLocation(program, 'u_partOffset');
     this.uDissolveProgress = gl.getUniformLocation(program, 'u_dissolveProgress');
 
-    // MP4 black level cutoff
-    gl.uniform1f(this.uLumaCutoff, 0.08);
-    gl.uniform1f(this.uLumaSoftness, 0.06);
+    // Chroma Key Green Screen initial values
+    gl.uniform1f(this.uChromaThreshold, 0.05);
+    gl.uniform1f(this.uChromaSoftness, 0.08);
     gl.uniform1f(this.uFadeAlpha, 0.0);
     gl.uniform1f(this.uPartOffset, 0.0);
     gl.uniform1f(this.uDissolveProgress, 0.0);
@@ -566,6 +588,8 @@ export class SceneTransitionController {
     gl.bindTexture(gl.TEXTURE_2D, this.texture);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this.rockVideo);
 
+    gl.uniform1f(this.uChromaThreshold, 0.05);
+    gl.uniform1f(this.uChromaSoftness, 0.08);
     gl.uniform1f(this.uFadeAlpha, this.fadeAlpha || 0.0);
     gl.uniform1f(this.uPartOffset, this.partOffset || 0.0);
     gl.uniform1f(this.uDissolveProgress, this.dissolveProgress || 0.0);
