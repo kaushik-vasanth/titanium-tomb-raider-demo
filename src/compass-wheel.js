@@ -4,9 +4,11 @@
 import { sound } from './sound.js';
 
 export class CompassWheelManager {
-  constructor({ openDossier, openForge } = {}) {
+  constructor({ openDossier, openForge, onNavigateSanctuary, onNavigateCavern } = {}) {
     this.openDossier = openDossier;
     this.openForge = openForge;
+    this.onNavigateSanctuary = onNavigateSanctuary;
+    this.onNavigateCavern = onNavigateCavern;
 
     this.dock = document.getElementById('compass-dock');
     this.compassBtn = document.getElementById('btn-compass-nav');
@@ -172,10 +174,20 @@ export class CompassWheelManager {
 
     setTimeout(() => {
       if (action === 'sanctuary') {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (this.onNavigateSanctuary) {
+          this.onNavigateSanctuary();
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
       } else if (action === 'cavern') {
-        const cavern = document.getElementById('cavern-stage');
-        if (cavern) cavern.scrollIntoView({ behavior: 'smooth' });
+        if (this.onNavigateCavern) {
+          this.onNavigateCavern();
+        } else {
+          const container = document.getElementById('transition-container');
+          if (container) {
+            window.scrollTo({ top: container.offsetHeight - window.innerHeight, behavior: 'smooth' });
+          }
+        }
       } else if (action === 'permit') {
         if (this.openForge) this.openForge();
       } else if (action && action.startsWith('dossier:')) {

@@ -424,26 +424,72 @@ body.survival-instinct-active #dock-survival {
 }
 
 /* ==========================================================================
-   HERO STAGE & STICKY SCROLL TRACK (ZOOMS ONTO MOUNTAIN AS ROCKS PILE UP)
+   CINEMATIC SCROLL-CONTROLLED ISLAND-TO-CAVE TRANSITION
+   Layer 1: Island scene | Layer 2: Cave scene | Layer 3: Rocks animation overlay
    ========================================================================== */
-.hero-scroll-track {
+.transition-container {
   position: relative;
   width: 100vw;
-  height: 180vh; /* Smooth, responsive cinematic descent track */
-  background: #06090e;
+  height: 280vh; /* Smooth, generous scroll distance for the 5-stage timeline */
+  background: var(--bg-deep);
 }
 
-.hero-sticky-viewport {
-  position: sticky;
-  top: 0;
-  left: 0;
+.transition-viewport {
+  position: relative;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
+}
+
+/* Layer 1: Island Scene */
+.scene-island {
+  position: absolute;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10;
+  pointer-events: auto;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+/* Layer 2: Cave Scene (Loaded underneath Layer 3) */
+.scene-cave {
+  position: absolute;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 20;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.scene-cave.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.scene-cave.interactive {
+  pointer-events: auto;
+}
+
+/* Layer 3: Rocks Animation Overlay */
+.scene-rocks-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 30;
+  pointer-events: none;
 }
 
 .hero-ambient-layer {
@@ -1624,15 +1670,16 @@ body.survival-instinct-active #dock-survival {
 }
 
 /* ==========================================================================
-   CINEMATIC ROCK & CLOUD TRANSITION OVERLAY (Techfest Inspired)
+   CINEMATIC ROCK & CLOUD TRANSITION OVERLAY
    ========================================================================== */
-.rock-transition-overlay {
-  position: fixed;
+.scene-rocks-overlay {
+  position: absolute;
   inset: 0;
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
+  z-index: 30;
   pointer-events: none;
-  z-index: 80;
 }
 
 .cloud-canopy-canvas {

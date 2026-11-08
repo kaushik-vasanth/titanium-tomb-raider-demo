@@ -74,151 +74,157 @@
       </div>
     </header>
 
-    <!-- MAIN HERO STAGE (STICKY SCROLL TRACK: ZOOMS ONTO MOUNTAIN AS ROCKS PILE UP) -->
-    <section class="hero-scroll-track" id="hero-stage">
-      <div class="hero-sticky-viewport" id="hero-sticky-viewport">
-        <!-- Layer 1: Ambient edge-bleed backdrop -->
-        <div class="hero-ambient-layer" id="hero-ambient-layer">
-          <img src="./assets/bg-tomb-raider.png" alt="" class="hero-ambient-img" />
-        </div>
+    <!-- CINEMATIC SCENE TRANSITION CONTAINER (GSAP SCROLLTRIGGER PINNED) -->
+    <div class="transition-container" id="transition-container">
+      <div class="transition-viewport" id="transition-viewport">
 
-        <!-- Layer 2: Pristine Mountain Sanctuary Background Art (Zooms onto mountain as rocks pile up) -->
-        <div class="hero-art-layer" id="hero-art-layer">
-          <img src="./assets/bg-tomb-raider.png" alt="RECs TITANIUM 2027 Tomb Raider Mountain Sanctuary" class="hero-clean-bg" id="hero-bg" />
-        </div>
+        <!-- LAYER 1: ISLAND SCENE -->
+        <section class="scene-island" id="scene-island">
+          <!-- Ambient edge-bleed backdrop -->
+          <div class="hero-ambient-layer" id="hero-ambient-layer">
+            <img src="./assets/bg-tomb-raider.png" alt="" class="hero-ambient-img" />
+          </div>
 
-        <!-- Layer 3: Interactive Canvas Atmosphere (Mist, Spray & Embers) -->
-        <canvas id="atmosphere-canvas"></canvas>
+          <!-- Island Mountain Sanctuary Art Layer -->
+          <div class="hero-art-layer" id="hero-art-layer">
+            <img src="./assets/bg-tomb-raider.png" alt="RECs TITANIUM 2027 Tomb Raider Mountain Sanctuary" class="hero-clean-bg" id="hero-bg" />
+          </div>
 
-        <!-- Layer 4: Independent 3D Floating Foreground Logos & Brand Lockups -->
-        <div class="hero-brand-layer" id="hero-brand-layer">
-          <!-- Center 3D Floating Fest Title -->
-          <div class="main-title-container" id="main-title-box">
-            <div class="fest-eyebrow">
-              <span class="eyebrow-line"></span>
-              <span class="eyebrow-text">RAJALAKSHMI ENGINEERING COLLEGE PRESENTS</span>
-              <span class="eyebrow-line rev"></span>
+          <!-- Interactive Canvas Atmosphere (Mist, Spray & Embers) -->
+          <canvas id="atmosphere-canvas"></canvas>
+
+          <!-- 3D Floating Foreground Logos & Brand Lockups -->
+          <div class="hero-brand-layer" id="hero-brand-layer">
+            <div class="main-title-container" id="main-title-box">
+              <div class="fest-eyebrow">
+                <span class="eyebrow-line"></span>
+                <span class="eyebrow-text">RAJALAKSHMI ENGINEERING COLLEGE PRESENTS</span>
+                <span class="eyebrow-line rev"></span>
+              </div>
+
+              <!-- Official Metallic TITANIUM 2027 Logo -->
+              <img src="./assets/logo-titanium-2027.png" alt="TITANIUM 2027" class="main-title-logo-img" id="main-title-img" data-cursor="scan" data-cursor-label="TITANIUM 2027" />
+
+              <div class="main-title-sub">
+                <span class="sub-line"></span>
+                <span class="sub-text">A FESTIVAL BEYOND THE SKY GATE &bull; VALLEY OF AUREL</span>
+                <span class="sub-line rev"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Vignette and Depth Shading -->
+          <div class="hero-vignette" id="hero-vignette"></div>
+
+          <!-- Scroll Descent Guide Indicator -->
+          <div class="scroll-descent-guide" id="btn-scroll-down" data-cursor="scan" data-cursor-label="DESCEND">
+            <span class="descent-glyph">&darr;</span>
+            <span class="descent-text">SCROLL TO DESCEND &bull; EXPEDITION ADVANCE</span>
+            <div class="descent-line"></div>
+          </div>
+        </section>
+
+        <!-- LAYER 2: CAVE SCENE (Loaded and ready underneath Layer 3) -->
+        <section class="scene-cave" id="scene-cave">
+          <div class="cavern-stage" id="cavern-stage">
+            <!-- Ambient Lighting Filter Layers -->
+            <div class="cavern-lighting-overlay" id="cavern-lighting"></div>
+
+            <!-- Top Header: Sub-level Navigation & Ascent -->
+            <div class="cavern-header-bar">
+              <div class="cavern-breadcrumb">
+                <h2 class="cavern-chamber-title">THE MISTY EXPEDITION COURTYARD</h2>
+              </div>
+
+              <button class="btn-surface-return" id="btn-surface-return" data-cursor="scan" data-cursor-label="SURFACE">
+                &uarr; ASCEND TO SANCTUARY
+              </button>
             </div>
 
-            <!-- Official Metallic TITANIUM 2027 Logo -->
-            <img src="./assets/logo-titanium-2027.png" alt="TITANIUM 2027" class="main-title-logo-img" id="main-title-img" data-cursor="scan" data-cursor-label="TITANIUM 2027" />
+            <!-- Interactive Ruined Exits / Gateways (Positioned on the Ruined Architecture) -->
+            <div class="courtyard-exits-layer" id="courtyard-exits">
+              <!-- Exit 1: The Automata Trials -->
+              <div class="courtyard-exit-gate exit-pos-1" data-topic="automata" data-cursor="scan" data-cursor-label="ROBOTICS">
+                <div class="exit-runic-arch">
+                  <span class="exit-chapter-tag">CHAPTER I</span>
+                  <h3 class="exit-title">The Automata Trials</h3>
+                  <span class="exit-venue-tag">ROBOTICS ROVER ARENA</span>
+                  <div class="exit-glow-flare"></div>
+                </div>
+              </div>
 
-            <div class="main-title-sub">
-              <span class="sub-line"></span>
-              <span class="sub-text">A FESTIVAL BEYOND THE SKY GATE &bull; VALLEY OF AUREL</span>
-              <span class="sub-line rev"></span>
+              <!-- Exit 2: Cipher Run -->
+              <div class="courtyard-exit-gate exit-pos-2" data-topic="cipher" data-cursor="scan" data-cursor-label="ALGORITHMS">
+                <div class="exit-runic-arch">
+                  <span class="exit-chapter-tag">CHAPTER I</span>
+                  <h3 class="exit-title">Cipher Run</h3>
+                  <span class="exit-venue-tag">TIMED ALGORITHM TRAIL</span>
+                  <div class="exit-glow-flare"></div>
+                </div>
+              </div>
+
+              <!-- Exit 3: 36H Machine Forge -->
+              <div class="courtyard-exit-gate exit-pos-3" data-topic="design" data-cursor="scan" data-cursor-label="HACKATHON">
+                <div class="exit-runic-arch">
+                  <span class="exit-chapter-tag">CHAPTER I</span>
+                  <h3 class="exit-title">36H Machine Forge</h3>
+                  <span class="exit-venue-tag">DESIGN UNDER PRESSURE</span>
+                  <div class="exit-glow-flare"></div>
+                </div>
+              </div>
+
+              <!-- Exit 4: Sensor & Drone Labs -->
+              <div class="courtyard-exit-gate exit-pos-4" data-topic="sensor" data-cursor="scan" data-cursor-label="WORKSHOPS">
+                <div class="exit-runic-arch">
+                  <span class="exit-chapter-tag">CHAPTER II</span>
+                  <h3 class="exit-title">Build a Sensor Rig</h3>
+                  <span class="exit-venue-tag">ELECTRONICS &amp; TELEMETRY</span>
+                  <div class="exit-glow-flare"></div>
+                </div>
+              </div>
+
+              <!-- Exit 5: Ancient Amphitheater (Keynotes) -->
+              <div class="courtyard-exit-gate exit-pos-5" data-topic="speakers" data-cursor="scan" data-cursor-label="KEYNOTES">
+                <div class="exit-runic-arch">
+                  <span class="exit-chapter-tag">CHAPTER IV</span>
+                  <h3 class="exit-title">Ancient Amphitheater</h3>
+                  <span class="exit-venue-tag">DISTINGUISHED KEYNOTES</span>
+                  <div class="exit-glow-flare"></div>
+                </div>
+              </div>
             </div>
+
+            <!-- Center Campfire Hearth (The user lights this using the cursor!) -->
+            <div class="courtyard-campfire-wrap" id="campfire-interactive-wrap">
+              <!-- Hearth Glow Ring -->
+              <div class="campfire-hearth-glow" id="hearth-glow"></div>
+
+              <!-- Glowing Campfire Image Asset (User Uploaded) -->
+              <div class="campfire-flame-chassis" id="campfire-chassis" data-cursor="flint" data-cursor-label="STRIKE FLINT">
+                <img src="./assets/campfire-glowing.png" alt="Campfire" class="courtyard-campfire-img" id="campfire-img" />
+                <div class="campfire-bloom-halo" id="campfire-bloom"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- LAYER 3: ROCKS ANIMATION OVERLAY (Above both scenes) -->
+        <div class="scene-rocks-overlay" id="scene-rocks-overlay">
+          <!-- Volumetric Mist & Cloud Canopy Canvas -->
+          <canvas class="cloud-canopy-canvas" id="cloud-canopy-canvas"></canvas>
+
+          <!-- WebGL Luma-Keyed Flying Rocks Canvas -->
+          <canvas class="sticky-rock-canvas" id="sticky-rock-canvas"></canvas>
+          <video class="sticky-rock-video" id="sticky-rock-video" src="./assets/transition-rock.mp4" playsinline muted preload="auto"></video>
+          
+          <div class="sticky-transition-tag" id="sticky-transition-tag">
+            <span class="transition-pulse-orb"></span>
+            <span class="transition-tag-text" id="transition-tag-text">SEISMIC AVALANCHE ADVANCING...</span>
           </div>
         </div>
 
-        <!-- Vignette and Depth Shading -->
-        <div class="hero-vignette" id="hero-vignette"></div>
-
-        <!-- Scroll Descent Guide Indicator -->
-        <div class="scroll-descent-guide" id="btn-scroll-down" data-cursor="scan" data-cursor-label="DESCEND">
-          <span class="descent-glyph">&darr;</span>
-          <span class="descent-text">SCROLL TO DESCEND &bull; EXPEDITION ADVANCE</span>
-          <div class="descent-line"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CINEMATIC ROCK & CLOUD TRANSITION OVERLAY (Techfest Inspired) -->
-    <div class="rock-transition-overlay" id="rock-transition-overlay">
-      <!-- Volumetric Mist & Cloud Canopy Canvas -->
-      <canvas class="cloud-canopy-canvas" id="cloud-canopy-canvas"></canvas>
-
-      <!-- WebGL Luma-Keyed Flying Rocks Canvas -->
-      <canvas class="sticky-rock-canvas" id="sticky-rock-canvas"></canvas>
-      <video class="sticky-rock-video" id="sticky-rock-video" src="./assets/transition-rock.mp4" playsinline muted preload="auto"></video>
-      
-      <div class="sticky-transition-tag" id="sticky-transition-tag">
-        <span class="transition-pulse-orb"></span>
-        <span class="transition-tag-text" id="transition-tag-text">SEISMIC AVALANCHE ADVANCING...</span>
       </div>
     </div>
-
-    <!-- STAGE 2: MISTY RUINED EXPEDITION COURTYARD & INTERACTIVE CAMPFIRE -->
-    <section class="cavern-stage" id="cavern-stage">
-      <!-- Ambient Lighting Filter Layers -->
-      <div class="cavern-lighting-overlay" id="cavern-lighting"></div>
-
-      <!-- Top Header: Sub-level Navigation & Ascent -->
-      <div class="cavern-header-bar">
-        <div class="cavern-breadcrumb">
-          <h2 class="cavern-chamber-title">THE MISTY EXPEDITION COURTYARD</h2>
-        </div>
-
-        <button class="btn-surface-return" id="btn-surface-return" data-cursor="scan" data-cursor-label="SURFACE">
-          &uarr; ASCEND TO SANCTUARY
-        </button>
-      </div>
-
-      <!-- Interactive Ruined Exits / Gateways (Positioned on the Ruined Architecture) -->
-      <div class="courtyard-exits-layer" id="courtyard-exits">
-        <!-- Exit 1: The Automata Trials -->
-        <div class="courtyard-exit-gate exit-pos-1" data-topic="automata" data-cursor="scan" data-cursor-label="ROBOTICS">
-          <div class="exit-runic-arch">
-            <span class="exit-chapter-tag">CHAPTER I</span>
-            <h3 class="exit-title">The Automata Trials</h3>
-            <span class="exit-venue-tag">ROBOTICS ROVER ARENA</span>
-            <div class="exit-glow-flare"></div>
-          </div>
-        </div>
-
-        <!-- Exit 2: Cipher Run -->
-        <div class="courtyard-exit-gate exit-pos-2" data-topic="cipher" data-cursor="scan" data-cursor-label="ALGORITHMS">
-          <div class="exit-runic-arch">
-            <span class="exit-chapter-tag">CHAPTER I</span>
-            <h3 class="exit-title">Cipher Run</h3>
-            <span class="exit-venue-tag">TIMED ALGORITHM TRAIL</span>
-            <div class="exit-glow-flare"></div>
-          </div>
-        </div>
-
-        <!-- Exit 3: 36H Machine Forge -->
-        <div class="courtyard-exit-gate exit-pos-3" data-topic="design" data-cursor="scan" data-cursor-label="HACKATHON">
-          <div class="exit-runic-arch">
-            <span class="exit-chapter-tag">CHAPTER I</span>
-            <h3 class="exit-title">36H Machine Forge</h3>
-            <span class="exit-venue-tag">DESIGN UNDER PRESSURE</span>
-            <div class="exit-glow-flare"></div>
-          </div>
-        </div>
-
-        <!-- Exit 4: Sensor & Drone Labs -->
-        <div class="courtyard-exit-gate exit-pos-4" data-topic="sensor" data-cursor="scan" data-cursor-label="WORKSHOPS">
-          <div class="exit-runic-arch">
-            <span class="exit-chapter-tag">CHAPTER II</span>
-            <h3 class="exit-title">Build a Sensor Rig</h3>
-            <span class="exit-venue-tag">ELECTRONICS &amp; TELEMETRY</span>
-            <div class="exit-glow-flare"></div>
-          </div>
-        </div>
-
-        <!-- Exit 5: Ancient Amphitheater (Keynotes) -->
-        <div class="courtyard-exit-gate exit-pos-5" data-topic="speakers" data-cursor="scan" data-cursor-label="KEYNOTES">
-          <div class="exit-runic-arch">
-            <span class="exit-chapter-tag">CHAPTER IV</span>
-            <h3 class="exit-title">Ancient Amphitheater</h3>
-            <span class="exit-venue-tag">DISTINGUISHED KEYNOTES</span>
-            <div class="exit-glow-flare"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Center Campfire Hearth (The user lights this using the cursor!) -->
-      <div class="courtyard-campfire-wrap" id="campfire-interactive-wrap">
-        <!-- Hearth Glow Ring -->
-        <div class="campfire-hearth-glow" id="hearth-glow"></div>
-
-        <!-- Glowing Campfire Image Asset (User Uploaded) -->
-        <div class="campfire-flame-chassis" id="campfire-chassis" data-cursor="flint" data-cursor-label="STRIKE FLINT">
-          <img src="./assets/campfire-glowing.png" alt="Campfire" class="courtyard-campfire-img" id="campfire-img" />
-          <div class="campfire-bloom-halo" id="campfire-bloom"></div>
-        </div>
-      </div>
-    </section>
 
     <!-- FULLSCREEN RELIC ARCHIVE & EXPEDITION DOSSIER -->
     <div class="relic-dossier-overlay" id="relic-dossier-overlay">

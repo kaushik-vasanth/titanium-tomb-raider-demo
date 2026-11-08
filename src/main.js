@@ -3,7 +3,7 @@
 
 import { SurveyorCursor } from './cursor.js';
 import { MountainAtmosphere } from './canvas-atmosphere.js';
-import { StickyTransitionManager } from './sticky-transition.js';
+import { SceneTransitionController } from './scene-transition.js';
 import { TitaniumLoader } from './loader.js';
 import { CompassWheelManager } from './compass-wheel.js';
 import { sound } from './sound.js';
@@ -17,22 +17,23 @@ new SurveyorCursor();
 // 3. Initialize Canvas Atmosphere (Mist, Spray & Campfire Embers)
 const atmosphere = new MountainAtmosphere('atmosphere-canvas');
 
-// 4. Initialize Sticky Rock & Cloud Section Transition (Techfest Inspired)
-const stickyTransition = new StickyTransitionManager();
+// 4. Initialize Cinematic Scroll-Controlled Island-to-Cave Transition (GSAP ScrollTrigger)
+const sceneTransition = new SceneTransitionController();
 
 // 5. Initialize Ancient Expedition Compass Dock & Radial Menu Wheel
 const compassWheel = new CompassWheelManager({
   openDossier: (seq) => openDossier(seq),
-  openForge: () => openForge()
+  openForge: () => openForge(),
+  onNavigateSanctuary: () => sceneTransition.triggerAscent(),
+  onNavigateCavern: () => sceneTransition.triggerCinematicDescent()
 });
 
-// 4. Header Titanium Logo Home Navigation
+// 6. Header Titanium Logo Home Navigation
 const headerLogoHome = document.getElementById('header-logo-home');
 if (headerLogoHome) {
   headerLogoHome.addEventListener('click', (e) => {
     e.preventDefault();
-    sound.playClick();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    sceneTransition.triggerAscent();
   });
 }
 
@@ -369,15 +370,14 @@ const btnSurfaceReturn = document.getElementById('btn-surface-return');
 if (btnScrollDown) {
   btnScrollDown.addEventListener('click', (e) => {
     e.preventDefault();
-    stickyTransition.triggerCinematicDescent();
+    sceneTransition.triggerCinematicDescent();
   });
 }
 
 if (btnSurfaceReturn) {
   btnSurfaceReturn.addEventListener('click', (e) => {
     e.preventDefault();
-    sound.playClick();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    sceneTransition.triggerAscent();
   });
 }
 
